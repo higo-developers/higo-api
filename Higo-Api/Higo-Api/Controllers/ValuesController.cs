@@ -23,7 +23,7 @@ namespace Higo_Api.Controllers
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody] string value)
+        public void Post([FromBody] string value )
         {
         }
 
