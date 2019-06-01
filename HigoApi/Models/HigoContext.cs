@@ -1,6 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace HigoApi.Models
 {
@@ -35,8 +33,9 @@ namespace HigoApi.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-                //TODO: Cambiar nombre de servidor por el propio
-                optionsBuilder.UseSqlServer("Data Source = DELL; Initial Catalog = Higo;Integrated Security = True");
+                //TODO: Cambiar nombre de servidor por el propio. Al momento de hacer commit, volver a dejar todos comentados.
+                //optionsBuilder.UseSqlServer("Data Source = DELL; Initial Catalog = Higo;Integrated Security = True"); // Pablo
+                //optionsBuilder.UseSqlServer("Server = 127.0.0.1,1433; Database = Higo; User=sa; Password=Password01"); // Santi
             }
         }
 
