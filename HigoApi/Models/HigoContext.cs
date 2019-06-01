@@ -35,6 +35,7 @@ namespace HigoApi.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
+                //TODO: Cambiar nombre de servidor por el propio
                 optionsBuilder.UseSqlServer("Data Source = DELL; Initial Catalog = Higo;Integrated Security = True");
             }
         }
