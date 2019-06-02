@@ -17,7 +17,7 @@ namespace HigoApi.Services.Impl
             this.vehiculoMapper = vehiculoMapper;
         }
 
-        public List<VehiculoResponse> Listar()
+        public List<VehiculoResponse> Listar(ParametrosBusquedaVehiculo parametrosBusqueda)
         {
             return vehiculoMapper.ToVehiculoResponseList(higoContext.Vehiculo.ToList());
         }

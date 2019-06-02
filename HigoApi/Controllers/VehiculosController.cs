@@ -1,3 +1,4 @@
+using HigoApi.Models.DTO;
 using HigoApi.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,9 +16,9 @@ namespace HigoApi.Controllers
         }
 
         [HttpGet]
-        public IActionResult Get()
+        public IActionResult Get([FromQuery] ParametrosBusquedaVehiculo parametrosBusqueda)
         {
-            return Ok(vehiculoService.Listar());
+            return Ok(vehiculoService.Listar(parametrosBusqueda));
         }
     }
 }
