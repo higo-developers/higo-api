@@ -10,6 +10,17 @@ namespace HigoApi
 {
     public class Startup
     {
+        /*
+         * MODIFICAR EN `appsettings.json` la propiedad `DefaultConnection` con el string de conexión que corresponda.
+         * 
+         * Demian = "Data Source = EMR-PC\SQLEXPRESS; Initial Catalog = Higo; Integrated Security = True";
+         * Nahu = "data source=DESKTOP-0AJSE47\SQLEXPRESS; integrated security=True; multipleactiveresultsets=True; application name=EntityFramework";
+         * Pablo = "Data Source = DELL; Initial Catalog = Higo; Integrated Security = True";
+         * Santi = "Server = 127.0.0.1,1433; Database = Higo; User=sa; Password=Password01";
+         * 
+         */
+        private const string ConfigConnectionKey = "DefaultConnection";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -20,12 +31,7 @@ namespace HigoApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //TODO: Cambiar nombre de servidor por el propio. Al momento de hacer commit, volver a dejar todos comentados.
-            var connection = "";
-            //var connection = "Data Source = DELL; Initial Catalog = Higo;Integrated Security = True"; // Pablo
-            //var connection = "Server = 127.0.0.1,1433; Database = Higo; User=sa; Password=Password01"; // Santi
-            //var connection = "Data Source = EMR-PC\SQLEXPRESS; Initial Catalog = Higo;Integrated Security = True"; // Demian
-            services.AddDbContext<HigoContext>(options => options.UseSqlServer(connection));
+            services.AddDbContext<HigoContext>(options => options.UseSqlServer(Configuration.GetConnectionString(ConfigConnectionKey)));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
