@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using HigoApi.Models.DTO;
 
 namespace HigoApi.Services.Impl
 {
     public class VehiculoService : IVehiculoService
     {
-        
+        public List<VehiculoResponse> Listar()
+        {
+            return null;
+        }
     }
 }

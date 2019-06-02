@@ -1,13 +1,10 @@
-﻿using HigoApi.Models.DTO;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using HigoApi.Models.DTO;
 
 namespace HigoApi.Services
 {
     interface IVehiculoService
     {
-        public List<VehiculoResponse> Listar();
+        List<VehiculoResponse> Listar();
     }
 }
