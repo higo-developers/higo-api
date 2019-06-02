@@ -6,6 +6,7 @@ namespace HigoApi.Models.DTO
     {
         public Nullable<DateTime> FechaDesde { get; set; }
         public Nullable<DateTime> FechaHasta { get; set; }
-        public Nullable<int> Localidad { get; set; }
+        public string Latitud { get; set; }
+        public string Longitud { get; set; }
     }
 }
