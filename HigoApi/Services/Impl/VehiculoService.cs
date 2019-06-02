@@ -9,7 +9,6 @@ namespace HigoApi.Services.Impl
     public class VehiculoService : IVehiculoService
     {
         private readonly HigoContext higoContext;
-
         private readonly VehiculoMapper vehiculoMapper;
 
         public VehiculoService(HigoContext higoContext, VehiculoMapper vehiculoMapper)
@@ -20,7 +19,7 @@ namespace HigoApi.Services.Impl
 
         public List<VehiculoResponse> Listar()
         {
-            return this.vehiculoMapper.ToVehiculoResponseList(higoContext.Vehiculo.ToList());
+            return vehiculoMapper.ToVehiculoResponseList(higoContext.Vehiculo.ToList());
         }
     }
 }
