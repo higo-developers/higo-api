@@ -14,7 +14,7 @@ namespace HigoApi
          * MODIFICAR EN `appsettings.json` la propiedad `DefaultConnection` con el string de conexión que corresponda.
          * 
          * Demian = "Data Source = EMR-PC\SQLEXPRESS; Initial Catalog = Higo; Integrated Security = True";
-         * Nahu = "data source=DESKTOP-0AJSE47\SQLEXPRESS; integrated security=True; multipleactiveresultsets=True; application name=EntityFramework";
+         * Nahu = "Data Source = DESKTOP-0AJSE47\\SQLEXPRESS; Initial Catalog = Higo; Integrated Security = True";
          * Pablo = "Data Source = DELL; Initial Catalog = Higo; Integrated Security = True";
          * Santi = "Server = 127.0.0.1,1433; Database = Higo; User=sa; Password=Password01";
          * 
