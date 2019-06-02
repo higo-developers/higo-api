@@ -1,13 +1,21 @@
 ﻿using System.Collections.Generic;
-using HigoApi.Models.DTO;
+using System.Linq;
+using HigoApi.Models;
 
 namespace HigoApi.Services.Impl
 {
     public class VehiculoService : IVehiculoService
     {
-        public List<VehiculoResponse> Listar()
+        private readonly HigoContext higoContext;
+
+        public VehiculoService(HigoContext higoContext)
         {
-            return null;
+            this.higoContext = higoContext;
+        }
+
+        public List<Vehiculo> Listar()
+        {
+            return higoContext.Vehiculo.ToList();
         }
     }
 }

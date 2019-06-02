@@ -1,4 +1,6 @@
 ﻿using HigoApi.Models;
+using HigoApi.Services;
+using HigoApi.Services.Impl;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -33,6 +35,8 @@ namespace HigoApi
         {
             services.AddDbContext<HigoContext>(options => options.UseSqlServer(Configuration.GetConnectionString(ConfigConnectionKey)));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            
+            services.AddScoped<IVehiculoService, VehiculoService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

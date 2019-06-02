@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
-using HigoApi.Models.DTO;
+using HigoApi.Models;
 
 namespace HigoApi.Services
 {
-    interface IVehiculoService
+    public interface IVehiculoService
     {
-        List<VehiculoResponse> Listar();
+        List<Vehiculo> Listar();
     }
 }
