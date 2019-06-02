@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using HigoApi.Mappers;
 using HigoApi.Models;
+using HigoApi.Models.DTO;
 
 namespace HigoApi.Services.Impl
 {
@@ -8,14 +10,17 @@ namespace HigoApi.Services.Impl
     {
         private readonly HigoContext higoContext;
 
-        public VehiculoService(HigoContext higoContext)
+        private readonly VehiculoMapper vehiculoMapper;
+
+        public VehiculoService(HigoContext higoContext, VehiculoMapper vehiculoMapper)
         {
             this.higoContext = higoContext;
+            this.vehiculoMapper = vehiculoMapper;
         }
 
-        public List<Vehiculo> Listar()
+        public List<VehiculoResponse> Listar()
         {
-            return higoContext.Vehiculo.ToList();
+            return this.vehiculoMapper.ToVehiculoResponseList(higoContext.Vehiculo.ToList());
         }
     }
 }
