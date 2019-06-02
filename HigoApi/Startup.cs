@@ -24,6 +24,7 @@ namespace HigoApi
             var connection = "";
             //var connection = "Data Source = DELL; Initial Catalog = Higo;Integrated Security = True"; // Pablo
             //var connection = "Server = 127.0.0.1,1433; Database = Higo; User=sa; Password=Password01"; // Santi
+            //var connection = "Data Source = EMR-PC\SQLEXPRESS; Initial Catalog = Higo;Integrated Security = True"; // Demian
             services.AddDbContext<HigoContext>(options => options.UseSqlServer(connection));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
