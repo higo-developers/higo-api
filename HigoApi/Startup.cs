@@ -8,6 +8,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using System;
+using Microsoft.AspNetCore.Identity;
 
 namespace HigoApi
 {
@@ -36,9 +41,22 @@ namespace HigoApi
         {
             services.AddDbContext<HigoContext>(options => options.UseSqlServer(Configuration.GetConnectionString(ConfigConnectionKey)));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-            
+            //services.AddIdentity<Usuario, IdentityRole>().AddEntityFrameworkStores<HigoContext>().AddDefaultTokenProviders();
             services.AddScoped<IVehiculoService, VehiculoService>();
             services.AddSingleton<VehiculoMapper>();
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(x => x.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = "higo.com.ar",
+                ValidAudience = "higo.com.ar",
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Secret_Key"])),
+                ClockSkew = TimeSpan.Zero
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

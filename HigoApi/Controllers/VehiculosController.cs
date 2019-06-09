@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HigoApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api")]
     [ApiController]
     public class VehiculosController : ControllerBase
     {
@@ -15,10 +15,12 @@ namespace HigoApi.Controllers
             this.vehiculoService = vehiculoService;
         }
 
-        [HttpGet]
-        public IActionResult Get([FromQuery] ParametrosBusquedaVehiculo parametrosBusqueda)
-        {
-            return Ok(vehiculoService.Listar(parametrosBusqueda));
-        }
+        //[HttpGet]
+        //[Route("laverga")]
+        //public IActionResult Get([FromQuery] ParametrosBusquedaVehiculo parametrosBusqueda)
+        //{
+            
+        //    return Ok("SArasaaa");
+        //}
     }
 }
