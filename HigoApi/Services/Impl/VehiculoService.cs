@@ -23,10 +23,10 @@ namespace HigoApi.Services.Impl
                          join Vehiculo v in higoContext.Vehiculo on o.IdVehiculo equals v.IdVehiculo
                          join Usuario u in higoContext.Usuario on v.IdPrestador equals u.IdUsuario
                          join Locacion l in higoContext.Locacion on u.IdLocacion equals l.IdLocacion
-                         where parametrosBusqueda.FechaDesde >= o.FechaHoraDesde
-                         where parametrosBusqueda.FechaHasta <= o.FechaHoraHasta
-                         where parametrosBusqueda.Latitud == l.Latitud
-                         where parametrosBusqueda.Longitud == l.Longitud
+//                         where parametrosBusqueda.FechaDesde >= o.FechaHoraDesde
+//                         where parametrosBusqueda.FechaHasta <= o.FechaHoraHasta
+//                         where parametrosBusqueda.Latitud == l.Latitud
+//                         where parametrosBusqueda.Longitud == l.Longitud
                          select v).ToList();
             
             return vehiculoMapper.ToVehiculoResponseList(query);
