@@ -13,12 +13,12 @@ namespace HigoApi.Models.DTO
 
         public DateTime GetFechaDesdeAsDateTime()
         {
-            return DateTime.Parse(this.FechaDesde);
+            return string.IsNullOrEmpty(FechaDesde) ? DateTime.Now : DateTime.Parse(FechaDesde);
         }
 
         public DateTime GetFechaHastaAsDateTime()
         {
-            return DateTime.Parse(this.FechaHasta);
+            return string.IsNullOrEmpty(FechaHasta) ? DateTime.Now : DateTime.Parse(FechaHasta);
         }
         
     }
