@@ -15,12 +15,10 @@ namespace HigoApi.Controllers
             this.vehiculoService = vehiculoService;
         }
 
-        //[HttpGet]
-        //[Route("laverga")]
-        //public IActionResult Get([FromQuery] ParametrosBusquedaVehiculo parametrosBusqueda)
-        //{
-            
-        //    return Ok("SArasaaa");
-        //}
+        [HttpGet]
+        public IActionResult Get([FromQuery] ParametrosBusquedaVehiculo parametros)
+        {
+            return Ok(vehiculoService.Listar(parametros));
+        }
     }
 }
