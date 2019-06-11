@@ -3,9 +3,9 @@ using HigoApi.Models;
 
 namespace HigoApi.Utils
 {
-    public static class OperacionUtils
+    public class OperacionUtils
     {
-        public static bool BetweenDateTimes(Operacion operacion, DateTime fechaDesde, DateTime fechaHasta)
+        public bool BetweenDateTimes(Operacion operacion, DateTime fechaDesde, DateTime fechaHasta)
         {
             var rangoBusquedaEntreRangoOperacion =
                 operacion.FechaHoraDesde <= fechaDesde && fechaDesde <= operacion.FechaHoraHasta

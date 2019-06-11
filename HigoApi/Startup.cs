@@ -2,6 +2,7 @@
 using HigoApi.Models;
 using HigoApi.Services;
 using HigoApi.Services.Impl;
+using HigoApi.Utils;
 using HigoApi.Validators;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -49,6 +50,8 @@ namespace HigoApi
             services.AddScoped<IVehiculoService, VehiculoService>();
             services.AddSingleton<VehiculoMapper>();
             services.AddScoped<ParametrosBusquedaVehiculoValidator>();
+            services.AddScoped<OperacionUtils>();
+            services.AddScoped<VehiculoUtils>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

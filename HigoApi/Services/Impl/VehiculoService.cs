@@ -12,28 +12,36 @@ namespace HigoApi.Services.Impl
     {
         private readonly HigoContext higoContext;
         private readonly VehiculoMapper vehiculoMapper;
+        private readonly OperacionUtils operacionUtils;
+        private readonly VehiculoUtils vehiculoUtils;
 
         const string ModeloMarcaNavigationPropertyPath = "IdModeloMarcaNavigation.IdMarcaNavigation";
 
-        public VehiculoService(HigoContext higoContext, VehiculoMapper vehiculoMapper)
+        public VehiculoService(HigoContext higoContext, VehiculoMapper vehiculoMapper, OperacionUtils operacionUtils, VehiculoUtils vehiculoUtils)
         {
             this.higoContext = higoContext;
             this.vehiculoMapper = vehiculoMapper;
+            this.operacionUtils = operacionUtils;
+            this.vehiculoUtils = vehiculoUtils;
         }
 
         public List<VehiculoResponse> Listar(ParametrosBusquedaVehiculo parametros)
         {
             /* Se obtienen los IDs de vehículos en operación entre el rango de fecha de los parámetros de búsqueda */
             ISet<int> idsVehiculosEnOperacion = higoContext.Operacion
-                .Where(o => OperacionUtils.BetweenDateTimes(o, parametros.FechaDesdeAsDateTime(), parametros.FechaHastaAsDateTime()))
+                .Where(o => operacionUtils.BetweenDateTimes(o, parametros.FechaDesdeAsDateTime(), parametros.FechaHastaAsDateTime()))
                 .Select(o => o.IdVehiculo)
                 .ToHashSet();
 
             List<Vehiculo> vehiculos = higoContext.Vehiculo
-                .Where(v => !idsVehiculosEnOperacion.Contains(v.IdVehiculo))
                 .Include(v => v.IdCilindradaNavigation)
                 .Include(ModeloMarcaNavigationPropertyPath)
                 .Include(v => v.IdLocacionNavigation)
+                .Where(v => !idsVehiculosEnOperacion.Contains(v.IdVehiculo))
+                .Where(v => vehiculoUtils.MatchLocationIfPresent(v.IdLocacionNavigation.Pais, parametros.Pais))
+                .Where(v => vehiculoUtils.MatchLocationIfPresent(v.IdLocacionNavigation.Provincia, parametros.Provincia))
+                .Where(v => vehiculoUtils.MatchLocationIfPresent(v.IdLocacionNavigation.Partido, parametros.Partido))
+                .Where(v => vehiculoUtils.MatchLocationIfPresent(v.IdLocacionNavigation.Localidad,parametros.Localidad))
                 .ToList();
 
             return vehiculoMapper.ToVehiculoResponseList(vehiculos);
