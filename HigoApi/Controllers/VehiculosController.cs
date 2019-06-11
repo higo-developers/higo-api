@@ -32,17 +32,18 @@ namespace HigoApi.Controllers
             catch (ValidationException ve)
             {
                 Console.WriteLine(ve);
-                return BadRequest(ve.Message);
+                return BadRequest(new ErrorResponse(StatusCodes.Status400BadRequest, ve.Message));
             }
             catch (FormatException fe)
             {
                 Console.WriteLine(fe);
-                return UnprocessableEntity(fe.Message);
+                return UnprocessableEntity(new ErrorResponse(StatusCodes.Status422UnprocessableEntity, fe.Message));
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+                var code = StatusCodes.Status500InternalServerError;
+                return StatusCode(code, new ErrorResponse(code, e.Message));
             }
 
             return Ok(vehiculoService.Listar(parametros));

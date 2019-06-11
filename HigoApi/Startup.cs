@@ -39,8 +39,7 @@ namespace HigoApi
         {
             services.AddCors(options =>
             {
-                options.AddPolicy(HigoAllowSpecificOrigins,
-                    builder => { builder.WithOrigins("*"); });
+                options.AddPolicy(HigoAllowSpecificOrigins, builder => { builder.WithOrigins("*"); });
             });
 
             services.AddDbContext<HigoContext>(options =>
