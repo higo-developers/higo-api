@@ -12,6 +12,7 @@ namespace HigoApi.Models
 
         public int IdTipoControl { get; set; }
         public string Descripcion { get; set; }
+        public string Codigo { get; set; }
 
         public virtual ICollection<Control> Control { get; set; }
     }

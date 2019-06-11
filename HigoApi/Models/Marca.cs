@@ -12,6 +12,7 @@ namespace HigoApi.Models
 
         public int IdMarca { get; set; }
         public string Descripcion { get; set; }
+        public string Codigo { get; set; }
 
         public virtual ICollection<ModeloMarca> ModeloMarca { get; set; }
     }

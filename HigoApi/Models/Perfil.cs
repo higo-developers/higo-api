@@ -12,6 +12,7 @@ namespace HigoApi.Models
 
         public int IdPerfil { get; set; }
         public string Descripcion { get; set; }
+        public string Codigo { get; set; }
 
         public virtual ICollection<Usuario> Usuario { get; set; }
     }
