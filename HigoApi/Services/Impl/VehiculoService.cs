@@ -11,6 +11,8 @@ namespace HigoApi.Services.Impl
     {
         private readonly HigoContext higoContext;
         private readonly VehiculoMapper vehiculoMapper;
+        
+        const string ModeloMarcaNavigationPropertyPath = "IdModeloMarcaNavigation.IdMarcaNavigation";
 
         public VehiculoService(HigoContext higoContext, VehiculoMapper vehiculoMapper)
         {
@@ -22,7 +24,7 @@ namespace HigoApi.Services.Impl
         {
             List<Vehiculo> query = higoContext.Vehiculo
                 .Include(v => v.IdCilindradaNavigation)
-                .Include("IdModeloMarcaNavigation.IdMarcaNavigation")
+                .Include(ModeloMarcaNavigationPropertyPath)
                 .Include(v => v.IdLocacionNavigation)
                 .ToList();
 
