@@ -4,6 +4,7 @@ namespace HigoApi.Models.DTO
 {
     public class VehiculoResponse
     {
+        public int Id { get; set; }
         public string PathImagen { get; set; }
         public string Marca { get; set; }
         public string Modelo { get; set; }

@@ -15,6 +15,7 @@ namespace HigoApi.Mappers
         {
             return new VehiculoResponse
             {
+                Id = vehiculo.IdVehiculo,
                 Cilindrada = vehiculo.IdCilindradaNavigation.Descripcion,
                 Marca = vehiculo.IdModeloMarcaNavigation.IdMarcaNavigation.Descripcion,
                 Modelo = vehiculo.IdModeloMarcaNavigation.Descripcion,

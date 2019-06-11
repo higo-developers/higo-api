@@ -17,7 +17,7 @@ namespace HigoApi.Validators
                 throw new ValidationException(MessageParametroAusente);
             }
 
-            if (DateTime.Compare(parametros.GetFechaDesdeAsDateTime(), parametros.GetFechaHastaAsDateTime()) > 0)
+            if (DateTime.Compare(parametros.FechaDesdeAsDateTime(), parametros.FechaHastaAsDateTime()) > 0)
             {
                 throw new FormatException(MessageErrorFechas);
             }
