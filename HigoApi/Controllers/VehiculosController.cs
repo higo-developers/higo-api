@@ -28,6 +28,8 @@ namespace HigoApi.Controllers
             try
             {
                 parametrosValidator.Validate(parametros);
+                
+                return Ok(vehiculoService.Listar(parametros));
             }
             catch (ValidationException ve)
             {
@@ -45,8 +47,6 @@ namespace HigoApi.Controllers
                 var code = StatusCodes.Status500InternalServerError;
                 return StatusCode(code, new ErrorResponse(code, e.Message));
             }
-
-            return Ok(vehiculoService.Listar(parametros));
         }
     }
 }
