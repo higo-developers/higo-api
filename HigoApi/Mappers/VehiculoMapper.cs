@@ -15,9 +15,19 @@ namespace HigoApi.Mappers
         {
             return new VehiculoResponse
             {
+                Id = vehiculo.IdVehiculo,
                 Cilindrada = vehiculo.IdCilindradaNavigation.Descripcion,
                 Marca = vehiculo.IdModeloMarcaNavigation.IdMarcaNavigation.Descripcion,
-                Modelo = vehiculo.IdModeloMarcaNavigation.Descripcion
+                Modelo = vehiculo.IdModeloMarcaNavigation.Descripcion,
+
+                Locacion = new LocacionResponse
+                {
+                    Latitud = vehiculo.IdLocacionNavigation.Latitud,
+                    Longitud = vehiculo.IdLocacionNavigation.Longitud,
+                    Pais = vehiculo.IdLocacionNavigation.Pais,
+                    Provincia = vehiculo.IdLocacionNavigation.Provincia,
+                    Localidad = vehiculo.IdLocacionNavigation.Localidad
+                }
             };
         }
     }

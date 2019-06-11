@@ -2,6 +2,8 @@
 using HigoApi.Models;
 using HigoApi.Services;
 using HigoApi.Services.Impl;
+using HigoApi.Utils;
+using HigoApi.Validators;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -38,18 +40,18 @@ namespace HigoApi
         {
             services.AddCors(options =>
             {
-                options.AddPolicy(HigoAllowSpecificOrigins,
-                    builder =>
-                    {
-                        builder.WithOrigins("*");
-                    });
+                options.AddPolicy(HigoAllowSpecificOrigins, builder => { builder.WithOrigins("*"); });
             });
-            
-            services.AddDbContext<HigoContext>(options => options.UseSqlServer(Configuration.GetConnectionString(ConfigConnectionKey)));
+
+            services.AddDbContext<HigoContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString(ConfigConnectionKey)));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-            
+
             services.AddScoped<IVehiculoService, VehiculoService>();
             services.AddSingleton<VehiculoMapper>();
+            services.AddScoped<ParametrosBusquedaVehiculoValidator>();
+            services.AddScoped<OperacionUtils>();
+            services.AddScoped<VehiculoUtils>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
