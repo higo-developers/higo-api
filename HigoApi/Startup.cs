@@ -1,4 +1,7 @@
-﻿using HigoApi.Models;
+﻿using HigoApi.Mappers;
+using HigoApi.Models;
+using HigoApi.Services;
+using HigoApi.Services.Impl;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -21,6 +24,8 @@ namespace HigoApi
          */
         private const string ConfigConnectionKey = "DefaultConnection";
 
+        private const string HigoAllowSpecificOrigins = "_higoAllowSpecificOrigins";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -31,8 +36,20 @@ namespace HigoApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy(HigoAllowSpecificOrigins,
+                    builder =>
+                    {
+                        builder.WithOrigins("*");
+                    });
+            });
+            
             services.AddDbContext<HigoContext>(options => options.UseSqlServer(Configuration.GetConnectionString(ConfigConnectionKey)));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            
+            services.AddScoped<IVehiculoService, VehiculoService>();
+            services.AddSingleton<VehiculoMapper>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -47,6 +64,8 @@ namespace HigoApi
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            app.UseCors(HigoAllowSpecificOrigins);
 
             app.UseHttpsRedirection();
             app.UseMvc();
