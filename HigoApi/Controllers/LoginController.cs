@@ -61,7 +61,7 @@ namespace HigoApi.Controllers
                 else
                 {
 
-                    ErrorMessageController err = new ErrorMessageController(422,"dasdasd");
+                    ErrorResponse err = new ErrorResponse(422,"dasdasd");
                     return UnprocessableEntity(err);
                 }
             }
@@ -88,7 +88,7 @@ namespace HigoApi.Controllers
                 else
                 {
 
-                    ErrorMessageController err = new ErrorMessageController(422, "dasdasd");
+                    ErrorResponse err = new ErrorResponse(422, "dasdasd");
                     return UnprocessableEntity(err);
                 }
             }

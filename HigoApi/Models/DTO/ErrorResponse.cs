@@ -7,14 +7,14 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HigoApi.Models.DTO
 {
-    public class ErrorMessageController
+    public class ErrorResponse
     {
-        public int Code { get; set; }
+        public int ErrorCode { get; set; }
         public string ErrorMessage { get; set; }
 
-        public ErrorMessageController(int code, string errorMessage)
+        public ErrorResponse(int code, string errorMessage)
         {
-            Code = code;
+            ErrorCode = code;
             ErrorMessage = errorMessage;
         }
     }
