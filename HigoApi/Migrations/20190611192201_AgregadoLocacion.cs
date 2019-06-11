@@ -2,7 +2,7 @@
 
 namespace HigoApi.Migrations
 {
-    public partial class addLocationData : Migration
+    public partial class AgregadoLocacion : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

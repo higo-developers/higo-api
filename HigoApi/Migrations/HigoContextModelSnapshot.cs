@@ -133,10 +133,18 @@ namespace HigoApi.Migrations
                         .HasMaxLength(20)
                         .IsUnicode(false);
 
+                    b.Property<string>("Localidad");
+
                     b.Property<string>("Longitud")
                         .IsRequired()
                         .HasMaxLength(20)
                         .IsUnicode(false);
+
+                    b.Property<string>("Pais");
+
+                    b.Property<string>("Partido");
+
+                    b.Property<string>("Provincia");
 
                     b.HasKey("IdLocacion");
 
