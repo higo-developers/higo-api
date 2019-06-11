@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HigoApi.Migrations
 {
     [DbContext(typeof(HigoContext))]
-    [Migration("20190611184130_Agregado_ColumnaCodigo")]
-    partial class Agregado_ColumnaCodigo
+    [Migration("20190611224551_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -135,10 +135,18 @@ namespace HigoApi.Migrations
                         .HasMaxLength(20)
                         .IsUnicode(false);
 
+                    b.Property<string>("Localidad");
+
                     b.Property<string>("Longitud")
                         .IsRequired()
                         .HasMaxLength(20)
                         .IsUnicode(false);
+
+                    b.Property<string>("Pais");
+
+                    b.Property<string>("Partido");
+
+                    b.Property<string>("Provincia");
 
                     b.HasKey("IdLocacion");
 
