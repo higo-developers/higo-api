@@ -34,8 +34,8 @@ namespace HigoApi.Services.Impl
                 .ToHashSet();
 
             List<Vehiculo> vehiculos = higoContext.Vehiculo
-                .Include(v => v.IdCilindradaNavigation)
                 .Include(ModeloMarcaNavigationPropertyPath)
+                .Include(v => v.IdCilindradaNavigation)
                 .Include(v => v.IdLocacionNavigation)
                 .Where(v => !idsVehiculosEnOperacion.Contains(v.IdVehiculo))
                 .Where(v => vehiculoUtils.MatchLocationIfPresent(v.IdLocacionNavigation.Pais, parametros.Pais))
@@ -45,6 +45,18 @@ namespace HigoApi.Services.Impl
                 .ToList();
 
             return vehiculoMapper.ToVehiculoResponseList(vehiculos);
+        }
+
+        public VehiculoResponse ObtenerPorId(int id)
+        {
+            Vehiculo vehiculo = higoContext.Vehiculo
+                .Where(v => v.IdVehiculo.Equals(id))
+                .Include(ModeloMarcaNavigationPropertyPath)
+                .Include(v => v.IdCilindradaNavigation)
+                .Include(v => v.IdLocacionNavigation)
+                .FirstOrDefault();
+
+            return vehiculoMapper.ToVehiculoResponse(vehiculo);
         }
     }
 }

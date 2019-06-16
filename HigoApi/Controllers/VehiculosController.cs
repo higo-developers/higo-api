@@ -47,14 +47,13 @@ namespace HigoApi.Controllers
                 return StatusCode(code, new ErrorResponse(code, e.Message));
             }
         }
-        
+
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
             try
             {
-                return Ok("Detalle de vehiculo " + id);
-
+                return Ok(vehiculoService.ObtenerPorId(id));
             }
             catch (Exception e)
             {

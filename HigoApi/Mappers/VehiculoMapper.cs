@@ -11,7 +11,7 @@ namespace HigoApi.Mappers
             return vehiculos.ConvertAll(vehiculo => ToVehiculoResponse(vehiculo));
         }
 
-        private static VehiculoResponse ToVehiculoResponse(Vehiculo vehiculo)
+        public VehiculoResponse ToVehiculoResponse(Vehiculo vehiculo)
         {
             return new VehiculoResponse
             {
