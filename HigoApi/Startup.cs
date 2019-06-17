@@ -2,17 +2,14 @@
 using HigoApi.Models;
 using HigoApi.Services;
 using HigoApi.Services.Impl;
+using HigoApi.Utils;
+using HigoApi.Validators;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using System;
-using Microsoft.AspNetCore.Identity;
 
 namespace HigoApi
 {
@@ -22,7 +19,7 @@ namespace HigoApi
          * MODIFICAR EN `appsettings.json` la propiedad `DefaultConnection` con el string de conexión que corresponda.
          * 
          * Demian = "Data Source = EMR-PC\SQLEXPRESS; Initial Catalog = Higo; Integrated Security = True";
-         * Nahu = "data source=DESKTOP-0AJSE47\SQLEXPRESS; integrated security=True; multipleactiveresultsets=True; application name=EntityFramework";
+         * Nahu = "Data Source = DESKTOP-0AJSE47\\SQLEXPRESS; Initial Catalog = Higo; Integrated Security = True";
          * Pablo = "Data Source = DELL; Initial Catalog = Higo; Integrated Security = True";
          * Santi = "Server = 127.0.0.1,1433; Database = Higo; User=sa; Password=Password01";
          * 
@@ -43,31 +40,18 @@ namespace HigoApi
         {
             services.AddCors(options =>
             {
-                options.AddPolicy(HigoAllowSpecificOrigins,
-                    builder =>
-                    {
-                        builder.WithOrigins("*");
-                    });
+                options.AddPolicy(HigoAllowSpecificOrigins, builder => { builder.WithOrigins("*"); });
             });
-            
-            services.AddDbContext<HigoContext>(options => options.UseSqlServer(Configuration.GetConnectionString(ConfigConnectionKey)));
+
+            services.AddDbContext<HigoContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString(ConfigConnectionKey)));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-            //services.AddIdentity<Usuario, IdentityRole>().AddEntityFrameworkStores<HigoContext>().AddDefaultTokenProviders();
+
             services.AddScoped<IVehiculoService, VehiculoService>();
             services.AddSingleton<VehiculoMapper>();
-
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(x => x.TokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuer = true,
-                ValidateAudience = true,
-                ValidateLifetime = true,
-                ValidateIssuerSigningKey = true,
-                ValidIssuer = "higo.com.ar",
-                ValidAudience = "higo.com.ar",
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Secret_Key"])),
-                ClockSkew = TimeSpan.Zero
-            });
-
+            services.AddScoped<ParametrosBusquedaVehiculoValidator>();
+            services.AddScoped<OperacionUtils>();
+            services.AddScoped<VehiculoUtils>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -26,6 +26,8 @@ namespace HigoApi.Migrations
                         .HasColumnName("Id_Cilindrada")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Codigo");
+
                     b.Property<string>("Descripcion")
                         .HasMaxLength(50)
                         .IsUnicode(false);
@@ -41,6 +43,8 @@ namespace HigoApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnName("Id_Combustible")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Codigo");
 
                     b.Property<string>("Descripcion")
                         .HasMaxLength(50)
@@ -87,6 +91,8 @@ namespace HigoApi.Migrations
                         .HasColumnName("Id_Estado_Operacion")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Codigo");
+
                     b.Property<string>("Descripcion")
                         .HasMaxLength(20)
                         .IsUnicode(false);
@@ -102,6 +108,8 @@ namespace HigoApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnName("Id_Estado_Vehiculo")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Codigo");
 
                     b.Property<string>("Descripcion")
                         .HasMaxLength(50)
@@ -150,6 +158,8 @@ namespace HigoApi.Migrations
                         .HasColumnName("Id_Marca")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Codigo");
+
                     b.Property<string>("Descripcion")
                         .HasMaxLength(50)
                         .IsUnicode(false);
@@ -165,6 +175,8 @@ namespace HigoApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnName("Id_Medio_Pago")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Codigo");
 
                     b.Property<string>("Descripcion")
                         .HasMaxLength(10)
@@ -254,6 +266,8 @@ namespace HigoApi.Migrations
                         .HasColumnName("Id_Perfil")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Codigo");
+
                     b.Property<string>("Descripcion")
                         .HasMaxLength(20)
                         .IsUnicode(false);
@@ -270,6 +284,8 @@ namespace HigoApi.Migrations
                         .HasColumnName("Id_Tipo_Control")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Codigo");
+
                     b.Property<string>("Descripcion")
                         .HasMaxLength(20)
                         .IsUnicode(false);
@@ -285,6 +301,8 @@ namespace HigoApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnName("Id_Tipo_Vehiculo")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Codigo");
 
                     b.Property<string>("Descripcion")
                         .HasMaxLength(50)
