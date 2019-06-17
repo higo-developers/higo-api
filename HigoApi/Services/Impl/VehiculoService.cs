@@ -54,6 +54,7 @@ namespace HigoApi.Services.Impl
                 .Include(ModeloMarcaNavigationPropertyPath)
                 .Include(v => v.IdCilindradaNavigation)
                 .Include(v => v.IdLocacionNavigation)
+                .Include(v => v.IdPrestadorNavigation)
                 .FirstOrDefault();
 
             return vehiculoMapper.ToVehiculoResponse(vehiculo);

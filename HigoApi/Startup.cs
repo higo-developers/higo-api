@@ -48,7 +48,11 @@ namespace HigoApi
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddScoped<IVehiculoService, VehiculoService>();
+            
             services.AddSingleton<VehiculoMapper>();
+            services.AddSingleton<LocacionMapper>();
+            services.AddSingleton<UsuarioMapper>();
+            
             services.AddScoped<ParametrosBusquedaVehiculoValidator>();
             services.AddScoped<OperacionUtils>();
             services.AddScoped<VehiculoUtils>();

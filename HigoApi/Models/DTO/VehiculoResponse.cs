@@ -11,5 +11,6 @@ namespace HigoApi.Models.DTO
         public string Cilindrada { get; set; }
         public LocacionResponse Locacion { get; set; }
         public Nullable<double> PrecioHora { get; set; }
+        public UsuarioResponse Usuario { get; set; }
     }
 }

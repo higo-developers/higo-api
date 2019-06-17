@@ -6,6 +6,15 @@ namespace HigoApi.Mappers
 {
     public class VehiculoMapper
     {
+        private readonly LocacionMapper locacionMapper;
+        private readonly UsuarioMapper usuarioMapper;
+
+        public VehiculoMapper(LocacionMapper locacionMapper, UsuarioMapper usuarioMapper)
+        {
+            this.locacionMapper = locacionMapper;
+            this.usuarioMapper = usuarioMapper;
+        }
+
         public List<VehiculoResponse> ToVehiculoResponseList(List<Vehiculo> vehiculos)
         {
             return vehiculos.ConvertAll(vehiculo => ToVehiculoResponse(vehiculo));
@@ -13,22 +22,30 @@ namespace HigoApi.Mappers
 
         public VehiculoResponse ToVehiculoResponse(Vehiculo vehiculo)
         {
-            return new VehiculoResponse
+            var response = new VehiculoResponse
             {
-                Id = vehiculo.IdVehiculo,
-                Cilindrada = vehiculo.IdCilindradaNavigation.Descripcion,
-                Marca = vehiculo.IdModeloMarcaNavigation.IdMarcaNavigation.Descripcion,
-                Modelo = vehiculo.IdModeloMarcaNavigation.Descripcion,
-
-                Locacion = new LocacionResponse
-                {
-                    Latitud = vehiculo.IdLocacionNavigation.Latitud,
-                    Longitud = vehiculo.IdLocacionNavigation.Longitud,
-                    Pais = vehiculo.IdLocacionNavigation.Pais,
-                    Provincia = vehiculo.IdLocacionNavigation.Provincia,
-                    Localidad = vehiculo.IdLocacionNavigation.Localidad
-                }
+                Id = vehiculo.IdVehiculo
             };
+
+
+            if (vehiculo.IdCilindradaNavigation != null)
+                response.Cilindrada = vehiculo.IdCilindradaNavigation.Descripcion;
+
+            if (vehiculo.IdModeloMarcaNavigation != null)
+            {
+                response.Modelo = vehiculo.IdModeloMarcaNavigation.Descripcion;
+                if (vehiculo.IdModeloMarcaNavigation.IdMarcaNavigation != null)
+                    response.Marca = vehiculo.IdModeloMarcaNavigation.IdMarcaNavigation.Descripcion;
+            }
+
+            if (vehiculo.IdLocacionNavigation != null)
+                response.Locacion = locacionMapper.ToLocacionResponse(vehiculo.IdLocacionNavigation);
+
+            if (vehiculo.IdPrestadorNavigation != null)
+                response.Usuario = usuarioMapper.ToUsuarioResponse(vehiculo.IdPrestadorNavigation);
+
+
+            return response;
         }
     }
 }
