@@ -72,32 +72,32 @@ namespace HigoApi.Controllers
 
         }
 
-        [HttpPost]
-        [Route("logout")]
+        //[HttpPost]
+        //[Route("logout")]
         //public async Task<IActionResult> Login([FromBody] ParametrosLogin usuarioParam)
-        public IActionResult Logout([FromBody] string token)
-        {
-            if (ModelState.IsValid)
-            {
-                //var result = await _signInManager.PasswordSignInAsync(usuarioParam.Email, usuarioParam.Password, isPersistent: false, lockoutOnFailure: false);
-                var result = context.Usuario.FirstOrDefault(x => x.Email == usuarioParam.Email && x.Password == usuarioParam.Password);
-                if (result != null)
-                {
-                    return BuildToken(usuarioParam);
-                }
-                else
-                {
+        //public IActionResult Logout([FromBody] string token)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        //var result = await _signInManager.PasswordSignInAsync(usuarioParam.Email, usuarioParam.Password, isPersistent: false, lockoutOnFailure: false);
+        //        var result = context.Usuario.FirstOrDefault(x => x.Email == usuarioParam.Email && x.Password == usuarioParam.Password);
+        //        if (result != null)
+        //        {
+        //            return BuildToken(usuarioParam);
+        //        }
+        //        else
+        //        {
 
-                    ErrorResponse err = new ErrorResponse(422, "dasdasd");
-                    return UnprocessableEntity(err);
-                }
-            }
-            else
-            {
-                return BadRequest(ModelState);
-            }
+        //            ErrorResponse err = new ErrorResponse(422, "dasdasd");
+        //            return UnprocessableEntity(err);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
 
-        }
+        //}
 
         private IActionResult BuildToken(ParametrosLogin usuarioParam)
         {
