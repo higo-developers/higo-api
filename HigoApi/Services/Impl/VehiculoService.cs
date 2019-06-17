@@ -25,7 +25,7 @@ namespace HigoApi.Services.Impl
             this.vehiculoUtils = vehiculoUtils;
         }
 
-        public List<VehiculoResponse> Listar(ParametrosBusquedaVehiculo parametros)
+        public List<VehiculoDTO> Listar(ParametrosBusquedaVehiculo parametros)
         {
             /* Se obtienen los IDs de vehículos en operación entre el rango de fecha de los parámetros de búsqueda */
             ISet<int> idsVehiculosEnOperacion = higoContext.Operacion
@@ -44,10 +44,10 @@ namespace HigoApi.Services.Impl
                 .Where(v => vehiculoUtils.MatchLocationIfPresent(v.IdLocacionNavigation.Localidad,parametros.Localidad))
                 .ToList();
 
-            return vehiculoMapper.ToVehiculoResponseList(vehiculos);
+            return vehiculoMapper.ToVehiculoDTOList(vehiculos);
         }
 
-        public VehiculoResponse ObtenerPorId(int id)
+        public VehiculoDTO ObtenerPorId(int id)
         {
             Vehiculo vehiculo = higoContext.Vehiculo
                 .Where(v => v.IdVehiculo.Equals(id))
@@ -57,7 +57,7 @@ namespace HigoApi.Services.Impl
                 .Include(v => v.IdPrestadorNavigation)
                 .FirstOrDefault();
 
-            return vehiculoMapper.ToVehiculoResponse(vehiculo);
+            return vehiculoMapper.ToVehiculoDTO(vehiculo);
         }
     }
 }

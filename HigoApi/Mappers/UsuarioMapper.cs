@@ -5,9 +5,9 @@ namespace HigoApi.Mappers
 {
     public class UsuarioMapper
     {
-        public UsuarioResponse ToUsuarioResponse(Usuario usuario)
+        public UsuarioDTO ToUsuarioDTO(Usuario usuario)
         {
-            return new UsuarioResponse
+            return new UsuarioDTO
             {
                 Id = usuario.IdUsuario,
                 Nombre = $"{usuario.Nombre} {usuario.Apellido}"

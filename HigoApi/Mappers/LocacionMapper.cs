@@ -5,9 +5,9 @@ namespace HigoApi.Mappers
 {
     public class LocacionMapper
     {
-        public LocacionResponse ToLocacionResponse(Locacion locacion)
+        public LocacionDTO ToLocacionDTO(Locacion locacion)
         {
-            return new LocacionResponse
+            return new LocacionDTO
             {
                 Latitud = locacion.Latitud,
                 Longitud = locacion.Longitud,

@@ -15,14 +15,14 @@ namespace HigoApi.Mappers
             this.usuarioMapper = usuarioMapper;
         }
 
-        public List<VehiculoResponse> ToVehiculoResponseList(List<Vehiculo> vehiculos)
+        public List<VehiculoDTO> ToVehiculoDTOList(List<Vehiculo> vehiculos)
         {
-            return vehiculos.ConvertAll(vehiculo => ToVehiculoResponse(vehiculo));
+            return vehiculos.ConvertAll(vehiculo => ToVehiculoDTO(vehiculo));
         }
 
-        public VehiculoResponse ToVehiculoResponse(Vehiculo vehiculo)
+        public VehiculoDTO ToVehiculoDTO(Vehiculo vehiculo)
         {
-            var response = new VehiculoResponse
+            var response = new VehiculoDTO
             {
                 Id = vehiculo.IdVehiculo
             };
@@ -39,10 +39,10 @@ namespace HigoApi.Mappers
             }
 
             if (vehiculo.IdLocacionNavigation != null)
-                response.Locacion = locacionMapper.ToLocacionResponse(vehiculo.IdLocacionNavigation);
+                response.Locacion = locacionMapper.ToLocacionDTO(vehiculo.IdLocacionNavigation);
 
             if (vehiculo.IdPrestadorNavigation != null)
-                response.Usuario = usuarioMapper.ToUsuarioResponse(vehiculo.IdPrestadorNavigation);
+                response.Usuario = usuarioMapper.ToUsuarioDTO(vehiculo.IdPrestadorNavigation);
 
 
             return response;
