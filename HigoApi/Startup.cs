@@ -4,12 +4,16 @@ using HigoApi.Services;
 using HigoApi.Services.Impl;
 using HigoApi.Utils;
 using HigoApi.Validators;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
+using System;
+using System.Text;
 
 namespace HigoApi
 {
@@ -49,6 +53,17 @@ namespace HigoApi
 
             services.AddScoped<IVehiculoService, VehiculoService>();
             services.AddSingleton<VehiculoMapper>();
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(x => x.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = "higo.com.ar",
+                ValidAudience = "higo.com.ar",
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Secret_Key"])),
+                ClockSkew = TimeSpan.Zero
+            });
             services.AddScoped<ParametrosBusquedaVehiculoValidator>();
             services.AddScoped<OperacionUtils>();
             services.AddScoped<VehiculoUtils>();
