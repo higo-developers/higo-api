@@ -29,8 +29,10 @@ namespace HigoApi
          * 
          */
         private const string ConfigConnectionKey = "DefaultConnection";
+        private const string AllowedHostsKey = "AllowedHosts";
+        private const string FrontEndKey = "FrontEnd";
 
-        private const string HigoAllowSpecificOrigins = "_higoAllowSpecificOrigins";
+        private const string HigoCorsPolicy = "_higoCorsPolicy";
 
         public Startup(IConfiguration configuration)
         {
@@ -44,7 +46,12 @@ namespace HigoApi
         {
             services.AddCors(options =>
             {
-                options.AddPolicy(HigoAllowSpecificOrigins, builder => { builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod(); });
+                options.AddPolicy(HigoCorsPolicy, builder =>
+                {
+                    builder.WithOrigins(Configuration.GetSection(AllowedHostsKey).GetSection(FrontEndKey).Value)
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
             });
 
             services.AddDbContext<HigoContext>(options =>
@@ -83,7 +90,7 @@ namespace HigoApi
                 app.UseHsts();
             }
 
-            app.UseCors(HigoAllowSpecificOrigins);
+            app.UseCors(HigoCorsPolicy);
 
             app.UseHttpsRedirection();
             app.UseMvc();
