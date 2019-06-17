@@ -1,4 +1,6 @@
-﻿using HigoApi.Mappers;
+﻿using System;
+using System.Text;
+using HigoApi.Mappers;
 using HigoApi.Models;
 using HigoApi.Services;
 using HigoApi.Services.Impl;
@@ -12,8 +14,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Text;
 
 namespace HigoApi
 {
@@ -44,7 +44,7 @@ namespace HigoApi
         {
             services.AddCors(options =>
             {
-                options.AddPolicy(HigoAllowSpecificOrigins, builder => { builder.WithOrigins("*"); });
+                options.AddPolicy(HigoAllowSpecificOrigins, builder => { builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod(); });
             });
 
             services.AddDbContext<HigoContext>(options =>
@@ -53,17 +53,18 @@ namespace HigoApi
 
             services.AddScoped<IVehiculoService, VehiculoService>();
             services.AddSingleton<VehiculoMapper>();
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(x => x.TokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuer = true,
-                ValidateAudience = true,
-                ValidateLifetime = true,
-                ValidateIssuerSigningKey = true,
-                ValidIssuer = "higo.com.ar",
-                ValidAudience = "higo.com.ar",
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Secret_Key"])),
-                ClockSkew = TimeSpan.Zero
-            });
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(x =>
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = "higo.com.ar",
+                    ValidAudience = "higo.com.ar",
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Secret_Key"])),
+                    ClockSkew = TimeSpan.Zero
+                });
             services.AddScoped<ParametrosBusquedaVehiculoValidator>();
             services.AddScoped<OperacionUtils>();
             services.AddScoped<VehiculoUtils>();
