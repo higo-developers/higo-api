@@ -5,6 +5,7 @@ namespace HigoApi.Services
 {
     public interface IVehiculoService
     {
-        List<VehiculoResponse> Listar(ParametrosBusquedaVehiculo parametros);
+        List<VehiculoDTO> Listar(ParametrosBusquedaVehiculo parametros);
+        VehiculoDTO ObtenerPorId(int id);
     }
 }

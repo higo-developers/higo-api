@@ -28,7 +28,6 @@ namespace HigoApi.Controllers
             try
             {
                 parametrosValidator.Validate(parametros);
-                
                 return Ok(vehiculoService.Listar(parametros));
             }
             catch (ValidationException ve)
@@ -40,6 +39,21 @@ namespace HigoApi.Controllers
             {
                 Console.WriteLine(fe);
                 return UnprocessableEntity(new ErrorResponse(StatusCodes.Status422UnprocessableEntity, fe.Message));
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                var code = StatusCodes.Status500InternalServerError;
+                return StatusCode(code, new ErrorResponse(code, e.Message));
+            }
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult Get(int id)
+        {
+            try
+            {
+                return Ok(vehiculoService.ObtenerPorId(id));
             }
             catch (Exception e)
             {

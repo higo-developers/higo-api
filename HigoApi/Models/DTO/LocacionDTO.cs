@@ -1,6 +1,6 @@
 namespace HigoApi.Models.DTO
 {
-    public class LocacionResponse
+    public class LocacionDTO
     {
         public string Latitud { get; set; }
         public string Longitud { get; set; }

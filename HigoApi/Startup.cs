@@ -54,12 +54,10 @@ namespace HigoApi
                 });
             });
 
-            services.AddDbContext<HigoContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString(ConfigConnectionKey)));
+            services.AddDbContext<HigoContext>(options => options.UseSqlServer(Configuration.GetConnectionString(ConfigConnectionKey)));
+            
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            services.AddScoped<IVehiculoService, VehiculoService>();
-            services.AddSingleton<VehiculoMapper>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(x =>
                 x.TokenValidationParameters = new TokenValidationParameters
                 {
@@ -72,6 +70,13 @@ namespace HigoApi
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Secret_Key"])),
                     ClockSkew = TimeSpan.Zero
                 });
+
+            services.AddScoped<IVehiculoService, VehiculoService>();
+            
+            services.AddScoped<VehiculoMapper>();
+            services.AddScoped<LocacionMapper>();
+            services.AddScoped<UsuarioMapper>();
+            
             services.AddScoped<ParametrosBusquedaVehiculoValidator>();
             services.AddScoped<OperacionUtils>();
             services.AddScoped<VehiculoUtils>();
