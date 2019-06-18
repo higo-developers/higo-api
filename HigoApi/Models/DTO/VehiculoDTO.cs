@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace HigoApi.Models.DTO
 {
@@ -12,5 +13,6 @@ namespace HigoApi.Models.DTO
         public LocacionDTO Locacion { get; set; }
         public Nullable<double> PrecioHora { get; set; }
         public UsuarioDTO Usuario { get; set; }
+        public List<string> Equipamiento { get; set; }
     }
 }

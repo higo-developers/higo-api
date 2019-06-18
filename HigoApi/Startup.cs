@@ -49,9 +49,9 @@ namespace HigoApi
 
             services.AddScoped<IVehiculoService, VehiculoService>();
             
-            services.AddSingleton<VehiculoMapper>();
-            services.AddSingleton<LocacionMapper>();
-            services.AddSingleton<UsuarioMapper>();
+            services.AddScoped<VehiculoMapper>();
+            services.AddScoped<LocacionMapper>();
+            services.AddScoped<UsuarioMapper>();
             
             services.AddScoped<ParametrosBusquedaVehiculoValidator>();
             services.AddScoped<OperacionUtils>();

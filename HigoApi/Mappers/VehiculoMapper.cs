@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using HigoApi.Models;
 using HigoApi.Models.DTO;
+using HigoApi.Utils;
 
 namespace HigoApi.Mappers
 {
@@ -8,11 +9,13 @@ namespace HigoApi.Mappers
     {
         private readonly LocacionMapper locacionMapper;
         private readonly UsuarioMapper usuarioMapper;
+        private readonly VehiculoUtils vehiculoUtils;
 
-        public VehiculoMapper(LocacionMapper locacionMapper, UsuarioMapper usuarioMapper)
+        public VehiculoMapper(LocacionMapper locacionMapper, UsuarioMapper usuarioMapper, VehiculoUtils vehiculoUtils)
         {
             this.locacionMapper = locacionMapper;
             this.usuarioMapper = usuarioMapper;
+            this.vehiculoUtils = vehiculoUtils;
         }
 
         public List<VehiculoDTO> ToVehiculoDTOList(List<Vehiculo> vehiculos)
@@ -24,7 +27,8 @@ namespace HigoApi.Mappers
         {
             var response = new VehiculoDTO
             {
-                Id = vehiculo.IdVehiculo
+                Id = vehiculo.IdVehiculo,
+                Equipamiento = vehiculoUtils.EquipamientoAsList(vehiculo)
             };
 
 
@@ -43,7 +47,6 @@ namespace HigoApi.Mappers
 
             if (vehiculo.IdPrestadorNavigation != null)
                 response.Usuario = usuarioMapper.ToUsuarioDTO(vehiculo.IdPrestadorNavigation);
-
 
             return response;
         }
