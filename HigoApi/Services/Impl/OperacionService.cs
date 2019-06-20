@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using HigoApi.Mappers;
 using HigoApi.Models;
+using HigoApi.Models.DTO;
+using Microsoft.EntityFrameworkCore;
 
 namespace HigoApi.Services.Impl
 {
@@ -15,69 +18,103 @@ namespace HigoApi.Services.Impl
             this.higoContext = higoContext;
         }
 
-        public Operacion Crear(Operacion dataOperacion)
+        public Operacion Crear(OperacionDTO dataOp)
         {
-            Operacion nuevaOperacion = new Operacion(dataOperacion);
+            Operacion nuevaOperacion = new Operacion(dataOp);
 
             higoContext.Operacion.Add(nuevaOperacion);
             higoContext.SaveChanges();
 
-            return nuevaOperacion;
+            Operacion opRes = ObtenerPorId(nuevaOperacion.IdOperacion);
+
+            return opRes;
         }
 
-        public Operacion Aprobar(int idOperacion)
+        /// <summary>
+        /// Actualiza según el código de estado.
+        /// Estados: PENDIENTE, APROBADO, RECHAZADO, CANCELADO, COMENZADO, FINALIZADO
+        /// </summary>
+        /// <param name="idOperacion"></param>
+        /// <param name="codEstado"></param>
+        /// <returns></returns>
+        public Operacion Actualizar(int idOperacion, string codEstado)
         {
+            EstadoOperacion estadoOp = ObtenerEstadoOperacionPorCodigo(codEstado);
 
-            throw new NotImplementedException();
-        }
+            Operacion op = ObtenerPorId(idOperacion);
+            op.IdEstadoOperacion = estadoOp.IdEstadoOperacion;
 
-        public Operacion Rechazar(int idOperacion)
-        {
-            throw new NotImplementedException();
-        }
+            higoContext.Operacion.Update(op);
+            higoContext.SaveChanges();
 
-        public Operacion Cancelar(int idOperacion)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Operacion Comenzar(int idOperacion)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Operacion Finalizar(int idOperacion)
-        {
-            throw new NotImplementedException();
+            return op;
         }
 
         public List<Operacion> ListadoPendientesPrestador(int idUsuario)
         {
             List<Operacion> operaciones = (from Operacion o in higoContext.Operacion
                                            where o.IdVehiculoNavigation.IdPrestador == idUsuario
-                                           where o.IdEstadoOperacionNavigation.Descripcion == "Pendiente"
+                                           where o.IdEstadoOperacionNavigation.Codigo == "PENDIENTE"
                                            select o).ToList();
 
             return operaciones;
         }
 
-        public List<Operacion> ListadoRealizadasPorAdquiriente(int idUsuario)
+        public List<Operacion> ListadoTodasPorAdquiriente(int idUsuario)
         {
-            List<Operacion> operaciones = (from Operacion o in higoContext.Operacion
-                                           where o.IdAdquirente == idUsuario
-                                           orderby o.FechaHoraDesde ascending
-                                           select o).ToList();
+            List<Operacion> operaciones = higoContext.Operacion
+                .Include(o => o.IdEstadoOperacionNavigation)
+                .Include(o => o.IdVehiculoNavigation)
+                    .ThenInclude(v => v.IdPrestadorNavigation)
+                .Include(o => o.IdVehiculoNavigation)
+                    .ThenInclude(v => v.IdModeloMarcaNavigation)
+                        .ThenInclude(m => m.IdMarcaNavigation)
+                .Where(o => o.IdAdquirente.Equals(idUsuario))
+                .ToList();
 
-            throw new NotImplementedException();
+            return operaciones;
         }
+
 
         public Operacion ObtenerPorId(int idOperacion)
         {
-            Operacion op = (from Operacion o in higoContext.Operacion
-                            where o.IdOperacion == idOperacion
-                            select o)
-                            .FirstOrDefault();
+            Operacion op = higoContext.Operacion
+                .Include(o => o.IdEstadoOperacionNavigation)
+                .Include(o => o.IdVehiculoNavigation)
+                    .ThenInclude(v => v.IdPrestadorNavigation)
+                .Include(o => o.IdVehiculoNavigation)
+                    .ThenInclude(v => v.IdModeloMarcaNavigation)
+                        .ThenInclude(m => m.IdMarcaNavigation)
+                .Where(o => o.IdOperacion.Equals(idOperacion))
+                .FirstOrDefault();
+
             return op;
+        }
+
+        private EstadoOperacion ObtenerEstadoOperacionPorCodigo(string cod)
+        {
+            EstadoOperacion estadoOp = (from EstadoOperacion eo in higoContext.EstadoOperacion
+                                        where eo.Codigo == cod
+                                        select eo)
+                                        .FirstOrDefault();
+
+            return estadoOp;
+        }
+
+        public List<Operacion> ListadoFiltradoPorEstadoPorAdquiriente(int idUsuario, string codEstado)
+        {
+            List<Operacion> operaciones = higoContext.Operacion
+                .Include(o => o.IdEstadoOperacionNavigation)
+                .Include(o => o.IdVehiculoNavigation)
+                    .ThenInclude(v => v.IdPrestadorNavigation)
+                .Include(o => o.IdVehiculoNavigation)
+                    .ThenInclude(v => v.IdModeloMarcaNavigation)
+                        .ThenInclude(m => m.IdMarcaNavigation)
+                .Where(o => o.IdAdquirente.Equals(idUsuario))
+                .Where(o => o.IdEstadoOperacionNavigation.Codigo.Equals(codEstado))
+                .ToList();
+
+            return operaciones;
         }
     }
 }

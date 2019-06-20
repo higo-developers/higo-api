@@ -1,4 +1,5 @@
 ﻿using HigoApi.Models;
+using HigoApi.Models.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,19 +11,13 @@ namespace HigoApi.Services
     {
         List<Operacion> ListadoPendientesPrestador(int idUsuario);
 
-        List<Operacion> ListadoRealizadasPorAdquiriente(int idUsuario);
+        List<Operacion> ListadoTodasPorAdquiriente(int idUsuario);
 
-        Operacion Crear(Operacion operacion);
+        List<Operacion> ListadoFiltradoPorEstadoPorAdquiriente(int idUsuario, string codEstado);
 
-        Operacion Aprobar(int idOperacion);
+        Operacion Crear(OperacionDTO operacion);
 
-        Operacion Rechazar(int idOperacion);
-
-        Operacion Cancelar(int idOperacion);
-
-        Operacion Comenzar(int idOperacion);
-
-        Operacion Finalizar(int idOperacion);
+        Operacion Actualizar(int idOperacion, string codEstado);
 
         Operacion ObtenerPorId(int idOperacion);
         

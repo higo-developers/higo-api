@@ -50,6 +50,8 @@ namespace HigoApi
             
             services.AddScoped<IVehiculoService, VehiculoService>();
             services.AddSingleton<VehiculoMapper>();
+
+            services.AddScoped<IOperacionService, OperacionService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
