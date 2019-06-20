@@ -16,9 +16,9 @@ namespace HigoApi.Controllers
         }
 
         [HttpGet]
-        public IActionResult Get([FromQuery] ParametrosBusquedaVehiculo parametrosBusqueda)
+        public IActionResult Get([FromQuery] ParametrosBusquedaVehiculo parametros)
         {
-            return Ok(vehiculoService.Listar(parametrosBusqueda));
+            return Ok(vehiculoService.Listar(parametros));
         }
     }
 }
