@@ -73,7 +73,8 @@ namespace HigoApi
                 });
 
             services.AddScoped<IVehiculoService, VehiculoService>();
-            
+            services.AddScoped<IOperacionService, OperacionService>();
+
             services.AddScoped<VehiculoMapper>();
             services.AddScoped<LocacionMapper>();
             services.AddScoped<UsuarioMapper>();
