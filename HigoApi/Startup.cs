@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using HigoApi.Builders;
 using HigoApi.Mappers;
 using HigoApi.Models;
 using HigoApi.Services;
@@ -76,6 +77,9 @@ namespace HigoApi
             services.AddScoped<VehiculoMapper>();
             services.AddScoped<LocacionMapper>();
             services.AddScoped<UsuarioMapper>();
+
+            services.AddScoped<TokenBuilder>();
+            services.AddScoped<LoginResponseBuilder>();
             
             services.AddScoped<ParametrosBusquedaVehiculoValidator>();
             services.AddScoped<OperacionUtils>();
