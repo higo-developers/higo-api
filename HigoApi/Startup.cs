@@ -1,13 +1,20 @@
-﻿using HigoApi.Mappers;
+﻿using System;
+using System.Text;
+using HigoApi.Builders;
+using HigoApi.Mappers;
 using HigoApi.Models;
 using HigoApi.Services;
 using HigoApi.Services.Impl;
+using HigoApi.Utils;
+using HigoApi.Validators;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 
 namespace HigoApi
 {
@@ -23,8 +30,10 @@ namespace HigoApi
          * 
          */
         private const string ConfigConnectionKey = "DefaultConnection";
+        private const string AllowedHostsKey = "AllowedHosts";
+        private const string FrontEndKey = "FrontEnd";
 
-        private const string HigoAllowSpecificOrigins = "_higoAllowSpecificOrigins";
+        private const string HigoCorsPolicy = "_higoCorsPolicy";
 
         public Startup(IConfiguration configuration)
         {
@@ -38,20 +47,44 @@ namespace HigoApi
         {
             services.AddCors(options =>
             {
-                options.AddPolicy(HigoAllowSpecificOrigins,
-                    builder =>
-                    {
-                        builder.WithOrigins("*");
-                    });
+                options.AddPolicy(HigoCorsPolicy, builder =>
+                {
+                    builder.WithOrigins(Configuration.GetSection(AllowedHostsKey).GetSection(FrontEndKey).Value)
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
             });
-            
-            services.AddDbContext<HigoContext>(options => options.UseSqlServer(Configuration.GetConnectionString(ConfigConnectionKey)));
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-            
-            services.AddScoped<IVehiculoService, VehiculoService>();
-            services.AddSingleton<VehiculoMapper>();
 
+            services.AddDbContext<HigoContext>(options => options.UseSqlServer(Configuration.GetConnectionString(ConfigConnectionKey)));
+            
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(x =>
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = "higo.com.ar",
+                    ValidAudience = "higo.com.ar",
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Secret_Key"])),
+                    ClockSkew = TimeSpan.Zero
+                });
+
+            services.AddScoped<IVehiculoService, VehiculoService>();
             services.AddScoped<IOperacionService, OperacionService>();
+
+            services.AddScoped<VehiculoMapper>();
+            services.AddScoped<LocacionMapper>();
+            services.AddScoped<UsuarioMapper>();
+
+            services.AddScoped<TokenBuilder>();
+            services.AddScoped<LoginResponseBuilder>();
+            
+            services.AddScoped<ParametrosBusquedaVehiculoValidator>();
+            services.AddScoped<OperacionUtils>();
+            services.AddScoped<VehiculoUtils>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -67,7 +100,7 @@ namespace HigoApi
                 app.UseHsts();
             }
 
-            app.UseCors(HigoAllowSpecificOrigins);
+            app.UseCors(HigoCorsPolicy);
 
             app.UseHttpsRedirection();
             app.UseMvc();

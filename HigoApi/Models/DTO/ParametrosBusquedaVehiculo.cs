@@ -11,15 +11,14 @@ namespace HigoApi.Models.DTO
         public string Partido { get; set; }
         public string Localidad { get; set; }
 
-        public DateTime GetFechaDesdeAsDateTime()
+        public DateTime FechaDesdeAsDateTime()
         {
-            return string.IsNullOrEmpty(FechaDesde) ? DateTime.Now : DateTime.Parse(FechaDesde);
+            return DateTime.Parse(FechaDesde);
         }
 
-        public DateTime GetFechaHastaAsDateTime()
+        public DateTime FechaHastaAsDateTime()
         {
-            return string.IsNullOrEmpty(FechaHasta) ? DateTime.Now : DateTime.Parse(FechaHasta);
+            return DateTime.Parse(FechaHasta);
         }
-        
     }
 }

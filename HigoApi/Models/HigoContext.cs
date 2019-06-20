@@ -58,6 +58,11 @@ namespace HigoApi.Models
 
                 entity.Property(e => e.IdCombustible).HasColumnName("Id_Combustible");
 
+                entity.Property(e => e.Codigo)
+                    .IsRequired()
+                    .HasMaxLength(30)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.Descripcion)
                     .HasMaxLength(50)
                     .IsUnicode(false);
@@ -66,6 +71,10 @@ namespace HigoApi.Models
             modelBuilder.Entity<Control>(entity =>
             {
                 entity.HasKey(e => e.IdControl);
+
+                entity.HasIndex(e => e.IdOperacion);
+
+                entity.HasIndex(e => e.IdTipoControl);
 
                 entity.Property(e => e.IdControl).HasColumnName("Id_Control");
 
@@ -99,8 +108,13 @@ namespace HigoApi.Models
 
                 entity.Property(e => e.IdEstadoOperacion).HasColumnName("Id_Estado_Operacion");
 
+                entity.Property(e => e.Codigo)
+                    .IsRequired()
+                    .HasMaxLength(30)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.Descripcion)
-                    .HasMaxLength(20)
+                    .HasMaxLength(100)
                     .IsUnicode(false);
             });
 
@@ -113,9 +127,12 @@ namespace HigoApi.Models
 
                 entity.Property(e => e.IdEstadoVehiculo).HasColumnName("Id_Estado_Vehiculo");
 
-                entity.Property(e => e.Descripcion)
-                    .HasMaxLength(50)
+                entity.Property(e => e.Codigo)
+                    .IsRequired()
+                    .HasMaxLength(30)
                     .IsUnicode(false);
+
+                entity.Property(e => e.Descripcion).HasMaxLength(100);
             });
 
             modelBuilder.Entity<Locacion>(entity =>
@@ -124,15 +141,9 @@ namespace HigoApi.Models
 
                 entity.Property(e => e.IdLocacion).HasColumnName("Id_Locacion");
 
-                entity.Property(e => e.Latitud)
-                    .IsRequired()
-                    .HasMaxLength(20)
-                    .IsUnicode(false);
+                entity.Property(e => e.Latitud).IsRequired();
 
-                entity.Property(e => e.Longitud)
-                    .IsRequired()
-                    .HasMaxLength(20)
-                    .IsUnicode(false);
+                entity.Property(e => e.Longitud).IsRequired();
             });
 
             modelBuilder.Entity<Marca>(entity =>
@@ -142,7 +153,7 @@ namespace HigoApi.Models
                 entity.Property(e => e.IdMarca).HasColumnName("Id_Marca");
 
                 entity.Property(e => e.Descripcion)
-                    .HasMaxLength(50)
+                    .HasMaxLength(100)
                     .IsUnicode(false);
             });
 
@@ -154,8 +165,13 @@ namespace HigoApi.Models
 
                 entity.Property(e => e.IdMedioPago).HasColumnName("Id_Medio_Pago");
 
+                entity.Property(e => e.Codigo)
+                    .IsRequired()
+                    .HasMaxLength(30)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.Descripcion)
-                    .HasMaxLength(10)
+                    .HasMaxLength(100)
                     .IsUnicode(false);
             });
 
@@ -165,11 +181,9 @@ namespace HigoApi.Models
 
                 entity.ToTable("Modelo_Marca");
 
-                entity.Property(e => e.IdModeloMarca).HasColumnName("Id_Modelo_Marca");
+                entity.HasIndex(e => e.IdMarca);
 
-                entity.Property(e => e.Descripcion)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                entity.Property(e => e.IdModeloMarca).HasColumnName("Id_Modelo_Marca");
 
                 entity.Property(e => e.IdMarca).HasColumnName("Id_Marca");
 
@@ -183,6 +197,14 @@ namespace HigoApi.Models
             modelBuilder.Entity<Operacion>(entity =>
             {
                 entity.HasKey(e => e.IdOperacion);
+
+                entity.HasIndex(e => e.IdAdquirente);
+
+                entity.HasIndex(e => e.IdEstadoOperacion);
+
+                entity.HasIndex(e => e.IdMedioPago);
+
+                entity.HasIndex(e => e.IdVehiculo);
 
                 entity.Property(e => e.IdOperacion).HasColumnName("Id_Operacion");
 
@@ -242,8 +264,13 @@ namespace HigoApi.Models
 
                 entity.Property(e => e.IdPerfil).HasColumnName("Id_Perfil");
 
+                entity.Property(e => e.Codigo)
+                    .IsRequired()
+                    .HasMaxLength(30)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.Descripcion)
-                    .HasMaxLength(20)
+                    .HasMaxLength(100)
                     .IsUnicode(false);
             });
 
@@ -255,8 +282,13 @@ namespace HigoApi.Models
 
                 entity.Property(e => e.IdTipoControl).HasColumnName("Id_Tipo_Control");
 
+                entity.Property(e => e.Codigo)
+                    .IsRequired()
+                    .HasMaxLength(30)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.Descripcion)
-                    .HasMaxLength(20)
+                    .HasMaxLength(100)
                     .IsUnicode(false);
             });
 
@@ -269,8 +301,13 @@ namespace HigoApi.Models
 
                 entity.Property(e => e.IdTipoVehiculo).HasColumnName("Id_Tipo_Vehiculo");
 
+                entity.Property(e => e.Codigo)
+                    .IsRequired()
+                    .HasMaxLength(30)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.Descripcion)
-                    .HasMaxLength(50)
+                    .HasMaxLength(100)
                     .IsUnicode(false);
             });
 
@@ -278,17 +315,13 @@ namespace HigoApi.Models
             {
                 entity.HasKey(e => e.IdUsuario);
 
+                entity.HasIndex(e => e.IdLocacion);
+
+                entity.HasIndex(e => e.IdPerfil);
+
                 entity.Property(e => e.IdUsuario).HasColumnName("Id_Usuario");
 
-                entity.Property(e => e.Apellido)
-                    .HasMaxLength(10)
-                    .IsUnicode(false);
-
                 entity.Property(e => e.Dni).HasColumnName("DNI");
-
-                entity.Property(e => e.Email)
-                    .HasMaxLength(30)
-                    .IsUnicode(false);
 
                 entity.Property(e => e.FechaAlta)
                     .HasColumnName("Fecha_Alta")
@@ -297,18 +330,6 @@ namespace HigoApi.Models
                 entity.Property(e => e.IdLocacion).HasColumnName("Id_Locacion");
 
                 entity.Property(e => e.IdPerfil).HasColumnName("Id_Perfil");
-
-                entity.Property(e => e.Nombre)
-                    .HasMaxLength(10)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Password)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Telefono)
-                    .HasMaxLength(15)
-                    .IsUnicode(false);
 
                 entity.HasOne(d => d.IdLocacionNavigation)
                     .WithMany(p => p.Usuario)
@@ -325,6 +346,20 @@ namespace HigoApi.Models
             {
                 entity.HasKey(e => e.IdVehiculo)
                     .HasName("PK__Vehiculo__46DBF4B46584BD66");
+
+                entity.HasIndex(e => e.IdCilindrada);
+
+                entity.HasIndex(e => e.IdCombustible);
+
+                entity.HasIndex(e => e.IdEstadoVehiculo);
+
+                entity.HasIndex(e => e.IdLocacion);
+
+                entity.HasIndex(e => e.IdModeloMarca);
+
+                entity.HasIndex(e => e.IdPrestador);
+
+                entity.HasIndex(e => e.IdTipoVehiculo);
 
                 entity.Property(e => e.IdVehiculo).HasColumnName("Id_Vehiculo");
 

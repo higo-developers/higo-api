@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace HigoApi.Migrations
 {
-    public partial class Inicial : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -14,7 +14,8 @@ namespace HigoApi.Migrations
                 {
                     Id_Cilindrada = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Descripcion = table.Column<string>(unicode: false, maxLength: 50, nullable: true)
+                    Descripcion = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
+                    Codigo = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -27,7 +28,8 @@ namespace HigoApi.Migrations
                 {
                     Id_Combustible = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Descripcion = table.Column<string>(unicode: false, maxLength: 50, nullable: true)
+                    Descripcion = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
+                    Codigo = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -40,7 +42,8 @@ namespace HigoApi.Migrations
                 {
                     Id_Estado_Operacion = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Descripcion = table.Column<string>(unicode: false, maxLength: 20, nullable: true)
+                    Descripcion = table.Column<string>(unicode: false, maxLength: 20, nullable: true),
+                    Codigo = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -53,7 +56,8 @@ namespace HigoApi.Migrations
                 {
                     Id_Estado_Vehiculo = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Descripcion = table.Column<string>(unicode: false, maxLength: 50, nullable: true)
+                    Descripcion = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
+                    Codigo = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -67,7 +71,11 @@ namespace HigoApi.Migrations
                     Id_Locacion = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Latitud = table.Column<string>(unicode: false, maxLength: 20, nullable: false),
-                    Longitud = table.Column<string>(unicode: false, maxLength: 20, nullable: false)
+                    Longitud = table.Column<string>(unicode: false, maxLength: 20, nullable: false),
+                    Pais = table.Column<string>(nullable: true),
+                    Provincia = table.Column<string>(nullable: true),
+                    Partido = table.Column<string>(nullable: true),
+                    Localidad = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -80,7 +88,8 @@ namespace HigoApi.Migrations
                 {
                     Id_Marca = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Descripcion = table.Column<string>(unicode: false, maxLength: 50, nullable: true)
+                    Descripcion = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
+                    Codigo = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -93,7 +102,8 @@ namespace HigoApi.Migrations
                 {
                     Id_Medio_Pago = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Descripcion = table.Column<string>(unicode: false, maxLength: 10, nullable: true)
+                    Descripcion = table.Column<string>(unicode: false, maxLength: 10, nullable: true),
+                    Codigo = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -106,7 +116,8 @@ namespace HigoApi.Migrations
                 {
                     Id_Perfil = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Descripcion = table.Column<string>(unicode: false, maxLength: 20, nullable: true)
+                    Descripcion = table.Column<string>(unicode: false, maxLength: 20, nullable: true),
+                    Codigo = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -119,7 +130,8 @@ namespace HigoApi.Migrations
                 {
                     Id_Tipo_Control = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Descripcion = table.Column<string>(unicode: false, maxLength: 20, nullable: true)
+                    Descripcion = table.Column<string>(unicode: false, maxLength: 20, nullable: true),
+                    Codigo = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -132,7 +144,8 @@ namespace HigoApi.Migrations
                 {
                     Id_Tipo_Vehiculo = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Descripcion = table.Column<string>(unicode: false, maxLength: 50, nullable: true)
+                    Descripcion = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
+                    Codigo = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
