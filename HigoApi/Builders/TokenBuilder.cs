@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -21,22 +22,23 @@ namespace HigoApi.Builders
 
         public TokenDTO Build(string userEmail)
         {
-            var claims = new[]
+            var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.UniqueName, userEmail),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
+
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration[ConfigurationSecretKey]));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             var expiration = DateTime.UtcNow.AddHours(TokenExpirationHours);
 
-            JwtSecurityToken token = new JwtSecurityToken(
-                issuer: "higo.com.ar",
-                audience: "higo.com.ar",
-                claims: claims,
+            var token = new JwtSecurityToken(
+                "higo.com.ar",
+                "higo.com.ar",
+                claims,
                 expires: expiration,
-                signingCredentials: creds
+                signingCredentials: signingCredentials
             );
 
             return new TokenDTO(

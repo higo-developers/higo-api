@@ -6,6 +6,6 @@ namespace HigoApi.Models.DTO
     {
         public string Token { get; set; }
         public DateTime FechaExpiracion { get; set; }
-        public DatosUsuarioLoginDTO DatosUsuario { get; set; }
+        public DatosUsuarioLoginDTO Usuario { get; set; }
     }
 }

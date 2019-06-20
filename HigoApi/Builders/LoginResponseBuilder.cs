@@ -23,7 +23,7 @@ namespace HigoApi.Builders
             {
                 Token = tokenDto.Token,
                 FechaExpiracion = tokenDto.Expiration,
-                DatosUsuario = usuarioMapper.ToDatosUsuarioLogin(usuario)
+                Usuario = usuarioMapper.ToDatosUsuarioLogin(usuario)
             };
         }
     }
