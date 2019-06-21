@@ -22,6 +22,15 @@ namespace HigoApi.Controllers
             this.ctx = ctx;
         }
 
+        [HttpPut]
+        public IActionResult Put()
+        {
+
+            return new ContentResult() {
+                StatusCode = StatusCodes.Status201Created
+            };
+        }
+
         [HttpGet]
         public IEnumerable<Marca> Get()
         {

@@ -9,6 +9,8 @@ using HigoApi.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using HigoApi.Models.DTO;
+using HigoApi.Services;
+using HigoApi.Validators;
 
 namespace HigoApi.Controllers
 {
@@ -18,11 +20,15 @@ namespace HigoApi.Controllers
     public class UsuarioController : ControllerBase
     {
         private readonly HigoContext ctx;
+        private readonly IUsuarioService usuarioService;
+        private readonly ParametrosUsuarioRequestValidator parametrosValidator;
 
-        public UsuarioController(HigoContext context)
+        public UsuarioController(IUsuarioService usuarioService, ParametrosUsuarioRequestValidator parametrosValidator)
         {
-            ctx = context;
+            this.usuarioService = usuarioService;
+            this.parametrosValidator = parametrosValidator;
         }
+
 
         // GET: api/Usuario
         //[HttpGet]
@@ -47,28 +53,19 @@ namespace HigoApi.Controllers
 
         // PUT: api/Usuario/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUsuario(int id, Usuario usuarioEdited)
+        public IActionResult PutUsuario(int id, Usuario usuarioEdited)
         {
             try
             {
-                var usr = ctx.Usuario.FirstOrDefault(x => x.IdUsuario == id);
-
-                usr.Nombre = usuarioEdited.Nombre != null ? usuarioEdited.Nombre : usr.Nombre;
-                usr.Apellido = usuarioEdited.Apellido != null ? usuarioEdited.Apellido : usr.Apellido;
-                usr.Dni = usuarioEdited.Dni != null ? usuarioEdited.Dni : usr.Dni;
-                usr.IdPerfil = usuarioEdited.IdPerfil != null ? usuarioEdited.IdPerfil : usr.IdPerfil;
-                usr.IdLocacion = usuarioEdited.IdLocacion != null ? usuarioEdited.IdLocacion : usr.IdLocacion;
-                usr.FechaAlta = usuarioEdited.FechaAlta != null ? usuarioEdited.FechaAlta : usr.FechaAlta;
-                usr.Email = usuarioEdited.Email != null ? usuarioEdited.Email : usr.Email;
-                usr.Password = usuarioEdited.Password != null ? usuarioEdited.Password : usr.Password;
-                usr.Telefono = usuarioEdited.Telefono != null ? usuarioEdited.Telefono : usr.Telefono;
-
-
-                ctx.Entry(usr).State = EntityState.Modified;
-
-                
-                await ctx.SaveChangesAsync();
+                var usr = usuarioService.ObtenerUsuarioPorId(id);
+                var usuarioValidado = parametrosValidator.ValidateNullsParameter(usr, usuarioEdited);
+                usuarioService.ActualizarUsuario(usuarioValidado);
+                return new ContentResult()
+                {
+                    StatusCode = StatusCodes.Status201Created
+                };
             }
+
             catch (DbUpdateConcurrencyException)
             {
                 if (!UsuarioExists(id))
@@ -86,8 +83,6 @@ namespace HigoApi.Controllers
                 const int code = StatusCodes.Status500InternalServerError;
                 return StatusCode(code, new ErrorResponse(code, e.Message));
             }
-
-            return NoContent();
         }
 
         // POST: api/Usuario

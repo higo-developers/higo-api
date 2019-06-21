@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using HigoApi.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace HigoApi.Services.Impl
 {
@@ -10,14 +11,22 @@ namespace HigoApi.Services.Impl
     {
         private readonly HigoContext higoContext;
 
-        public Usuario ActualizarUsuario(Usuario usuario)
+        public UsuarioService(HigoContext higoContext)
         {
-            throw new NotImplementedException();
+            this.higoContext = higoContext;
+        }
+
+        public void ActualizarUsuario(Usuario usuario)
+        {
+
+            higoContext.Entry(usuario).State = EntityState.Modified;
+            higoContext.SaveChanges();
         }
 
         public Usuario ObtenerUsuarioPorId(int id)
         {
-            throw new NotImplementedException();
+            var usuario = higoContext.Usuario.Where(u => u.IdUsuario == id).FirstOrDefault();
+            return usuario;
         }
     }
 }

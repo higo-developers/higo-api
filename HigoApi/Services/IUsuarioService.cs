@@ -9,7 +9,6 @@ namespace HigoApi.Services
     public interface IUsuarioService
     {
         Usuario ObtenerUsuarioPorId(int id);
-        Usuario ActualizarUsuario(Usuario usuario);
-        
+        void ActualizarUsuario(Usuario usuario);
     }
 }
