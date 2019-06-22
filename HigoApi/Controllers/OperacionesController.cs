@@ -24,29 +24,29 @@ namespace HigoApi.Controllers
 
         [HttpGet]
         [Consumes("application/json")]
-        //public IEnumerable<Operacion> Get([FromBody] OperacionDTO opRes)
-        public IEnumerable<OperacionDTO> Get()
+        // GET: api/Operacion
+        public IEnumerable<OperacionDTO> Get([FromBody] OperacionDTO opDTO)
         {
             List<Operacion> operaciones = new List<Operacion>();
-            /*
-            if (opRes.CodEstado != null)
+            
+            if (opDTO.CodEstado != null)
             {
-                operaciones = _operacionService.ListadoFiltradoPorEstadoPorAdquiriente(opRes.IdAdquiriente, opRes.CodEstado);
+                operaciones = _operacionService.ListadoFiltradoPorEstadoPorAdquiriente(opDTO.IdAdquiriente, opDTO.CodEstado);
             }
             else
             {
-                operaciones = _operacionService.ListadoTodasPorAdquiriente(opRes.IdAdquiriente);
+                operaciones = _operacionService.ListadoTodasPorAdquiriente(opDTO.IdAdquiriente);
             }
-            */
+            
 
-            operaciones = _operacionService.ListadoTodasPorAdquiriente(1);
+            //operaciones = _operacionService.ListadoTodasPorAdquiriente(opDTO.IdAdquiriente);
 
 
             return OperacionMapper.ConvertirAOperacionDTOLista(operaciones);
         }
 
         // GET: api/Operacion/5
-        [HttpGet("{id}", Name = "Get")]
+        [HttpGet("{id}", Name = "GetOperacion")]
         public OperacionDTO Get(int id)
         {
             Operacion op = _operacionService.ObtenerPorId(id);
