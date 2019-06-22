@@ -28,7 +28,7 @@ namespace HigoApi.Models
         public virtual DbSet<TipoVehiculo> TipoVehiculo { get; set; }
         public virtual DbSet<Usuario> Usuario { get; set; }
         public virtual DbSet<Vehiculo> Vehiculo { get; set; }
-
+        public virtual DbSet<Notificacion> Notificacion { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -433,6 +433,41 @@ namespace HigoApi.Models
                     .WithMany(p => p.Vehiculo)
                     .HasForeignKey(d => d.IdTipoVehiculo)
                     .HasConstraintName("FK_Vehiculo_Tipo_Vehiculo");
+            });
+
+            modelBuilder.Entity<Notificacion>(entity => {
+                entity.HasKey(e => e.IdNotificacion);
+
+                entity.HasIndex(e => e.IdUsuario);
+                entity.HasIndex(e => e.IdOperacion);
+
+                entity.Property(e => e.IdNotificacion).HasColumnName("Id_Notificacion");
+
+                entity.Property(e => e.IdUsuario).HasColumnName("Id_Usuario");
+
+                entity.Property(e => e.IdOperacion).HasColumnName("Id_Operacion");
+
+                entity.Property(e => e.FechaCreacion)
+                    .HasColumnName("Fecha_Creacion")
+                    .HasColumnType("datetime");
+
+                entity.Property(e => e.Descripcion)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Mensaje)
+                    .HasMaxLength(500)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.IdUsuarioNavigation)
+                    .WithMany(p => p.Notificacion)
+                    .HasForeignKey(d => d.IdUsuario)
+                    .HasConstraintName("FK_Notificacion_Usuario");
+
+                entity.HasOne(d => d.IdOperacionNavigation)
+                    .WithMany(p => p.Notificacion)
+                    .HasForeignKey(d => d.IdOperacion)
+                    .HasConstraintName("FK_Notificacion_Operacion");
             });
         }
     }

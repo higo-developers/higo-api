@@ -8,6 +8,7 @@ namespace HigoApi.Models
         public Operacion()
         {
             Control = new HashSet<Control>();
+            Notificacion = new HashSet<Notificacion>();
         }
 
         public int IdOperacion { get; set; }
@@ -26,5 +27,6 @@ namespace HigoApi.Models
         public virtual MedioPago IdMedioPagoNavigation { get; set; }
         public virtual Vehiculo IdVehiculoNavigation { get; set; }
         public virtual ICollection<Control> Control { get; set; }
+        public virtual ICollection<Notificacion> Notificacion { get; set; }
     }
 }

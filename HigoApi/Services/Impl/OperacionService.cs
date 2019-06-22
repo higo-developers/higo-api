@@ -12,10 +12,12 @@ namespace HigoApi.Services.Impl
     public class OperacionService : IOperacionService
     {
         private readonly HigoContext higoContext;
+        private readonly INotificacionService notificacionService;
 
-        public OperacionService(HigoContext higoContext)
+        public OperacionService(HigoContext higoContext, INotificacionService notificacionService)
         {
             this.higoContext = higoContext;
+            this.notificacionService = notificacionService;
         }
 
         public Operacion Crear(OperacionDTO dataOp)
@@ -26,6 +28,12 @@ namespace HigoApi.Services.Impl
             higoContext.SaveChanges();
 
             Operacion opRes = ObtenerPorId(nuevaOperacion.IdOperacion);
+
+            notificacionService.Crear(opRes.IdVehiculoNavigation.IdPrestador.GetValueOrDefault(),
+                                        opRes.IdOperacion,
+                                        "Nueva solicitud",
+                                        opRes.IdAdquirenteNavigation.Nombre + " solicita tu " +
+                                        opRes.IdVehiculoNavigation.IdModeloMarcaNavigation.Descripcion);
 
             return opRes;
         }
@@ -46,6 +54,27 @@ namespace HigoApi.Services.Impl
 
             higoContext.Operacion.Update(op);
             higoContext.SaveChanges();
+
+            switch (codEstado)
+            {
+                case "APROBADO":
+                case "RECHAZADO":
+                    notificacionService.Crear(op.IdAdquirente,
+                                        op.IdOperacion,
+                                        "Pedido " + codEstado.ToLower(),
+                                        "El prestador ha " + codEstado.ToLower() + " tu solicitud");
+                    break;
+                case "CANCELADO":
+                case "FINALIZADO":
+                    notificacionService.Crear(op.IdVehiculoNavigation.IdPrestador.GetValueOrDefault(),
+                                        op.IdOperacion,
+                                        "Pedido " + codEstado.ToLower(),
+                                        op.IdAdquirenteNavigation.Nombre + " ha " + codEstado.ToLower() + " el pedido");
+                    break;
+                default:
+                    break;
+            }
+            
 
             return op;
         }
@@ -85,6 +114,7 @@ namespace HigoApi.Services.Impl
                 .Include(o => o.IdVehiculoNavigation)
                     .ThenInclude(v => v.IdModeloMarcaNavigation)
                         .ThenInclude(m => m.IdMarcaNavigation)
+                .Include(o => o.IdAdquirenteNavigation)
                 .Where(o => o.IdOperacion.Equals(idOperacion))
                 .FirstOrDefault();
 

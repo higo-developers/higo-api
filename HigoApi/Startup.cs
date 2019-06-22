@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using HigoApi.Builders;
+using HigoApi.Hubs;
 using HigoApi.Mappers;
 using HigoApi.Models;
 using HigoApi.Services;
@@ -75,6 +76,8 @@ namespace HigoApi
             services.AddScoped<IVehiculoService, VehiculoService>();
             services.AddScoped<IOperacionService, OperacionService>();
             services.AddScoped<IUsuarioService, UsuarioService>();
+            services.AddScoped<INotificacionService, NotificacionService>();
+
             services.AddScoped<VehiculoMapper>();
             services.AddScoped<LocacionMapper>();
             services.AddScoped<UsuarioMapper>();
@@ -86,6 +89,8 @@ namespace HigoApi
             services.AddScoped<ParametrosUsuarioRequestValidator>();
             services.AddScoped<OperacionUtils>();
             services.AddScoped<VehiculoUtils>();
+
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
