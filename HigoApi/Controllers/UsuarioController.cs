@@ -44,12 +44,24 @@ namespace HigoApi.Controllers
         {
             var usuario = await ctx.Usuario.FindAsync(id);
 
-            if (usuario == null)
+            try
             {
-                return NotFound();
+                if (usuario == null)
+                {
+                    const int code = StatusCodes.Status404NotFound;
+                    return StatusCode(code, new ErrorResponse(code, "Usuario no encontrado"));
+                }
+
+                return usuario;
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                const int code = StatusCodes.Status500InternalServerError;
+                return StatusCode(code, new ErrorResponse(code, e.Message));
             }
 
-            return usuario;
         }
 
         // PUT: api/Usuario/5
