@@ -23,33 +23,34 @@ namespace HigoApi.Controllers
         private readonly IUsuarioService usuarioService;
         private readonly ParametrosUsuarioRequestValidator parametrosValidator;
 
-        public UsuarioController(IUsuarioService usuarioService, ParametrosUsuarioRequestValidator parametrosValidator)
+        public UsuarioController(IUsuarioService usuarioService, ParametrosUsuarioRequestValidator parametrosValidator, HigoContext ctx)
         {
+            this.ctx = ctx;
             this.usuarioService = usuarioService;
             this.parametrosValidator = parametrosValidator;
         }
 
 
-        // GET: api/Usuario
-        //[HttpGet]
-        //public async Task<ActionResult<IEnumerable<Usuario>>> GetUsuario()
-        //{
-        //    return await ctx.Usuario.ToListAsync();
-        //}
+        //GET: api/Usuario
+       [HttpGet]
+        public async Task<ActionResult<IEnumerable<Usuario>>> GetUsuario()
+        {
+            return await ctx.Usuario.ToListAsync();
+        }
 
-        // GET: api/Usuario/5
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult<Usuario>> GetUsuario(int id)
-        //{
-        //    var usuario = await ctx.Usuario.FindAsync(id);
+        //GET: api/Usuario/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Usuario>> GetUsuario(int id)
+        {
+            var usuario = await ctx.Usuario.FindAsync(id);
 
-        //    if (usuario == null)
-        //    {
-        //        return NotFound();
-        //    }
+            if (usuario == null)
+            {
+                return NotFound();
+            }
 
-        //    return usuario;
-        //}
+            return usuario;
+        }
 
         // PUT: api/Usuario/5
         [HttpPut("{id}")]
