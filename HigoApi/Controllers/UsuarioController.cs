@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using HigoApi.Factories;
@@ -26,15 +27,17 @@ namespace HigoApi.Controllers
         private readonly IVehiculoService vehiculoService;
         private readonly ParametrosUsuarioRequestValidator parametrosValidator;
         private readonly ErrorResponseFactory errorResponseFactory;
+        private readonly UsuarioVehiculoValidator usuarioVehiculoValidator;
 
         public UsuarioController(IUsuarioService usuarioService, ParametrosUsuarioRequestValidator parametrosValidator,
-            HigoContext ctx, IVehiculoService vehiculoService, ErrorResponseFactory errorResponseFactory)
+            HigoContext ctx, IVehiculoService vehiculoService, ErrorResponseFactory errorResponseFactory, UsuarioVehiculoValidator usuarioVehiculoValidator)
         {
             this.ctx = ctx;
             this.usuarioService = usuarioService;
             this.parametrosValidator = parametrosValidator;
             this.vehiculoService = vehiculoService;
             this.errorResponseFactory = errorResponseFactory;
+            this.usuarioVehiculoValidator = usuarioVehiculoValidator;
         }
 
 
@@ -154,7 +157,13 @@ namespace HigoApi.Controllers
         {
             try
             {
-                return Ok(new {mensaje = $"Vehiculo {idVehiculo} del usuario {idUsuario}"});
+                usuarioVehiculoValidator.Validate(idUsuario, idVehiculo);
+                return Ok(vehiculoService.ObtenerPorId(idVehiculo));
+            }
+            catch (ValidationException ve)
+            {
+                Console.WriteLine(ve);
+                return UnprocessableEntity(new ErrorResponse(StatusCodes.Status422UnprocessableEntity, ve.Message));
             }
             catch (Exception e)
             {

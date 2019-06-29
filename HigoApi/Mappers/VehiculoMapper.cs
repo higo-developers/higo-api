@@ -28,7 +28,8 @@ namespace HigoApi.Mappers
             var response = new VehiculoDTO
             {
                 Id = vehiculo.IdVehiculo,
-                Equipamiento = vehiculoUtils.EquipamientoAsList(vehiculo)
+                Equipamiento = vehiculoUtils.EquipamientoAsList(vehiculo),
+                Estado = vehiculo.IdEstadoVehiculoNavigation.Codigo
             };
 
 
