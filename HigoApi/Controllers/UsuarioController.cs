@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using HigoApi.Factories;
 using HigoApi.Models;
 using HigoApi.Models.DTO;
 using HigoApi.Services;
@@ -22,13 +23,18 @@ namespace HigoApi.Controllers
 
         private readonly HigoContext ctx;
         private readonly IUsuarioService usuarioService;
+        private readonly IVehiculoService vehiculoService;
         private readonly ParametrosUsuarioRequestValidator parametrosValidator;
+        private readonly ErrorResponseFactory errorResponseFactory;
 
-        public UsuarioController(IUsuarioService usuarioService, ParametrosUsuarioRequestValidator parametrosValidator, HigoContext ctx)
+        public UsuarioController(IUsuarioService usuarioService, ParametrosUsuarioRequestValidator parametrosValidator,
+            HigoContext ctx, IVehiculoService vehiculoService, ErrorResponseFactory errorResponseFactory)
         {
             this.ctx = ctx;
             this.usuarioService = usuarioService;
             this.parametrosValidator = parametrosValidator;
+            this.vehiculoService = vehiculoService;
+            this.errorResponseFactory = errorResponseFactory;
         }
 
 
@@ -133,13 +139,27 @@ namespace HigoApi.Controllers
         [HttpGet(RouteUsuarioVehiculos)]
         public IActionResult GetUsuarioVehiculos(int idUsuario)
         {
-            return Ok(new {mensaje = $"Vehiculos del usuario {idUsuario}"});
+            try
+            {
+                return Ok(vehiculoService.ListarPorIdUsuario(idUsuario));
+            }
+            catch (Exception e)
+            {
+                return errorResponseFactory.InternalServerErrorResponse(e);
+            }
         }
 
         [HttpGet(RouteUsuarioVehiculoPorId)]
         public IActionResult GetUsuarioVehiculoPorId(int idUsuario, int idVehiculo)
         {
-            return Ok(new {mensaje = $"Vehiculo {idVehiculo} del usuario {idUsuario}"});
+            try
+            {
+                return Ok(new {mensaje = $"Vehiculo {idVehiculo} del usuario {idUsuario}"});
+            }
+            catch (Exception e)
+            {
+                return errorResponseFactory.InternalServerErrorResponse(e);
+            }
         }
     }
 }

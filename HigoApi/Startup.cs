@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 using HigoApi.Builders;
-using HigoApi.Hubs;
+using HigoApi.Factories;
 using HigoApi.Mappers;
 using HigoApi.Models;
 using HigoApi.Services;
@@ -89,6 +89,8 @@ namespace HigoApi
             services.AddScoped<ParametrosUsuarioRequestValidator>();
             services.AddScoped<OperacionUtils>();
             services.AddScoped<VehiculoUtils>();
+
+            services.AddScoped<ErrorResponseFactory>();
 
             services.AddSignalR();
         }

@@ -7,5 +7,6 @@ namespace HigoApi.Services
     {
         List<VehiculoDTO> Listar(ParametrosBusquedaVehiculo parametros);
         VehiculoDTO ObtenerPorId(int id);
+        List<VehiculoDTO> ListarPorIdUsuario(int idUsuario);
     }
 }

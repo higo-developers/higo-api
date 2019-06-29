@@ -17,7 +17,8 @@ namespace HigoApi.Services.Impl
 
         const string ModeloMarcaNavigationPropertyPath = "IdModeloMarcaNavigation.IdMarcaNavigation";
 
-        public VehiculoService(HigoContext higoContext, VehiculoMapper vehiculoMapper, OperacionUtils operacionUtils, VehiculoUtils vehiculoUtils)
+        public VehiculoService(HigoContext higoContext, VehiculoMapper vehiculoMapper, OperacionUtils operacionUtils,
+            VehiculoUtils vehiculoUtils)
         {
             this.higoContext = higoContext;
             this.vehiculoMapper = vehiculoMapper;
@@ -29,7 +30,8 @@ namespace HigoApi.Services.Impl
         {
             /* Se obtienen los IDs de vehículos en operación entre el rango de fecha de los parámetros de búsqueda */
             ISet<int> idsVehiculosEnOperacion = higoContext.Operacion
-                .Where(o => operacionUtils.BetweenDateTimes(o, parametros.FechaDesdeAsDateTime(), parametros.FechaHastaAsDateTime()))
+                .Where(o => operacionUtils.BetweenDateTimes(o, parametros.FechaDesdeAsDateTime(),
+                    parametros.FechaHastaAsDateTime()))
                 .Select(o => o.IdVehiculo)
                 .ToHashSet();
 
@@ -39,9 +41,11 @@ namespace HigoApi.Services.Impl
                 .Include(v => v.IdLocacionNavigation)
                 .Where(v => !idsVehiculosEnOperacion.Contains(v.IdVehiculo))
                 .Where(v => vehiculoUtils.MatchLocationIfPresent(v.IdLocacionNavigation.Pais, parametros.Pais))
-                .Where(v => vehiculoUtils.MatchLocationIfPresent(v.IdLocacionNavigation.Provincia, parametros.Provincia))
+                .Where(
+                    v => vehiculoUtils.MatchLocationIfPresent(v.IdLocacionNavigation.Provincia, parametros.Provincia))
                 .Where(v => vehiculoUtils.MatchLocationIfPresent(v.IdLocacionNavigation.Partido, parametros.Partido))
-                .Where(v => vehiculoUtils.MatchLocationIfPresent(v.IdLocacionNavigation.Localidad,parametros.Localidad))
+                .Where(
+                    v => vehiculoUtils.MatchLocationIfPresent(v.IdLocacionNavigation.Localidad, parametros.Localidad))
                 .ToList();
 
             return vehiculoMapper.ToVehiculoDTOList(vehiculos);
@@ -58,6 +62,16 @@ namespace HigoApi.Services.Impl
                 .FirstOrDefault();
 
             return vehiculoMapper.ToVehiculoDTO(vehiculo);
+        }
+
+        public List<VehiculoDTO> ListarPorIdUsuario(int idUsuario)
+        {
+            return vehiculoMapper.ToVehiculoDTOList(higoContext.Vehiculo
+                .Where(v => v.IdPrestador.Equals(idUsuario))
+                .Include(ModeloMarcaNavigationPropertyPath)
+                .Include(v => v.IdCilindradaNavigation)
+                .Include(v => v.IdLocacionNavigation)
+                .ToList());
         }
     }
 }
