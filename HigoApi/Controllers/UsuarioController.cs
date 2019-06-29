@@ -2,15 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using HigoApi.Models;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using HigoApi.Models.DTO;
 using HigoApi.Services;
 using HigoApi.Validators;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace HigoApi.Controllers
 {
@@ -19,6 +17,9 @@ namespace HigoApi.Controllers
     //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class UsuarioController : ControllerBase
     {
+        private const string RouteUsuarioVehiculos = "{idUsuario}/Vehiculos";
+        private const string RouteUsuarioVehiculoPorId = RouteUsuarioVehiculos + "/{idVehiculo}";
+
         private readonly HigoContext ctx;
         private readonly IUsuarioService usuarioService;
         private readonly ParametrosUsuarioRequestValidator parametrosValidator;
@@ -127,6 +128,18 @@ namespace HigoApi.Controllers
         private bool UsuarioExists(int id)
         {
             return ctx.Usuario.Any(e => e.IdUsuario == id);
+        }
+
+        [HttpGet(RouteUsuarioVehiculos)]
+        public IActionResult GetUsuarioVehiculos(int idUsuario)
+        {
+            return Ok(new {mensaje = $"Vehiculos del usuario {idUsuario}"});
+        }
+
+        [HttpGet(RouteUsuarioVehiculoPorId)]
+        public IActionResult GetUsuarioVehiculoPorId(int idUsuario, int idVehiculo)
+        {
+            return Ok(new {mensaje = $"Vehiculo {idVehiculo} del usuario {idUsuario}"});
         }
     }
 }
