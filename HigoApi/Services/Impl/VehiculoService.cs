@@ -5,6 +5,7 @@ using HigoApi.Models;
 using HigoApi.Models.DTO;
 using HigoApi.Utils;
 using Microsoft.EntityFrameworkCore;
+using EstadoVehiculo = HigoApi.Enums.EstadoVehiculo;
 
 namespace HigoApi.Services.Impl
 {
@@ -40,12 +41,11 @@ namespace HigoApi.Services.Impl
                 .Include(v => v.IdCilindradaNavigation)
                 .Include(v => v.IdLocacionNavigation)
                 .Where(v => !idsVehiculosEnOperacion.Contains(v.IdVehiculo))
+                .Where(v => EstadoVehiculo.ACTIVO.ToString().Equals(v.IdEstadoVehiculoNavigation.Codigo))
                 .Where(v => vehiculoUtils.MatchLocationIfPresent(v.IdLocacionNavigation.Pais, parametros.Pais))
-                .Where(
-                    v => vehiculoUtils.MatchLocationIfPresent(v.IdLocacionNavigation.Provincia, parametros.Provincia))
+                .Where(v => vehiculoUtils.MatchLocationIfPresent(v.IdLocacionNavigation.Provincia, parametros.Provincia))
                 .Where(v => vehiculoUtils.MatchLocationIfPresent(v.IdLocacionNavigation.Partido, parametros.Partido))
-                .Where(
-                    v => vehiculoUtils.MatchLocationIfPresent(v.IdLocacionNavigation.Localidad, parametros.Localidad))
+                .Where(v => vehiculoUtils.MatchLocationIfPresent(v.IdLocacionNavigation.Localidad, parametros.Localidad))
                 .ToList();
 
             return vehiculoMapper.ToVehiculoDTOList(vehiculos);
@@ -55,6 +55,7 @@ namespace HigoApi.Services.Impl
         {
             Vehiculo vehiculo = higoContext.Vehiculo
                 .Where(v => v.IdVehiculo.Equals(id))
+                .Where(v => EstadoVehiculo.ACTIVO.ToString().Equals(v.IdEstadoVehiculoNavigation.Codigo))
                 .Include(ModeloMarcaNavigationPropertyPath)
                 .Include(v => v.IdCilindradaNavigation)
                 .Include(v => v.IdLocacionNavigation)
@@ -66,12 +67,15 @@ namespace HigoApi.Services.Impl
 
         public List<VehiculoDTO> ListarPorIdUsuario(int idUsuario)
         {
-            return vehiculoMapper.ToVehiculoDTOList(higoContext.Vehiculo
-                .Where(v => v.IdPrestador.Equals(idUsuario))
-                .Include(ModeloMarcaNavigationPropertyPath)
-                .Include(v => v.IdCilindradaNavigation)
-                .Include(v => v.IdLocacionNavigation)
-                .ToList());
+            return vehiculoMapper.ToVehiculoDTOList(
+                higoContext.Vehiculo
+                    .Where(v => v.IdPrestador.Equals(idUsuario))
+                    .Where(v => EstadoVehiculo.ACTIVO.ToString().Equals(v.IdEstadoVehiculoNavigation.Codigo))
+                    .Include(ModeloMarcaNavigationPropertyPath)
+                    .Include(v => v.IdCilindradaNavigation)
+                    .Include(v => v.IdLocacionNavigation)
+                    .ToList()
+            );
         }
     }
 }
