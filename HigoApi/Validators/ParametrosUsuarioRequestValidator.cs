@@ -1,4 +1,5 @@
 ﻿using HigoApi.Models;
+using HigoApi.Models.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +22,15 @@ namespace HigoApi.Validators
             usr.Telefono = usuarioEdited.Telefono != null ? usuarioEdited.Telefono : usr.Telefono;
 
             return usr;
+        }
+
+        public bool IsValidatedUser(RegistrarUsuarioDTO usr)
+        {
+            if (usr.Password != usr.PasswordConfirm)
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

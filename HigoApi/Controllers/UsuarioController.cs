@@ -100,12 +100,26 @@ namespace HigoApi.Controllers
 
         // POST: api/Usuario
         [HttpPost]
-        public async Task<ActionResult<Usuario>> PostUsuario(Usuario usuario)
+        public IActionResult PostUsuario(RegistrarUsuarioDTO usuario)
         {
-            ctx.Usuario.Add(usuario);
-            await ctx.SaveChangesAsync();
-
-            return CreatedAtAction("GetUsuario", new { id = usuario.IdUsuario }, usuario);
+            try
+            {
+                Usuario usr = usuarioService.RegistrarUsuario(usuario);
+                if (usr == null)
+                {
+                    const int code = StatusCodes.Status422UnprocessableEntity;
+                    return StatusCode(code, new ErrorResponse(code, "Informacion de usuario no valida"));
+                }
+                //return CreatedAtAction("GetUsuario", new { id = usr.IdUsuario }, usuario);
+                return Ok(usr) ;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                const int code = StatusCodes.Status500InternalServerError;
+                return StatusCode(code, new ErrorResponse(code, e.Message));
+            }
+           
         }
 
         // DELETE: api/Usuario/5
