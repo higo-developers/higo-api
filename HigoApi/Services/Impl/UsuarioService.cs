@@ -23,6 +23,11 @@ namespace HigoApi.Services.Impl
 
         public void ActualizarUsuario(Usuario usuario)
         {
+            if (higoContext.Usuario.Any(x => x.Email == usuario.Email))
+                throw new ValidationException("El E-mail ya se encuentra registrado anteriormente");
+
+            if (higoContext.Usuario.Any(x => x.Dni.Equals(usuario.Dni)))
+                throw new ValidationException("El DNI ya se encuentra registrado anteriormente");
 
             higoContext.Entry(usuario).State = EntityState.Modified;
             higoContext.SaveChanges();
@@ -37,10 +42,10 @@ namespace HigoApi.Services.Impl
         public Usuario RegistrarUsuario(RegistrarUsuarioDTO usuarioARegistrar)
         {
         if (higoContext.Usuario.Any(x => x.Email == usuarioARegistrar.Email))
-            throw new ValidationException("E-mail ya existente");
+            throw new ValidationException("El E-mail ya se encuentra registrado anteriormente");
 
         if (higoContext.Usuario.Any(x => x.Dni.Equals(long.Parse(usuarioARegistrar.Dni))))
-            throw new ValidationException("DNI ya existente");
+            throw new ValidationException("El DNI ya se encuentra registrado anteriormente");
 
             validator.IsValidatedUser(usuarioARegistrar);
             Usuario usr = new Usuario()

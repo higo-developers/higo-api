@@ -67,29 +67,24 @@ namespace HigoApi.Controllers
 
         // PUT: api/Usuario/5
         [HttpPut("{id}")]
-        public IActionResult PutUsuario(int id, Usuario usuarioEdited)
+        public IActionResult PutUsuario(int id, RegistrarUsuarioDTO usuarioEdited)
         {
             try
             {
                 var usr = usuarioService.ObtenerUsuarioPorId(id);
+                parametrosValidator.IsValidatedUser(usuarioEdited);
                 var usuarioValidado = parametrosValidator.ValidateNullsParameter(usr, usuarioEdited);
                 usuarioService.ActualizarUsuario(usuarioValidado);
+
                 return new ContentResult()
                 {
                     StatusCode = StatusCodes.Status201Created
                 };
             }
-
-            catch (DbUpdateConcurrencyException)
+            catch (ValidationException ve)
             {
-                if (!UsuarioExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                Console.WriteLine(ve);
+                return BadRequest(new ErrorResponse(StatusCodes.Status400BadRequest, ve.Message));
             }
             catch (Exception e)
             {
@@ -136,11 +131,6 @@ namespace HigoApi.Controllers
             await ctx.SaveChangesAsync();
 
             return usuario;
-        }
-
-        private bool UsuarioExists(int id)
-        {
-            return ctx.Usuario.Any(e => e.IdUsuario == id);
         }
     }
 }
