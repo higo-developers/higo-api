@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using HigoApi.Factories;
 using HigoApi.Models;
 using HigoApi.Models.DTO;
 using HigoApi.Services;
@@ -19,27 +17,16 @@ namespace HigoApi.Controllers
     //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class UsuarioController : ControllerBase
     {
-        private const string RouteUsuarioVehiculos = "{idUsuario}/Vehiculos";
-        private const string RouteUsuarioVehiculoPorId = RouteUsuarioVehiculos + "/{idVehiculo}";
-
         private readonly HigoContext ctx;
         private readonly IUsuarioService usuarioService;
-        private readonly IVehiculoService vehiculoService;
         private readonly ParametrosUsuarioRequestValidator parametrosValidator;
-        private readonly ErrorResponseFactory errorResponseFactory;
-        private readonly UsuarioVehiculoValidator usuarioVehiculoValidator;
 
-        public UsuarioController(IUsuarioService usuarioService, ParametrosUsuarioRequestValidator parametrosValidator,
-            HigoContext ctx, IVehiculoService vehiculoService, ErrorResponseFactory errorResponseFactory, UsuarioVehiculoValidator usuarioVehiculoValidator)
+        public UsuarioController(HigoContext ctx, IUsuarioService usuarioService, ParametrosUsuarioRequestValidator parametrosValidator)
         {
             this.ctx = ctx;
             this.usuarioService = usuarioService;
             this.parametrosValidator = parametrosValidator;
-            this.vehiculoService = vehiculoService;
-            this.errorResponseFactory = errorResponseFactory;
-            this.usuarioVehiculoValidator = usuarioVehiculoValidator;
         }
-
 
         //GET: api/Usuario
        [HttpGet]
@@ -137,38 +124,6 @@ namespace HigoApi.Controllers
         private bool UsuarioExists(int id)
         {
             return ctx.Usuario.Any(e => e.IdUsuario == id);
-        }
-
-        [HttpGet(RouteUsuarioVehiculos)]
-        public IActionResult GetUsuarioVehiculos(int idUsuario)
-        {
-            try
-            {
-                return Ok(vehiculoService.ListarPorIdUsuario(idUsuario));
-            }
-            catch (Exception e)
-            {
-                return errorResponseFactory.InternalServerErrorResponse(e);
-            }
-        }
-
-        [HttpGet(RouteUsuarioVehiculoPorId)]
-        public IActionResult GetUsuarioVehiculoPorId(int idUsuario, int idVehiculo)
-        {
-            try
-            {
-                usuarioVehiculoValidator.Validate(idUsuario, idVehiculo);
-                return Ok(vehiculoService.ObtenerPorId(idVehiculo));
-            }
-            catch (ValidationException ve)
-            {
-                Console.WriteLine(ve);
-                return UnprocessableEntity(new ErrorResponse(StatusCodes.Status422UnprocessableEntity, ve.Message));
-            }
-            catch (Exception e)
-            {
-                return errorResponseFactory.InternalServerErrorResponse(e);
-            }
         }
     }
 }
