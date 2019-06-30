@@ -47,6 +47,7 @@ namespace HigoApi.Services.Impl
                 .Where(v => vehiculoUtils.MatchLocationIfPresent(v.IdLocacionNavigation.Provincia, parametros.Provincia))
                 .Where(v => vehiculoUtils.MatchLocationIfPresent(v.IdLocacionNavigation.Partido, parametros.Partido))
                 .Where(v => vehiculoUtils.MatchLocationIfPresent(v.IdLocacionNavigation.Localidad, parametros.Localidad))
+                .OrderBy(v => v.IdVehiculo)
                 .ToList();
 
             return vehiculoMapper.ToVehiculoDTOList(vehiculos);
@@ -75,6 +76,7 @@ namespace HigoApi.Services.Impl
                     .Include(v => v.IdCilindradaNavigation)
                     .Include(v => v.IdLocacionNavigation)
                     .Include(v => v.IdEstadoVehiculoNavigation)
+                    .OrderBy(v => v.IdVehiculo)
                     .ToList()
             );
         }
