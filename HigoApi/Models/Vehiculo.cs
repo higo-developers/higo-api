@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace HigoApi.Models
 {
@@ -30,6 +31,8 @@ namespace HigoApi.Models
         public bool? Abs { get; set; }
         public bool? ControlTraccion { get; set; }
         public bool? TapizadoCuero { get; set; }
+        [MaxLength(15)]
+        public string Patente { get; set; }
 
         public virtual Cilindrada IdCilindradaNavigation { get; set; }
         public virtual Combustible IdCombustibleNavigation { get; set; }
