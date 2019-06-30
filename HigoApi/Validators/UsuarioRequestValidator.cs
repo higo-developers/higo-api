@@ -2,21 +2,19 @@
 using HigoApi.Models.DTO;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace HigoApi.Validators
 {
-    public class ParametrosUsuarioRequestValidator
+    public class UsuarioRequestValidator
     {
         public Usuario ValidateNullsParameter(Usuario usr, Usuario usuarioEdited)
         {
             usr.Nombre = usuarioEdited.Nombre != null ? usuarioEdited.Nombre : usr.Nombre;
             usr.Apellido = usuarioEdited.Apellido != null ? usuarioEdited.Apellido : usr.Apellido;
             usr.Dni = usuarioEdited.Dni != null ? usuarioEdited.Dni : usr.Dni;
-            usr.IdPerfil = usuarioEdited.IdPerfil != null ? usuarioEdited.IdPerfil : usr.IdPerfil;
-            usr.IdLocacion = usuarioEdited.IdLocacion != null ? usuarioEdited.IdLocacion : usr.IdLocacion;
-            usr.FechaAlta = usuarioEdited.FechaAlta != null ? usuarioEdited.FechaAlta : usr.FechaAlta;
             usr.Email = usuarioEdited.Email != null ? usuarioEdited.Email : usr.Email;
             usr.Password = usuarioEdited.Password != null ? usuarioEdited.Password : usr.Password;
             usr.Telefono = usuarioEdited.Telefono != null ? usuarioEdited.Telefono : usr.Telefono;
@@ -24,13 +22,18 @@ namespace HigoApi.Validators
             return usr;
         }
 
-        public bool IsValidatedUser(RegistrarUsuarioDTO usr)
+        public void IsValidatedUser(RegistrarUsuarioDTO usr)
         {
-            if (usr.Password != usr.PasswordConfirm)
-            {
-                return false;
-            }
-            return true;
+            if (usr.Nombre == null || usr.Nombre == "")
+                throw new ValidationException("El Nombre es obligatorio");
+            if (usr.Apellido == null || usr.Apellido == "")
+                throw new ValidationException("El Apellido es obligatorio");
+            if (usr.Dni == null || usr.Dni == "")
+                throw new ValidationException("El Dni es obligatorio");
+            if (usr.Email == null || usr.Email == "")
+                throw new ValidationException("El Email es obligatorio");
+            if (usr.Password == null || usr.Password == "")
+                throw new ValidationException("El Password es obligatorio");
         }
     }
 }

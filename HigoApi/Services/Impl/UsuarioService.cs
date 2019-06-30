@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using HigoApi.Models;
@@ -12,9 +13,9 @@ namespace HigoApi.Services.Impl
     public class UsuarioService : IUsuarioService
     {
         private readonly HigoContext higoContext;
-        private readonly ParametrosUsuarioRequestValidator validator;
+        private readonly UsuarioRequestValidator validator;
 
-        public UsuarioService(HigoContext higoContext,ParametrosUsuarioRequestValidator validator)
+        public UsuarioService(HigoContext higoContext,UsuarioRequestValidator validator)
         {
             this.higoContext = higoContext;
             this.validator = validator;
@@ -35,25 +36,28 @@ namespace HigoApi.Services.Impl
 
         public Usuario RegistrarUsuario(RegistrarUsuarioDTO usuarioARegistrar)
         {
-            if ((validator.IsValidatedUser(usuarioARegistrar)))
+        if (higoContext.Usuario.Any(x => x.Email == usuarioARegistrar.Email))
+            throw new ValidationException("E-mail ya existente");
+
+        if (higoContext.Usuario.Any(x => x.Dni.Equals(long.Parse(usuarioARegistrar.Dni))))
+            throw new ValidationException("DNI ya existente");
+
+            validator.IsValidatedUser(usuarioARegistrar);
+            Usuario usr = new Usuario()
             {
-                Usuario usr = new Usuario()
-                {
-                    Nombre = usuarioARegistrar.Nombre,
-                    Apellido = usuarioARegistrar.Apellido,
-                    Dni = usuarioARegistrar.Dni,
-                    Email = usuarioARegistrar.Email,
-                    Password = usuarioARegistrar.Password,
-                    IdPerfil = 2
+                Nombre = usuarioARegistrar.Nombre,
+                Apellido = usuarioARegistrar.Apellido,
+                Dni = int.Parse(usuarioARegistrar.Dni),
+                Email = usuarioARegistrar.Email,
+                Password = usuarioARegistrar.Password,
+                IdPerfil = 2,
+                FechaAlta = DateTime.Now
                     
-                };
-                higoContext.Usuario.Add(usr);
-                higoContext.SaveChanges();
+            };
+            higoContext.Usuario.Add(usr);
+            higoContext.SaveChanges();
 
-                return usr;
-            }
-
-            return null;
+            return usr;
         }
     }
 }

@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using HigoApi.Models.DTO;
 using HigoApi.Services;
 using HigoApi.Validators;
+using System.ComponentModel.DataAnnotations;
 
 namespace HigoApi.Controllers
 {
@@ -21,9 +22,9 @@ namespace HigoApi.Controllers
     {
         private readonly HigoContext ctx;
         private readonly IUsuarioService usuarioService;
-        private readonly ParametrosUsuarioRequestValidator parametrosValidator;
+        private readonly UsuarioRequestValidator parametrosValidator;
 
-        public UsuarioController(IUsuarioService usuarioService, ParametrosUsuarioRequestValidator parametrosValidator, HigoContext ctx)
+        public UsuarioController(IUsuarioService usuarioService, UsuarioRequestValidator parametrosValidator, HigoContext ctx)
         {
             this.ctx = ctx;
             this.usuarioService = usuarioService;
@@ -105,13 +106,12 @@ namespace HigoApi.Controllers
             try
             {
                 Usuario usr = usuarioService.RegistrarUsuario(usuario);
-                if (usr == null)
-                {
-                    const int code = StatusCodes.Status422UnprocessableEntity;
-                    return StatusCode(code, new ErrorResponse(code, "Informacion de usuario no valida"));
-                }
-                //return CreatedAtAction("GetUsuario", new { id = usr.IdUsuario }, usuario);
                 return Ok(usr) ;
+            }
+            catch (ValidationException ve)
+            {
+                Console.WriteLine(ve);
+                return BadRequest(new ErrorResponse(StatusCodes.Status400BadRequest, ve.Message));
             }
             catch (Exception e)
             {
