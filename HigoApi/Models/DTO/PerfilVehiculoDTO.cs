@@ -13,18 +13,20 @@ namespace HigoApi.Models.DTO
         public int Modelo { get; set; }
         public int Cilindrada { get; set; }
         
-        // EQUIPAMIENTO
+        // < Datos de equipamiento >
         
-        public bool AC { get; set; }
-        public bool DA { get; set; }
-        public bool DH { get; set; }
+        public bool Ac { get; set; }
+        public bool Da { get; set; }
+        public bool Dh { get; set; }
         public bool Alarma { get; set; }
         public bool CierreCentralizado { get; set; }
         public bool RompenieblasDelantero { get; set; }
         public bool RompenieblasTrasero { get; set; }
         public bool Airbag { get; set; }
-        public bool ABS { get; set; }
+        public bool Abs { get; set; }
         public bool ControlTraccion { get; set; }
         public bool TapizadoCuero { get; set; }
+        
+        // <! Datos de equipamiento >
     }
 }

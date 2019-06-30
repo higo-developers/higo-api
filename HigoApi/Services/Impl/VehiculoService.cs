@@ -80,5 +80,12 @@ namespace HigoApi.Services.Impl
                     .ToList()
             );
         }
+
+        public Vehiculo ObtenerPorIdParaPerfil(int id)
+        {
+            return higoContext.Vehiculo
+                .Include(v => v.IdCombustibleNavigation)
+                .FirstOrDefault(v => v.IdVehiculo.Equals(id));
+        }
     }
 }

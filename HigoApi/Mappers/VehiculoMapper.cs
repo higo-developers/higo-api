@@ -51,5 +51,31 @@ namespace HigoApi.Mappers
 
             return response;
         }
+
+        public PerfilVehiculoDTO ToPerfilVehiculoDTO(Vehiculo vehiculo)
+        {
+            var perfilVehiculoDto = new PerfilVehiculoDTO();
+
+            perfilVehiculoDto.Id = vehiculo.IdVehiculo;
+            perfilVehiculoDto.Anno = vehiculo.Anno?.ToString();
+            perfilVehiculoDto.Patente = vehiculo.Patente;
+            perfilVehiculoDto.Combustible = vehiculo.IdCombustibleNavigation.Codigo;
+            perfilVehiculoDto.Modelo = vehiculo.IdModeloMarca;
+            perfilVehiculoDto.Cilindrada = vehiculo.IdCilindrada;
+
+            perfilVehiculoDto.Ac = vehiculo.Ac ?? false;
+            perfilVehiculoDto.Da = vehiculo.Da ?? false;
+            perfilVehiculoDto.Dh = vehiculo.Dh ?? false;
+            perfilVehiculoDto.Alarma = vehiculo.Alarma ?? false;
+            perfilVehiculoDto.CierreCentralizado = vehiculo.CierreCentralizado ?? false;
+            perfilVehiculoDto.RompenieblasDelantero = vehiculo.RompenieblasDelantero ?? false;
+            perfilVehiculoDto.RompenieblasTrasero = vehiculo.RompenieblasTrasero ?? false;
+            perfilVehiculoDto.Airbag = vehiculo.Airbag ?? false;
+            perfilVehiculoDto.Abs = vehiculo.Abs ?? false;
+            perfilVehiculoDto.ControlTraccion = vehiculo.ControlTraccion ?? false;
+            perfilVehiculoDto.TapizadoCuero = vehiculo.TapizadoCuero ?? false;
+
+            return perfilVehiculoDto;
+        }
     }
 }

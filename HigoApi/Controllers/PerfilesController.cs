@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using HigoApi.Factories;
+using HigoApi.Mappers;
 using HigoApi.Models.DTO;
 using HigoApi.Services;
 using HigoApi.Validators;
@@ -19,12 +20,14 @@ namespace HigoApi.Controllers
         private readonly ErrorResponseFactory errorResponseFactory;
         private readonly IVehiculoService vehiculoService;
         private readonly UsuarioVehiculoValidator usuarioVehiculoValidator;
+        private readonly VehiculoMapper vehiculoMapper;
 
-        public PerfilesController(ErrorResponseFactory errorResponseFactory, IVehiculoService vehiculoService, UsuarioVehiculoValidator usuarioVehiculoValidator)
+        public PerfilesController(ErrorResponseFactory errorResponseFactory, IVehiculoService vehiculoService, UsuarioVehiculoValidator usuarioVehiculoValidator, VehiculoMapper vehiculoMapper)
         {
             this.errorResponseFactory = errorResponseFactory;
             this.vehiculoService = vehiculoService;
             this.usuarioVehiculoValidator = usuarioVehiculoValidator;
+            this.vehiculoMapper = vehiculoMapper;
         }
 
         [HttpGet(RoutePerfilVehiculos)]
@@ -46,7 +49,7 @@ namespace HigoApi.Controllers
             try
             {
                 usuarioVehiculoValidator.Validate(idUsuario, idVehiculo);
-                return Ok(vehiculoService.ObtenerPorId(idVehiculo));
+                return Ok(vehiculoMapper.ToPerfilVehiculoDTO(vehiculoService.ObtenerPorIdParaPerfil(idVehiculo)));
             }
             catch (ValidationException ve)
             {
