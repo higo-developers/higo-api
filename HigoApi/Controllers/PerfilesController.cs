@@ -16,13 +16,14 @@ namespace HigoApi.Controllers
     {
         private const string RoutePerfilVehiculos = "{idUsuario}/Vehiculos";
         private const string RoutePerfilVehiculoPorId = RoutePerfilVehiculos + "/{idVehiculo}";
-        
+
         private readonly ErrorResponseFactory errorResponseFactory;
         private readonly IVehiculoService vehiculoService;
         private readonly UsuarioVehiculoValidator usuarioVehiculoValidator;
         private readonly VehiculoMapper vehiculoMapper;
 
-        public PerfilesController(ErrorResponseFactory errorResponseFactory, IVehiculoService vehiculoService, UsuarioVehiculoValidator usuarioVehiculoValidator, VehiculoMapper vehiculoMapper)
+        public PerfilesController(ErrorResponseFactory errorResponseFactory, IVehiculoService vehiculoService,
+            UsuarioVehiculoValidator usuarioVehiculoValidator, VehiculoMapper vehiculoMapper)
         {
             this.errorResponseFactory = errorResponseFactory;
             this.vehiculoService = vehiculoService;
@@ -42,7 +43,35 @@ namespace HigoApi.Controllers
                 return errorResponseFactory.InternalServerErrorResponse(e);
             }
         }
-
+        
+        [HttpPost(RoutePerfilVehiculos)]
+        public IActionResult PostPerfilVehiculo(int idUsuario, [FromBody]PerfilVehiculoDTO perfilVehiculoDto)
+        {
+            try
+            {
+                Console.WriteLine($"Nuevo vehiculo de usuario {idUsuario}");
+                return StatusCode(StatusCodes.Status201Created, new PerfilVehiculoDTO());
+            }
+            catch (Exception e)
+            {
+                return errorResponseFactory.InternalServerErrorResponse(e);
+            }
+        }
+        
+        [HttpPut(RoutePerfilVehiculoPorId)]
+        public IActionResult PutPerfilVehiculo(int idUsuario, int idVehiculo, [FromBody]PerfilVehiculoDTO perfilVehiculoDto)
+        {
+            try
+            {
+                Console.WriteLine($"Actualizacion de vehiculo de usuario {idUsuario}");
+                return Ok(new PerfilVehiculoDTO());
+            }
+            catch (Exception e)
+            {
+                return errorResponseFactory.InternalServerErrorResponse(e);
+            }
+        }
+        
         [HttpGet(RoutePerfilVehiculoPorId)]
         public IActionResult GetPerfilVehiculoPorId(int idUsuario, int idVehiculo)
         {

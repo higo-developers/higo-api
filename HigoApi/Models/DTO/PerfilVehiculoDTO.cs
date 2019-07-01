@@ -2,7 +2,7 @@ namespace HigoApi.Models.DTO
 {
     public class PerfilVehiculoDTO
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
 
         public string Estado { get; set; }
         public string Tipo { get; set; }
