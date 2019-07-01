@@ -15,7 +15,9 @@ namespace HigoApi.Services.Impl
 
         public List<Marca> Listar()
         {
-            return higoContext.Marca.OrderBy(marca => marca.IdMarca).ToList();
+            return higoContext.Marca
+                .OrderBy(marca => marca.Descripcion)
+                .ToList();
         }
 
         public Marca ObtenerPorId(int id)
@@ -25,7 +27,7 @@ namespace HigoApi.Services.Impl
 
         public List<ModeloMarca> ListarModelosDeMarca(int idMarca)
         {
-            return higoContext.ModeloMarca.OrderBy(modelo => modelo.IdModeloMarca)
+            return higoContext.ModeloMarca.OrderBy(modelo => modelo.Descripcion)
                 .Where(modelo => modelo.IdMarca.Equals(idMarca))
                 .ToList();
         }

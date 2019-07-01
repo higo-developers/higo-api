@@ -85,6 +85,7 @@ namespace HigoApi.Services.Impl
         {
             return higoContext.Vehiculo
                 .Include(v => v.IdCombustibleNavigation)
+                .Include(v => v.IdModeloMarcaNavigation)
                 .FirstOrDefault(v => v.IdVehiculo.Equals(id));
         }
     }

@@ -60,6 +60,7 @@ namespace HigoApi.Mappers
             perfilVehiculoDto.Anno = vehiculo.Anno?.ToString();
             perfilVehiculoDto.Patente = vehiculo.Patente;
             perfilVehiculoDto.Combustible = vehiculo.IdCombustibleNavigation.Codigo;
+            perfilVehiculoDto.Marca = vehiculo.IdModeloMarcaNavigation.IdMarca;
             perfilVehiculoDto.Modelo = vehiculo.IdModeloMarca;
             perfilVehiculoDto.Cilindrada = vehiculo.IdCilindrada;
 
