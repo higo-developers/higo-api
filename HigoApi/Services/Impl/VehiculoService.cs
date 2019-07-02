@@ -70,11 +70,13 @@ namespace HigoApi.Services.Impl
         public List<Vehiculo> ListarPorIdUsuario(int idUsuario)
         {
             return higoContext.Vehiculo
-                .Where(v => v.IdPrestador.Equals(idUsuario))
                 .Include(ModeloMarcaNavigationPropertyPath)
                 .Include(v => v.IdCilindradaNavigation)
                 .Include(v => v.IdLocacionNavigation)
                 .Include(v => v.IdEstadoVehiculoNavigation)
+                .Include(v => v.IdEstadoVehiculoNavigation)
+                .Where(v => v.IdPrestador.Equals(idUsuario))
+                .Where(v => !EstadoVehiculo.ELIMINADO.ToString().Equals(v.IdEstadoVehiculoNavigation.Codigo))
                 .OrderBy(v => v.IdVehiculo)
                 .ToList();
         }
@@ -85,6 +87,7 @@ namespace HigoApi.Services.Impl
                 .Include(v => v.IdCombustibleNavigation)
                 .Include(v => v.IdModeloMarcaNavigation)
                 .Include(v => v.IdEstadoVehiculoNavigation)
+                .Where(v => !EstadoVehiculo.ELIMINADO.ToString().Equals(v.IdEstadoVehiculoNavigation.Codigo))
                 .FirstOrDefault(v => v.IdVehiculo.Equals(id));
         }
 

@@ -4,6 +4,7 @@ namespace HigoApi.Enums
     {
         ACTIVO,
         INACTIVO,
-        PENDIENTE
+        PENDIENTE,
+        ELIMINADO
     }
 }
