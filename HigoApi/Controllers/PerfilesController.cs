@@ -52,6 +52,10 @@ namespace HigoApi.Controllers
                 var vehiculo = vehiculoService.Crear(vehiculoMapper.FromPerfilVehiculoDTO(perfilVehiculoDto), idUsuario);
                 return StatusCode(StatusCodes.Status201Created, vehiculoMapper.ToPerfilVehiculoDTO(vehiculo));
             }
+            catch (FormatException fe)
+            {
+                return UnprocessableEntity(new ErrorResponse(StatusCodes.Status422UnprocessableEntity, fe.Message));
+            }
             catch (Exception e)
             {
                 return errorResponseFactory.InternalServerErrorResponse(e);
