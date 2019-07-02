@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using HigoApi.Models;
 using HigoApi.Models.DTO;
+using HigoApi.Services;
 using HigoApi.Utils;
+using TipoVehiculo = HigoApi.Enums.TipoVehiculo;
 
 namespace HigoApi.Mappers
 {
@@ -11,11 +13,17 @@ namespace HigoApi.Mappers
         private readonly UsuarioMapper usuarioMapper;
         private readonly VehiculoUtils vehiculoUtils;
 
-        public VehiculoMapper(LocacionMapper locacionMapper, UsuarioMapper usuarioMapper, VehiculoUtils vehiculoUtils)
+        private readonly ITipoService tipoService;
+        private readonly IOpcionesService opcionesService;
+
+        public VehiculoMapper(LocacionMapper locacionMapper, UsuarioMapper usuarioMapper, VehiculoUtils vehiculoUtils,
+            ITipoService tipoService, IOpcionesService opcionesService)
         {
             this.locacionMapper = locacionMapper;
             this.usuarioMapper = usuarioMapper;
             this.vehiculoUtils = vehiculoUtils;
+            this.tipoService = tipoService;
+            this.opcionesService = opcionesService;
         }
 
         public List<VehiculoDTO> ToVehiculoDTOList(List<Vehiculo> vehiculos)
@@ -77,6 +85,18 @@ namespace HigoApi.Mappers
             perfilVehiculoDto.TapizadoCuero = vehiculo.TapizadoCuero ?? false;
 
             return perfilVehiculoDto;
+        }
+
+        public Vehiculo FromPerfilVehiculoDTO(PerfilVehiculoDTO dto)
+        {
+            // IdPrestador = idPrestador; -------------> Setear al persistir
+            // IdEstadoVehiculo = idEstadoVehiculo; ---> Setear al persistir
+            // IdLocacion = idLocacion; ---------------> Setear al persistir
+            Vehiculo vehiculo = new Vehiculo(dto);
+            vehiculo.IdTipoVehiculoNavigation = tipoService.ObtenerPorCodigo(TipoVehiculo.AUTO.ToString());
+            vehiculo.IdCombustibleNavigation = opcionesService.CombustiblePorCodigo(dto.Combustible);
+            
+            return vehiculo;
         }
     }
 }

@@ -7,5 +7,6 @@ namespace HigoApi.Services
     {
         List<Cilindrada> ListarCilindradas();
         List<Combustible> ListarCombustibles();
+        Combustible CombustiblePorCodigo(string codigo);
     }
 }

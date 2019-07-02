@@ -22,5 +22,10 @@ namespace HigoApi.Services.Impl
         {
             return higoContext.Combustible.OrderBy(c => c.IdCombustible).ToList();
         }
+
+        public Combustible CombustiblePorCodigo(string codigo)
+        {
+            return higoContext.Combustible.FirstOrDefault(v => v.Codigo.Equals(codigo));
+        }
     }
 }

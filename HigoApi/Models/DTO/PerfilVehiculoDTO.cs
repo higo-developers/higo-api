@@ -11,8 +11,8 @@ namespace HigoApi.Models.DTO
         public string Anno { get; set; }
 
         public int? Marca { get; set; }
-        public int? Modelo { get; set; }
-        public int? Cilindrada { get; set; }
+        public int Modelo { get; set; }
+        public int Cilindrada { get; set; }
 
         // < Datos de equipamiento >
 

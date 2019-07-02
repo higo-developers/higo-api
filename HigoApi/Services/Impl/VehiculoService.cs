@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using HigoApi.Mappers;
 using HigoApi.Models;
@@ -87,6 +88,11 @@ namespace HigoApi.Services.Impl
                 .Include(v => v.IdCombustibleNavigation)
                 .Include(v => v.IdModeloMarcaNavigation)
                 .FirstOrDefault(v => v.IdVehiculo.Equals(id));
+        }
+
+        public Vehiculo Crear(Vehiculo vehiculo)
+        {
+            throw new NotImplementedException();
         }
     }
 }
