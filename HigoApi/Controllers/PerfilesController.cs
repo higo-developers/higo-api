@@ -36,7 +36,7 @@ namespace HigoApi.Controllers
         {
             try
             {
-                return Ok(vehiculoService.ListarPorIdUsuario(idUsuario));
+                return Ok(vehiculoMapper.ToVehiculoDTOList(vehiculoService.ListarPorIdUsuario(idUsuario)));
             }
             catch (Exception e)
             {
