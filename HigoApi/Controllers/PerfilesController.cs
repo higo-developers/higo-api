@@ -49,8 +49,8 @@ namespace HigoApi.Controllers
         {
             try
             {
-                Console.WriteLine($"Nuevo vehiculo de usuario {idUsuario}");
-                return StatusCode(StatusCodes.Status201Created, new PerfilVehiculoDTO());
+                var vehiculo = vehiculoService.Crear(vehiculoMapper.FromPerfilVehiculoDTO(perfilVehiculoDto), idUsuario);
+                return StatusCode(StatusCodes.Status201Created, vehiculoMapper.ToPerfilVehiculoDTO(vehiculo));
             }
             catch (Exception e)
             {

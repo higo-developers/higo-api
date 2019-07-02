@@ -80,6 +80,7 @@ namespace HigoApi
             services.AddScoped<IMarcaService, MarcaService>();
             services.AddScoped<IOpcionesService, OpcionesService>();
             services.AddScoped<ITipoService, TipoService>();
+            services.AddScoped<IEstadoService, EstadoService>();
 
             services.AddScoped<VehiculoMapper>();
             services.AddScoped<LocacionMapper>();

@@ -89,13 +89,9 @@ namespace HigoApi.Mappers
 
         public Vehiculo FromPerfilVehiculoDTO(PerfilVehiculoDTO dto)
         {
-            // IdPrestador = idPrestador; -------------> Setear al persistir
-            // IdEstadoVehiculo = idEstadoVehiculo; ---> Setear al persistir
-            // IdLocacion = idLocacion; ---------------> Setear al persistir
-            Vehiculo vehiculo = new Vehiculo(dto);
-            vehiculo.IdTipoVehiculoNavigation = tipoService.ObtenerPorCodigo(TipoVehiculo.AUTO.ToString());
-            vehiculo.IdCombustibleNavigation = opcionesService.CombustiblePorCodigo(dto.Combustible);
-            
+            var vehiculo = new Vehiculo(dto);
+            vehiculo.IdTipoVehiculo = tipoService.ObtenerPorCodigo(TipoVehiculo.AUTO.ToString()).IdTipoVehiculo;
+            vehiculo.IdCombustible = opcionesService.CombustiblePorCodigo(dto.Combustible).IdCombustible;
             return vehiculo;
         }
     }

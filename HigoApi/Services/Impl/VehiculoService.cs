@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using HigoApi.Mappers;
 using HigoApi.Models;
@@ -17,15 +16,18 @@ namespace HigoApi.Services.Impl
         private readonly OperacionUtils operacionUtils;
         private readonly VehiculoUtils vehiculoUtils;
 
+        private readonly IEstadoService estadoService;
+
         const string ModeloMarcaNavigationPropertyPath = "IdModeloMarcaNavigation.IdMarcaNavigation";
 
         public VehiculoService(HigoContext higoContext, VehiculoMapper vehiculoMapper, OperacionUtils operacionUtils,
-            VehiculoUtils vehiculoUtils)
+            VehiculoUtils vehiculoUtils, IEstadoService estadoService)
         {
             this.higoContext = higoContext;
             this.vehiculoMapper = vehiculoMapper;
             this.operacionUtils = operacionUtils;
             this.vehiculoUtils = vehiculoUtils;
+            this.estadoService = estadoService;
         }
 
         public List<Vehiculo> Listar(ParametrosBusquedaVehiculo parametros)
@@ -88,9 +90,16 @@ namespace HigoApi.Services.Impl
                 .FirstOrDefault(v => v.IdVehiculo.Equals(id));
         }
 
-        public Vehiculo Crear(Vehiculo vehiculo)
+        public Vehiculo Crear(Vehiculo vehiculo, int idUsuario)
         {
-            throw new NotImplementedException();
+            vehiculo.IdPrestador = idUsuario;
+            vehiculo.IdLocacion = higoContext.Usuario.Find(idUsuario).IdLocacion;
+            vehiculo.IdEstadoVehiculo = estadoService.EstadoVehiculoPorCodigo(EstadoVehiculo.PENDIENTE.ToString()).IdEstadoVehiculo;
+
+            higoContext.Vehiculo.Add(vehiculo);
+            higoContext.SaveChanges();
+
+            return ObtenerPorIdParaPerfil(vehiculo.IdVehiculo);
         }
     }
 }
