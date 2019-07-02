@@ -67,8 +67,12 @@ namespace HigoApi.Controllers
         {
             try
             {
-                Console.WriteLine($"Actualizacion de vehiculo de usuario {idUsuario}");
-                return Ok(new PerfilVehiculoDTO());
+                var vehiculo = vehiculoMapper.FromPerfilVehiculoDTO(perfilVehiculoDto);
+                return Ok(vehiculoMapper.ToPerfilVehiculoDTO(vehiculoService.Actualizar(vehiculo, idUsuario)));
+            }
+            catch (FormatException fe)
+            {
+                return UnprocessableEntity(new ErrorResponse(StatusCodes.Status422UnprocessableEntity, fe.Message));
             }
             catch (Exception e)
             {

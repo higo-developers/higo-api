@@ -15,12 +15,12 @@ namespace HigoApi.Validators
             this.higoContext = higoContext;
         }
 
-        public void Validate(int idUsuario, int idVehiculo)
+        public void Validate(int usuarioId, int vehiculoId)
         {
-            var exists = higoContext.Vehiculo.FirstOrDefault(v => v.IdVehiculo.Equals(idVehiculo) && v.IdPrestador.Equals(idUsuario));
+            var exists = higoContext.Vehiculo.FirstOrDefault(v => v.IdVehiculo.Equals(vehiculoId) && v.IdPrestador.Equals(usuarioId));
 
             if (exists == null)
-                throw new ValidationException(string.Format(ErrorMessage, idVehiculo, idUsuario));
+                throw new ValidationException(string.Format(ErrorMessage, vehiculoId, usuarioId));
         }
     }
 }

@@ -7,6 +7,7 @@ namespace HigoApi.Models
     {
         public Vehiculo(PerfilVehiculoDTO dto)
         {
+            if (dto.Id != null) IdVehiculo = (int) dto.Id;
             IdModeloMarca = dto.Modelo;
             IdCilindrada = dto.Cilindrada;
             Anno = Int32.Parse(dto.Anno);

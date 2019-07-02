@@ -11,5 +11,6 @@ namespace HigoApi.Services
         List<Vehiculo> ListarPorIdUsuario(int idUsuario);
         Vehiculo ObtenerPorIdParaPerfil(int id);
         Vehiculo Crear(Vehiculo vehiculo, int idUsuario);
+        Vehiculo Actualizar(Vehiculo vehiculo, int idUsuario);
     }
 }

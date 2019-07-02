@@ -16,18 +16,15 @@ namespace HigoApi.Services.Impl
         private readonly OperacionUtils operacionUtils;
         private readonly VehiculoUtils vehiculoUtils;
 
-        private readonly IEstadoService estadoService;
-
         const string ModeloMarcaNavigationPropertyPath = "IdModeloMarcaNavigation.IdMarcaNavigation";
-
+        
         public VehiculoService(HigoContext higoContext, VehiculoMapper vehiculoMapper, OperacionUtils operacionUtils,
-            VehiculoUtils vehiculoUtils, IEstadoService estadoService)
+            VehiculoUtils vehiculoUtils)
         {
             this.higoContext = higoContext;
             this.vehiculoMapper = vehiculoMapper;
             this.operacionUtils = operacionUtils;
             this.vehiculoUtils = vehiculoUtils;
-            this.estadoService = estadoService;
         }
 
         public List<Vehiculo> Listar(ParametrosBusquedaVehiculo parametros)
@@ -73,13 +70,13 @@ namespace HigoApi.Services.Impl
         public List<Vehiculo> ListarPorIdUsuario(int idUsuario)
         {
             return higoContext.Vehiculo
-                    .Where(v => v.IdPrestador.Equals(idUsuario))
-                    .Include(ModeloMarcaNavigationPropertyPath)
-                    .Include(v => v.IdCilindradaNavigation)
-                    .Include(v => v.IdLocacionNavigation)
-                    .Include(v => v.IdEstadoVehiculoNavigation)
-                    .OrderBy(v => v.IdVehiculo)
-                    .ToList();
+                .Where(v => v.IdPrestador.Equals(idUsuario))
+                .Include(ModeloMarcaNavigationPropertyPath)
+                .Include(v => v.IdCilindradaNavigation)
+                .Include(v => v.IdLocacionNavigation)
+                .Include(v => v.IdEstadoVehiculoNavigation)
+                .OrderBy(v => v.IdVehiculo)
+                .ToList();
         }
 
         public Vehiculo ObtenerPorIdParaPerfil(int id)
@@ -87,6 +84,7 @@ namespace HigoApi.Services.Impl
             return higoContext.Vehiculo
                 .Include(v => v.IdCombustibleNavigation)
                 .Include(v => v.IdModeloMarcaNavigation)
+                .Include(v => v.IdEstadoVehiculoNavigation)
                 .FirstOrDefault(v => v.IdVehiculo.Equals(id));
         }
 
@@ -94,9 +92,19 @@ namespace HigoApi.Services.Impl
         {
             vehiculo.IdPrestador = idUsuario;
             vehiculo.IdLocacion = higoContext.Usuario.Find(idUsuario).IdLocacion;
-            vehiculo.IdEstadoVehiculo = estadoService.EstadoVehiculoPorCodigo(EstadoVehiculo.PENDIENTE.ToString()).IdEstadoVehiculo;
 
             higoContext.Vehiculo.Add(vehiculo);
+            higoContext.SaveChanges();
+
+            return ObtenerPorIdParaPerfil(vehiculo.IdVehiculo);
+        }
+
+        public Vehiculo Actualizar(Vehiculo vehiculo, int idUsuario)
+        {
+            vehiculo.IdPrestador = idUsuario;
+            vehiculo.IdLocacion = higoContext.Usuario.Find(idUsuario).IdLocacion;
+
+            higoContext.Vehiculo.Update(vehiculo);
             higoContext.SaveChanges();
 
             return ObtenerPorIdParaPerfil(vehiculo.IdVehiculo);
