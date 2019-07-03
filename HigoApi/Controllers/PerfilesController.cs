@@ -21,6 +21,8 @@ namespace HigoApi.Controllers
         private readonly IVehiculoService vehiculoService;
         private readonly UsuarioVehiculoValidator usuarioVehiculoValidator;
         private readonly VehiculoMapper vehiculoMapper;
+        
+        private const string MensajeRespuestaVehiculoDadoDeBaja = "Vehículo {0} dado de baja";
 
         public PerfilesController(ErrorResponseFactory errorResponseFactory, IVehiculoService vehiculoService,
             UsuarioVehiculoValidator usuarioVehiculoValidator, VehiculoMapper vehiculoMapper)
@@ -106,7 +108,7 @@ namespace HigoApi.Controllers
             {
                 usuarioVehiculoValidator.Validate(idUsuario, idVehiculo);
                 vehiculoService.Eliminar(idVehiculo);
-                return NoContent();
+                return Ok(new {Mensaje = string.Format(MensajeRespuestaVehiculoDadoDeBaja, idVehiculo)});
             }
             catch (ValidationException ve)
             {
