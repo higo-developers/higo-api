@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 using HigoApi.Builders;
-using HigoApi.Hubs;
+using HigoApi.Factories;
 using HigoApi.Mappers;
 using HigoApi.Models;
 using HigoApi.Services;
@@ -77,18 +77,27 @@ namespace HigoApi
             services.AddScoped<IOperacionService, OperacionService>();
             services.AddScoped<IUsuarioService, UsuarioService>();
             services.AddScoped<INotificacionService, NotificacionService>();
+            services.AddScoped<IMarcaService, MarcaService>();
+            services.AddScoped<IOpcionesService, OpcionesService>();
+            services.AddScoped<ITipoService, TipoService>();
+            services.AddScoped<IEstadoService, EstadoService>();
 
             services.AddScoped<VehiculoMapper>();
             services.AddScoped<LocacionMapper>();
             services.AddScoped<UsuarioMapper>();
+            services.AddScoped<MarcaMapper>();
+            services.AddScoped<OpcionesMapper>();
 
             services.AddScoped<TokenBuilder>();
             services.AddScoped<LoginResponseBuilder>();
             
             services.AddScoped<ParametrosBusquedaVehiculoValidator>();
+            services.AddScoped<UsuarioVehiculoValidator>();
             services.AddScoped<UsuarioRequestValidator>();
             services.AddScoped<OperacionUtils>();
             services.AddScoped<VehiculoUtils>();
+
+            services.AddScoped<ErrorResponseFactory>();
 
             services.AddSignalR();
         }

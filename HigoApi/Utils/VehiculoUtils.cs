@@ -16,7 +16,7 @@ namespace HigoApi.Utils
         private const string RompenieblasDelantero = "Rompenieblas delantero";
         private const string RompenieblasTrasero = "Rompenieblas trasero";
         private const string TapizadoDeCuero = "Tapizado de cuero";
-        private const string direccionAsistida = "Dirección asistida";
+        private const string DireccionAsistida = "Dirección asistida";
 
         public bool MatchLocationIfPresent(string locacionVehiculo, string locacion)
         {
@@ -47,7 +47,7 @@ namespace HigoApi.Utils
                 equipamientoList.Add(ControlDeTracción);
 
             if (vehiculo.Da.HasValue && vehiculo.Da.Value)
-                equipamientoList.Add(direccionAsistida);
+                equipamientoList.Add(DireccionAsistida);
 
             if (vehiculo.Dh.HasValue && vehiculo.Dh.Value)
                 equipamientoList.Add(DireccionHidraulica);

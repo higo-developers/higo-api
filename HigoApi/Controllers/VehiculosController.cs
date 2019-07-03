@@ -1,5 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using HigoApi.Factories;
+using HigoApi.Mappers;
 using HigoApi.Models.DTO;
 using HigoApi.Services;
 using HigoApi.Validators;
@@ -14,12 +16,18 @@ namespace HigoApi.Controllers
     {
         private readonly IVehiculoService vehiculoService;
         private readonly ParametrosBusquedaVehiculoValidator parametrosValidator;
+        private readonly ErrorResponseFactory errorResponseFactory;
+
+        private readonly VehiculoMapper vehiculoMapper;
 
         public VehiculosController(IVehiculoService vehiculoService,
-            ParametrosBusquedaVehiculoValidator parametrosValidator)
+            ParametrosBusquedaVehiculoValidator parametrosValidator, ErrorResponseFactory errorResponseFactory,
+            VehiculoMapper vehiculoMapper)
         {
             this.vehiculoService = vehiculoService;
             this.parametrosValidator = parametrosValidator;
+            this.errorResponseFactory = errorResponseFactory;
+            this.vehiculoMapper = vehiculoMapper;
         }
 
         [HttpGet]
@@ -28,7 +36,7 @@ namespace HigoApi.Controllers
             try
             {
                 parametrosValidator.Validate(parametros);
-                return Ok(vehiculoService.Listar(parametros));
+                return Ok(vehiculoMapper.ToVehiculoDTOList(vehiculoService.Listar(parametros)));
             }
             catch (ValidationException ve)
             {
@@ -42,9 +50,7 @@ namespace HigoApi.Controllers
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
-                var code = StatusCodes.Status500InternalServerError;
-                return StatusCode(code, new ErrorResponse(code, e.Message));
+                return errorResponseFactory.InternalServerErrorResponse(e);
             }
         }
 
@@ -53,13 +59,11 @@ namespace HigoApi.Controllers
         {
             try
             {
-                return Ok(vehiculoService.ObtenerPorId(id));
+                return Ok(vehiculoMapper.ToVehiculoDTO(vehiculoService.ObtenerPorId(id)));
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
-                var code = StatusCodes.Status500InternalServerError;
-                return StatusCode(code, new ErrorResponse(code, e.Message));
+                return errorResponseFactory.InternalServerErrorResponse(e);
             }
         }
     }
