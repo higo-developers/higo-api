@@ -2,13 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using HigoApi.Models;
-using HigoApi.Models.DTO;
-using HigoApi.Services;
-using HigoApi.Validators;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using HigoApi.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using HigoApi.Models.DTO;
+using HigoApi.Services;
+using HigoApi.Validators;
+using System.ComponentModel.DataAnnotations;
 
 namespace HigoApi.Controllers
 {
@@ -19,14 +22,15 @@ namespace HigoApi.Controllers
     {
         private readonly HigoContext ctx;
         private readonly IUsuarioService usuarioService;
-        private readonly ParametrosUsuarioRequestValidator parametrosValidator;
+        private readonly UsuarioRequestValidator parametrosValidator;
 
-        public UsuarioController(HigoContext ctx, IUsuarioService usuarioService, ParametrosUsuarioRequestValidator parametrosValidator)
+        public UsuarioController(IUsuarioService usuarioService, UsuarioRequestValidator parametrosValidator, HigoContext ctx)
         {
             this.ctx = ctx;
             this.usuarioService = usuarioService;
             this.parametrosValidator = parametrosValidator;
         }
+
 
         //GET: api/Usuario
        [HttpGet]
@@ -63,29 +67,24 @@ namespace HigoApi.Controllers
 
         // PUT: api/Usuario/5
         [HttpPut("{id}")]
-        public IActionResult PutUsuario(int id, Usuario usuarioEdited)
+        public IActionResult PutUsuario(int id, RegistrarUsuarioDTO usuarioEdited)
         {
             try
             {
                 var usr = usuarioService.ObtenerUsuarioPorId(id);
+                parametrosValidator.IsValidatedUser(usuarioEdited);
                 var usuarioValidado = parametrosValidator.ValidateNullsParameter(usr, usuarioEdited);
                 usuarioService.ActualizarUsuario(usuarioValidado);
+
                 return new ContentResult()
                 {
                     StatusCode = StatusCodes.Status201Created
                 };
             }
-
-            catch (DbUpdateConcurrencyException)
+            catch (ValidationException ve)
             {
-                if (!UsuarioExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                Console.WriteLine(ve);
+                return BadRequest(new ErrorResponse(StatusCodes.Status400BadRequest, ve.Message));
             }
             catch (Exception e)
             {
@@ -97,12 +96,25 @@ namespace HigoApi.Controllers
 
         // POST: api/Usuario
         [HttpPost]
-        public async Task<ActionResult<Usuario>> PostUsuario(Usuario usuario)
+        public IActionResult PostUsuario(RegistrarUsuarioDTO usuario)
         {
-            ctx.Usuario.Add(usuario);
-            await ctx.SaveChangesAsync();
-
-            return CreatedAtAction("GetUsuario", new { id = usuario.IdUsuario }, usuario);
+            try
+            {
+                Usuario usr = usuarioService.RegistrarUsuario(usuario);
+                return Ok(usr) ;
+            }
+            catch (ValidationException ve)
+            {
+                Console.WriteLine(ve);
+                return BadRequest(new ErrorResponse(StatusCodes.Status400BadRequest, ve.Message));
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                const int code = StatusCodes.Status500InternalServerError;
+                return StatusCode(code, new ErrorResponse(code, e.Message));
+            }
+           
         }
 
         // DELETE: api/Usuario/5
@@ -119,11 +131,6 @@ namespace HigoApi.Controllers
             await ctx.SaveChangesAsync();
 
             return usuario;
-        }
-
-        private bool UsuarioExists(int id)
-        {
-            return ctx.Usuario.Any(e => e.IdUsuario == id);
         }
     }
 }

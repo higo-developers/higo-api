@@ -1,8 +1,5 @@
 ﻿using HigoApi.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using HigoApi.Models.DTO;
 
 namespace HigoApi.Services
 {
@@ -10,5 +7,6 @@ namespace HigoApi.Services
     {
         Usuario ObtenerUsuarioPorId(int id);
         void ActualizarUsuario(Usuario usuario);
+        Usuario RegistrarUsuario(RegistrarUsuarioDTO usuarioARegistrar);
     }
 }
