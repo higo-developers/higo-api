@@ -12,5 +12,6 @@ namespace HigoApi.Services
         Vehiculo ObtenerPorIdParaPerfil(int id);
         Vehiculo Crear(Vehiculo vehiculo, int idUsuario);
         Vehiculo Actualizar(Vehiculo vehiculo, int idUsuario);
+        void Eliminar(int idVehiculo);
     }
 }

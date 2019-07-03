@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using HigoApi.Mappers;
 using HigoApi.Models;
 using HigoApi.Models.DTO;
 using HigoApi.Utils;
@@ -12,19 +11,19 @@ namespace HigoApi.Services.Impl
     public class VehiculoService : IVehiculoService
     {
         private readonly HigoContext higoContext;
-        private readonly VehiculoMapper vehiculoMapper;
         private readonly OperacionUtils operacionUtils;
         private readonly VehiculoUtils vehiculoUtils;
+        private readonly IEstadoService estadoService;
 
         const string ModeloMarcaNavigationPropertyPath = "IdModeloMarcaNavigation.IdMarcaNavigation";
-        
-        public VehiculoService(HigoContext higoContext, VehiculoMapper vehiculoMapper, OperacionUtils operacionUtils,
-            VehiculoUtils vehiculoUtils)
+
+        public VehiculoService(HigoContext higoContext, OperacionUtils operacionUtils, VehiculoUtils vehiculoUtils,
+            IEstadoService estadoService)
         {
             this.higoContext = higoContext;
-            this.vehiculoMapper = vehiculoMapper;
             this.operacionUtils = operacionUtils;
             this.vehiculoUtils = vehiculoUtils;
+            this.estadoService = estadoService;
         }
 
         public List<Vehiculo> Listar(ParametrosBusquedaVehiculo parametros)
@@ -111,6 +110,16 @@ namespace HigoApi.Services.Impl
             higoContext.SaveChanges();
 
             return ObtenerPorIdParaPerfil(vehiculo.IdVehiculo);
+        }
+
+        public void Eliminar(int idVehiculo)
+        {
+            var vehiculo = ObtenerPorId(idVehiculo);
+            
+            vehiculo.IdEstadoVehiculo = estadoService.EstadoVehiculoPorCodigo(EstadoVehiculo.ELIMINADO.ToString()).IdEstadoVehiculo;
+            
+            higoContext.Vehiculo.Update(vehiculo);
+            higoContext.SaveChanges();
         }
     }
 }

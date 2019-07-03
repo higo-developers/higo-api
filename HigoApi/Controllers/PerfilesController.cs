@@ -43,9 +43,28 @@ namespace HigoApi.Controllers
                 return errorResponseFactory.InternalServerErrorResponse(e);
             }
         }
-        
+
+        [HttpGet(RoutePerfilVehiculoPorId)]
+        public IActionResult GetPerfilVehiculoPorId(int idUsuario, int idVehiculo)
+        {
+            try
+            {
+                usuarioVehiculoValidator.Validate(idUsuario, idVehiculo);
+                return Ok(vehiculoMapper.ToPerfilVehiculoDTO(vehiculoService.ObtenerPorIdParaPerfil(idVehiculo)));
+            }
+            catch (ValidationException ve)
+            {
+                Console.WriteLine(ve);
+                return UnprocessableEntity(new ErrorResponse(StatusCodes.Status422UnprocessableEntity, ve.Message));
+            }
+            catch (Exception e)
+            {
+                return errorResponseFactory.InternalServerErrorResponse(e);
+            }
+        }
+
         [HttpPost(RoutePerfilVehiculos)]
-        public IActionResult PostPerfilVehiculo(int idUsuario, [FromBody]PerfilVehiculoDTO perfilVehiculoDto)
+        public IActionResult PostPerfilVehiculo(int idUsuario, [FromBody] PerfilVehiculoDTO perfilVehiculoDto)
         {
             try
             {
@@ -61,9 +80,9 @@ namespace HigoApi.Controllers
                 return errorResponseFactory.InternalServerErrorResponse(e);
             }
         }
-        
+
         [HttpPut(RoutePerfilVehiculoPorId)]
-        public IActionResult PutPerfilVehiculo(int idUsuario, int idVehiculo, [FromBody]PerfilVehiculoDTO perfilVehiculoDto)
+        public IActionResult PutPerfilVehiculo(int idUsuario, int idVehiculo, [FromBody] PerfilVehiculoDTO perfilVehiculoDto)
         {
             try
             {
@@ -79,14 +98,15 @@ namespace HigoApi.Controllers
                 return errorResponseFactory.InternalServerErrorResponse(e);
             }
         }
-        
-        [HttpGet(RoutePerfilVehiculoPorId)]
-        public IActionResult GetPerfilVehiculoPorId(int idUsuario, int idVehiculo)
+
+        [HttpDelete(RoutePerfilVehiculoPorId)]
+        public IActionResult DeletePerfilVehiculo(int idUsuario, int idVehiculo)
         {
             try
             {
                 usuarioVehiculoValidator.Validate(idUsuario, idVehiculo);
-                return Ok(vehiculoMapper.ToPerfilVehiculoDTO(vehiculoService.ObtenerPorIdParaPerfil(idVehiculo)));
+                vehiculoService.Eliminar(idVehiculo);
+                return NoContent();
             }
             catch (ValidationException ve)
             {
