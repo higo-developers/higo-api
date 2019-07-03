@@ -12,7 +12,7 @@ namespace HigoApi.Services
 
         List<Notificacion> ObtenerListado(int idUsuario);
 
-        void Crear(int idUsuario, int idOperacion, string descripcion, string mensaje);
+        void Crear(int idUsuario, Operacion operacion);
         void Modificar(int idNotificacion);
 
         Notificacion ObtenerPorId(int idNotificacion);
