@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using HigoApi.Enums;
 using HigoApi.Models;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using HigoApi.Models.DTO;
 using HigoApi.Services;
 using HigoApi.Validators;
-using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace HigoApi.Controllers
 {
@@ -24,6 +22,10 @@ namespace HigoApi.Controllers
         private readonly IUsuarioService usuarioService;
         private readonly UsuarioRequestValidator parametrosValidator;
 
+        private const string RouteUsuarioPorMailYOrigen = "{email}/origen/{codigoOrigen}";
+        
+        private const string ErrorMessageUsuarioNoEncontrado = "No se ha encontrado usuario con mail {0} y origen {1}";
+        
         public UsuarioController(IUsuarioService usuarioService, UsuarioRequestValidator parametrosValidator, HigoContext ctx)
         {
             this.ctx = ctx;
@@ -131,6 +133,20 @@ namespace HigoApi.Controllers
             await ctx.SaveChangesAsync();
 
             return usuario;
+        }
+
+        [HttpGet(RouteUsuarioPorMailYOrigen)]
+        public IActionResult UsuarioPorEmailYOrigen(string email, string codigoOrigen)
+        {
+            var origen = (OrigenUsuario) Enum.Parse(typeof(OrigenUsuario), codigoOrigen, true);
+            var usuario = usuarioService.UsuarioPorEmailYOrigen(email, origen);
+
+            if (usuario == null)
+                return NotFound(
+                    new ErrorResponse(StatusCodes.Status404NotFound, string.Format(ErrorMessageUsuarioNoEncontrado, email, origen))
+                );
+
+            return Ok(usuario);
         }
     }
 }

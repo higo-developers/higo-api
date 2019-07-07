@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace HigoApi.Models
 {
@@ -23,6 +23,9 @@ namespace HigoApi.Models
         public string Email { get; set; }
         public string Password { get; set; }
         public string Telefono { get; set; }
+
+        [MaxLength(30)]
+        public string Origen { get; set; }
 
         public virtual Locacion IdLocacionNavigation { get; set; }
         public virtual Perfil IdPerfilNavigation { get; set; }
