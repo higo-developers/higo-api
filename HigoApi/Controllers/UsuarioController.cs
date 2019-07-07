@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using HigoApi.Enums;
 using HigoApi.Models;
 using HigoApi.Models.DTO;
 using HigoApi.Services;
@@ -21,6 +22,10 @@ namespace HigoApi.Controllers
         private readonly IUsuarioService usuarioService;
         private readonly UsuarioRequestValidator parametrosValidator;
 
+        private const string RouteUsuarioPorMailYOrigen = "{email}/origen/{codigoOrigen}";
+        
+        private const string ErrorMessageUsuarioNoEncontrado = "No se ha encontrado usuario con mail {0} y origen {1}";
+        
         public UsuarioController(IUsuarioService usuarioService, UsuarioRequestValidator parametrosValidator, HigoContext ctx)
         {
             this.ctx = ctx;
@@ -130,10 +135,18 @@ namespace HigoApi.Controllers
             return usuario;
         }
 
-        [HttpGet("{email}/origen/{origen}")]
-        public IActionResult UsuarioPorEmailYOrigen(string email, string origen)
+        [HttpGet(RouteUsuarioPorMailYOrigen)]
+        public IActionResult UsuarioPorEmailYOrigen(string email, string codigoOrigen)
         {
-            return Ok($"Consulta de usuario con email {email} y origen {origen}");
+            var origen = (OrigenUsuario) Enum.Parse(typeof(OrigenUsuario), codigoOrigen, true);
+            var usuario = usuarioService.UsuarioPorEmailYOrigen(email, origen);
+
+            if (usuario == null)
+                return NotFound(
+                    new ErrorResponse(StatusCodes.Status404NotFound, string.Format(ErrorMessageUsuarioNoEncontrado, email, origen))
+                );
+
+            return Ok(usuario);
         }
     }
 }

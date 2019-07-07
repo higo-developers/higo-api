@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using HigoApi.Enums;
 using HigoApi.Models;
 using HigoApi.Models.DTO;
 using HigoApi.Validators;
@@ -64,6 +65,11 @@ namespace HigoApi.Services.Impl
             higoContext.SaveChanges();
 
             return usr;
+        }
+
+        public Usuario UsuarioPorEmailYOrigen(string email, OrigenUsuario origen)
+        {
+            return higoContext.Usuario.FirstOrDefault(u => u.Email.Equals(email) && u.Origen.Equals(origen.ToString()));
         }
     }
 }
