@@ -8,5 +8,8 @@ namespace HigoApi.Services
         List<Cilindrada> ListarCilindradas();
         List<Combustible> ListarCombustibles();
         Combustible CombustiblePorCodigo(string codigo);
+
+        /* TODO Reubicar este métdodo a un service más específico. */
+        Perfil PerfilPorCodigo(string codigo);
     }
 }
