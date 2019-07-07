@@ -92,8 +92,8 @@ namespace HigoApi.Services.Impl
 
         public Vehiculo Crear(Vehiculo vehiculo, int idUsuario)
         {
+            // TODO Cambiar datos de locacion de vehiculo
             vehiculo.IdPrestador = idUsuario;
-            vehiculo.IdLocacion = higoContext.Usuario.Find(idUsuario).IdLocacion;
 
             higoContext.Vehiculo.Add(vehiculo);
             higoContext.SaveChanges();
@@ -103,8 +103,8 @@ namespace HigoApi.Services.Impl
 
         public Vehiculo Actualizar(Vehiculo vehiculo, int idUsuario)
         {
+            // TODO Cambiar datos de locacion de vehiculo 
             vehiculo.IdPrestador = idUsuario;
-            vehiculo.IdLocacion = higoContext.Usuario.Find(idUsuario).IdLocacion;
 
             higoContext.Vehiculo.Update(vehiculo);
             higoContext.SaveChanges();

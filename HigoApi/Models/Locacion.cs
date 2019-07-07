@@ -6,7 +6,6 @@ namespace HigoApi.Models
     {
         public Locacion()
         {
-            Usuario = new HashSet<Usuario>();
             Vehiculo = new HashSet<Vehiculo>();
         }
 
@@ -18,7 +17,6 @@ namespace HigoApi.Models
         public string Partido { get; set; }
         public string Provincia { get; set; }
 
-        public virtual ICollection<Usuario> Usuario { get; set; }
         public virtual ICollection<Vehiculo> Vehiculo { get; set; }
     }
 }

@@ -315,8 +315,6 @@ namespace HigoApi.Models
             {
                 entity.HasKey(e => e.IdUsuario);
 
-                entity.HasIndex(e => e.IdLocacion);
-
                 entity.HasIndex(e => e.IdPerfil);
 
                 entity.Property(e => e.IdUsuario).HasColumnName("Id_Usuario");
@@ -327,14 +325,7 @@ namespace HigoApi.Models
                     .HasColumnName("Fecha_Alta")
                     .HasColumnType("date");
 
-                entity.Property(e => e.IdLocacion).HasColumnName("Id_Locacion");
-
                 entity.Property(e => e.IdPerfil).HasColumnName("Id_Perfil");
-
-                entity.HasOne(d => d.IdLocacionNavigation)
-                    .WithMany(p => p.Usuario)
-                    .HasForeignKey(d => d.IdLocacion)
-                    .HasConstraintName("FK_Usuario_Locacion");
 
                 entity.HasOne(d => d.IdPerfilNavigation)
                     .WithMany(p => p.Usuario)
