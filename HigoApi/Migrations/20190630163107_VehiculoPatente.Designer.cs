@@ -4,14 +4,16 @@ using HigoApi.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace HigoApi.Migrations
 {
     [DbContext(typeof(HigoContext))]
-    partial class HigoContextModelSnapshot : ModelSnapshot
+    [Migration("20190630163107_VehiculoPatente")]
+    partial class VehiculoPatente
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -216,6 +218,8 @@ namespace HigoApi.Migrations
                         .HasColumnName("Id_Notificacion")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<bool?>("Borrada");
+
                     b.Property<string>("Descripcion")
                         .HasMaxLength(100)
                         .IsUnicode(false);
@@ -235,8 +239,6 @@ namespace HigoApi.Migrations
                     b.Property<string>("Mensaje")
                         .HasMaxLength(500)
                         .IsUnicode(false);
-
-                    b.Property<string>("URL");
 
                     b.HasKey("IdNotificacion");
 
