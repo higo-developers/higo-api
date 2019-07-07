@@ -14,7 +14,7 @@ namespace HigoApi.Utils
         {
             SmtpClient smtp = new SmtpClient
             {
-                Host = "smtp.gmail.com",   //gmail example
+                Host = "smtp.gmail.com",
                 Port = 587,
                 EnableSsl = true,
                 DeliveryMethod = SmtpDeliveryMethod.Network,
@@ -28,7 +28,10 @@ namespace HigoApi.Utils
             catch(SmtpException ex)
             {
                 ex.Message.ToString();
-
+            }
+            catch(Exception x)
+            {
+                x.Message.ToString();
             }
         }
 
@@ -40,26 +43,16 @@ namespace HigoApi.Utils
             };
         }
 
-        private static MailMessage Nuevo(MailAddressCollection toAddressColl)
-        {
-            MailMessage mailMessage = Nuevo(fromAddress);
-            
-            foreach (MailAddress mad in toAddressColl)
-            {
-                mailMessage.Bcc.Add(mad);
-            }
+        private static readonly MailAddress fromAddress = new MailAddress("no-reply@gmail.com", "higo");
 
-            return mailMessage;
-        }
-
-        private static readonly MailAddress fromAddress = new MailAddress("no-reply@higo.com", "higo");
+        private static readonly string HIGO_HEADER = "<h1 style='background-color:#7a3994;'><span style='color:#dadada;'>hi</span><span style='color:white;'>go</span></h1>";
 
         public static void EmailNuevaSolicitud(Operacion operacion)
         {
             MailAddress toAddress = new MailAddress(operacion.IdVehiculoNavigation.IdPrestadorNavigation.Email);
             MailMessage mailMessage = Nuevo(toAddress);
 
-            string mailBody = "<h1>higo</h1>";
+            string mailBody = HIGO_HEADER;
             mailBody += "<h2>Nueva solicitud de alquiler</h2>";
             mailBody += "<p>";
             mailBody += "El usuario ";
@@ -87,7 +80,7 @@ namespace HigoApi.Utils
             MailAddress toAddress = new MailAddress(operacion.IdAdquirenteNavigation.Email);
             MailMessage mailMessage = Nuevo(toAddress);
 
-            string mailBody = "<h1>higo</h1>";
+            string mailBody = HIGO_HEADER;
             mailBody += "<h2>Alquiler rechazado</h2>";
             mailBody += "<p>";
             mailBody += "El usuario ";
@@ -115,7 +108,7 @@ namespace HigoApi.Utils
             MailAddress toAddress = new MailAddress(operacion.IdAdquirenteNavigation.Email);
             MailMessage mailMessage = Nuevo(toAddress);
 
-            string mailBody = "<h1>higo</h1>";
+            string mailBody = HIGO_HEADER;
             mailBody += "<h2>Alquiler rechazado</h2>";
             mailBody += "<p>";
             mailBody += "El usuario ";
@@ -142,7 +135,7 @@ namespace HigoApi.Utils
             MailAddress toAddress = new MailAddress(operacion.IdVehiculoNavigation.IdPrestadorNavigation.Email);
             MailMessage mailMessage = Nuevo(toAddress);
 
-            string mailBody = "<h1>higo</h1>";
+            string mailBody = HIGO_HEADER;
             mailBody += "<h2>Solicitud de alquiler cancelada</h2>";
             mailBody += "<p>";
             mailBody += "El usuario ";
@@ -163,16 +156,22 @@ namespace HigoApi.Utils
             Enviar(mailMessage);
         }
 
-        public static void EmailComenzarSolicitud(Operacion operacion)
+        public static void EmailComenzarSolicitud(Operacion operacion, int idUsuario)
         {
-            MailAddressCollection toAddresses = new MailAddressCollection
-            {
-                operacion.IdVehiculoNavigation.IdPrestadorNavigation.Email,
-                operacion.IdAdquirenteNavigation.Email
-            };
-            MailMessage mailMessage = Nuevo(toAddresses);
+            MailAddress toAddress;
 
-            string mailBody = "<h1>higo</h1>";
+            if (idUsuario == operacion.IdAdquirente)
+            {
+                toAddress = new MailAddress(operacion.IdAdquirenteNavigation.Email);
+            }
+            else
+            {
+                toAddress = new MailAddress(operacion.IdVehiculoNavigation.IdPrestadorNavigation.Email);
+            }
+
+            MailMessage mailMessage = Nuevo(toAddress);
+
+            string mailBody = HIGO_HEADER;
             mailBody += "<h2>El alquiler de tu vehículo a comenzado!</h2>";
             mailBody += "<p>";
             mailBody += "El usuario ";
@@ -193,16 +192,22 @@ namespace HigoApi.Utils
 
             Enviar(mailMessage);
         }
-        public static void EmailFinalizarSolicitud(Operacion operacion)
+        public static void EmailFinalizarSolicitud(Operacion operacion, int idUsuario)
         {
-            MailAddressCollection toAddresses = new MailAddressCollection
-            {
-                operacion.IdVehiculoNavigation.IdPrestadorNavigation.Email,
-                operacion.IdAdquirenteNavigation.Email
-            };
-            MailMessage mailMessage = Nuevo(toAddresses);
+            MailAddress toAddress;
 
-            string mailBody = "<h1>higo</h1>";
+            if (idUsuario == operacion.IdAdquirente)
+            {
+                toAddress = new MailAddress(operacion.IdAdquirenteNavigation.Email);
+            }
+            else
+            {
+                toAddress = new MailAddress(operacion.IdVehiculoNavigation.IdPrestadorNavigation.Email);
+            }
+
+            MailMessage mailMessage = Nuevo(toAddress);
+
+            string mailBody = HIGO_HEADER;
             mailBody += "<h2>El alquiler de tu vehículo a finalizado!</h2>";
             mailBody += "<p>";
             mailBody += "El usuario ";

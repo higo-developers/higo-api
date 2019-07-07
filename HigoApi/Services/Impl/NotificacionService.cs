@@ -46,13 +46,13 @@ namespace HigoApi.Services.Impl
                     EmailUtil.EmailCancelarSolicitud(operacion);
                     break;
                 case EstadoOperacion.FINALIZADO:
-                    EmailUtil.EmailFinalizarSolicitud(operacion);
+                    EmailUtil.EmailFinalizarSolicitud(operacion, idUsuario);
                     break;
                 case EstadoOperacion.RECHAZADO:
                     EmailUtil.EmailRechazarSolicitud(operacion);
                     break;
                 case EstadoOperacion.EJECUCION:
-                    EmailUtil.EmailComenzarSolicitud(operacion);
+                    EmailUtil.EmailComenzarSolicitud(operacion, idUsuario);
                     break;
                 default:
                     break;
