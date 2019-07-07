@@ -67,7 +67,7 @@ namespace HigoApi.Controllers
 
         // PUT: api/Usuario/5
         [HttpPut("{id}")]
-        public IActionResult PutUsuario(int id, RegistrarUsuarioDTO usuarioEdited)
+        public IActionResult PutUsuario(int id, [FromBody] RegistrarUsuarioDTO usuarioEdited)
         {
             try
             {
@@ -76,10 +76,7 @@ namespace HigoApi.Controllers
                 var usuarioValidado = parametrosValidator.ValidateNullsParameter(usr, usuarioEdited);
                 usuarioService.ActualizarUsuario(usuarioValidado);
 
-                return new ContentResult()
-                {
-                    StatusCode = StatusCodes.Status201Created
-                };
+                return Ok(StatusCodes.Status201Created);
             }
             catch (ValidationException ve)
             {
