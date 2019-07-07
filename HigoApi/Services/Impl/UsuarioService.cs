@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Threading.Tasks;
 using HigoApi.Models;
 using HigoApi.Models.DTO;
 using HigoApi.Validators;
 using Microsoft.EntityFrameworkCore;
+using Perfil = HigoApi.Enums.Perfil;
 
 namespace HigoApi.Services.Impl
 {
@@ -14,11 +13,14 @@ namespace HigoApi.Services.Impl
     {
         private readonly HigoContext higoContext;
         private readonly UsuarioRequestValidator validator;
+        private readonly IOpcionesService opcionesService;
 
-        public UsuarioService(HigoContext higoContext,UsuarioRequestValidator validator)
+        public UsuarioService(HigoContext higoContext, UsuarioRequestValidator validator,
+            IOpcionesService opcionesService)
         {
             this.higoContext = higoContext;
             this.validator = validator;
+            this.opcionesService = opcionesService;
         }
 
         public void ActualizarUsuario(Usuario usuario)
@@ -41,23 +43,22 @@ namespace HigoApi.Services.Impl
 
         public Usuario RegistrarUsuario(RegistrarUsuarioDTO usuarioARegistrar)
         {
-        if (higoContext.Usuario.Any(x => x.Email == usuarioARegistrar.Email))
-            throw new ValidationException("El E-mail ya se encuentra registrado anteriormente");
+            if (higoContext.Usuario.Any(x => x.Email == usuarioARegistrar.Email))
+                throw new ValidationException("El E-mail ya se encuentra registrado anteriormente");
 
-        if (higoContext.Usuario.Any(x => x.Dni.Equals(long.Parse(usuarioARegistrar.Dni))))
-            throw new ValidationException("El DNI ya se encuentra registrado anteriormente");
+            if (higoContext.Usuario.Any(x => x.Dni.Equals(long.Parse(usuarioARegistrar.Dni))))
+                throw new ValidationException("El DNI ya se encuentra registrado anteriormente");
 
             validator.IsValidatedUser(usuarioARegistrar);
-            Usuario usr = new Usuario()
+            var usr = new Usuario
             {
                 Nombre = usuarioARegistrar.Nombre,
                 Apellido = usuarioARegistrar.Apellido,
                 Dni = int.Parse(usuarioARegistrar.Dni),
                 Email = usuarioARegistrar.Email,
                 Password = usuarioARegistrar.Password,
-                IdPerfil = 2,
+                IdPerfil = opcionesService.PerfilPorCodigo(Perfil.USER.ToString()).IdPerfil,
                 FechaAlta = DateTime.Now
-                    
             };
             higoContext.Usuario.Add(usr);
             higoContext.SaveChanges();

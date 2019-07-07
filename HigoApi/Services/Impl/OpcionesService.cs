@@ -35,5 +35,10 @@ namespace HigoApi.Services.Impl
 
             return combustible;
         }
+
+        public Perfil PerfilPorCodigo(string codigo)
+        {
+            return higoContext.Perfil.FirstOrDefault(p => p.Codigo.Equals(codigo));
+        }
     }
 }
