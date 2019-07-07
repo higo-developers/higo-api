@@ -62,7 +62,7 @@ namespace HigoApi.Utils
             string mailBody = "<h1>higo</h1>";
             mailBody += "<h2>Nueva solicitud de alquiler</h2>";
             mailBody += "<p>";
-            mailBody += "El usuario";
+            mailBody += "El usuario ";
             mailBody += operacion.IdAdquirenteNavigation.Nombre + " " + operacion.IdAdquirenteNavigation.Apellido;
             mailBody += " ha solicitado tu vehículo ";
             mailBody += operacion.IdVehiculoNavigation.IdModeloMarcaNavigation.IdMarcaNavigation.Descripcion + " " + operacion.IdVehiculoNavigation.IdModeloMarcaNavigation.Descripcion;
@@ -90,7 +90,7 @@ namespace HigoApi.Utils
             string mailBody = "<h1>higo</h1>";
             mailBody += "<h2>Alquiler rechazado</h2>";
             mailBody += "<p>";
-            mailBody += "El usuario";
+            mailBody += "El usuario ";
             mailBody += operacion.IdVehiculoNavigation.IdPrestadorNavigation.Nombre + " " + operacion.IdVehiculoNavigation.IdPrestadorNavigation.Apellido;
             mailBody += " ha rechazado tu solicitud para el vehículo ";
             mailBody += operacion.IdVehiculoNavigation.IdModeloMarcaNavigation.IdMarcaNavigation.Descripcion + " " + operacion.IdVehiculoNavigation.IdModeloMarcaNavigation.Descripcion;
@@ -118,7 +118,7 @@ namespace HigoApi.Utils
             string mailBody = "<h1>higo</h1>";
             mailBody += "<h2>Alquiler rechazado</h2>";
             mailBody += "<p>";
-            mailBody += "El usuario";
+            mailBody += "El usuario ";
             mailBody += operacion.IdVehiculoNavigation.IdPrestadorNavigation.Nombre + " " + operacion.IdVehiculoNavigation.IdPrestadorNavigation.Apellido;
             mailBody += " ha aprobado tu solicitud para el vehículo ";
             mailBody += operacion.IdVehiculoNavigation.IdModeloMarcaNavigation.IdMarcaNavigation.Descripcion + " " + operacion.IdVehiculoNavigation.IdModeloMarcaNavigation.Descripcion;
@@ -145,7 +145,7 @@ namespace HigoApi.Utils
             string mailBody = "<h1>higo</h1>";
             mailBody += "<h2>Solicitud de alquiler cancelada</h2>";
             mailBody += "<p>";
-            mailBody += "El usuario";
+            mailBody += "El usuario ";
             mailBody += operacion.IdAdquirenteNavigation.Nombre + " " + operacion.IdAdquirenteNavigation.Apellido;
             mailBody += " ha cancelado la solicitud de tu vehículo ";
             mailBody += operacion.IdVehiculoNavigation.IdModeloMarcaNavigation.IdMarcaNavigation.Descripcion + " " + operacion.IdVehiculoNavigation.IdModeloMarcaNavigation.Descripcion;
@@ -165,16 +165,17 @@ namespace HigoApi.Utils
 
         public static void EmailComenzarSolicitud(Operacion operacion)
         {
-            MailAddressCollection toAddresses = new MailAddressCollection();
-
-            toAddresses.Add(operacion.IdVehiculoNavigation.IdPrestadorNavigation.Email);
-            toAddresses.Add(operacion.IdAdquirenteNavigation.Email);
+            MailAddressCollection toAddresses = new MailAddressCollection
+            {
+                operacion.IdVehiculoNavigation.IdPrestadorNavigation.Email,
+                operacion.IdAdquirenteNavigation.Email
+            };
             MailMessage mailMessage = Nuevo(toAddresses);
 
             string mailBody = "<h1>higo</h1>";
             mailBody += "<h2>El alquiler de tu vehículo a comenzado!</h2>";
             mailBody += "<p>";
-            mailBody += "El usuario";
+            mailBody += "El usuario ";
             mailBody += operacion.IdAdquirenteNavigation.Nombre + " " + operacion.IdAdquirenteNavigation.Apellido;
             mailBody += " ha comenzado el uso de tu vehículo ";
             mailBody += operacion.IdVehiculoNavigation.IdModeloMarcaNavigation.IdMarcaNavigation.Descripcion + " " + operacion.IdVehiculoNavigation.IdModeloMarcaNavigation.Descripcion;
@@ -194,16 +195,17 @@ namespace HigoApi.Utils
         }
         public static void EmailFinalizarSolicitud(Operacion operacion)
         {
-            MailAddressCollection toAddresses = new MailAddressCollection();
-
-            toAddresses.Add(operacion.IdVehiculoNavigation.IdPrestadorNavigation.Email);
-            toAddresses.Add(operacion.IdAdquirenteNavigation.Email);
+            MailAddressCollection toAddresses = new MailAddressCollection
+            {
+                operacion.IdVehiculoNavigation.IdPrestadorNavigation.Email,
+                operacion.IdAdquirenteNavigation.Email
+            };
             MailMessage mailMessage = Nuevo(toAddresses);
 
             string mailBody = "<h1>higo</h1>";
             mailBody += "<h2>El alquiler de tu vehículo a finalizado!</h2>";
             mailBody += "<p>";
-            mailBody += "El usuario";
+            mailBody += "El usuario ";
             mailBody += operacion.IdAdquirenteNavigation.Nombre + " " + operacion.IdAdquirenteNavigation.Apellido;
             mailBody += " ha finalizado el uso de tu vehículo ";
             mailBody += operacion.IdVehiculoNavigation.IdModeloMarcaNavigation.IdMarcaNavigation.Descripcion + " " + operacion.IdVehiculoNavigation.IdModeloMarcaNavigation.Descripcion;
