@@ -22,7 +22,7 @@ namespace HigoApi.Controllers
 
         // GET: api/Notificaciones
         [HttpGet]
-        public IEnumerable<Notificacion> Get([FromBody] int idUsuario, string estado)
+        public IEnumerable<Notificacion> GetAll([FromBody] int idUsuario)
         {
             List<Notificacion> nots = notificacionService.ObtenerListado(idUsuario);
             return nots;
@@ -35,12 +35,6 @@ namespace HigoApi.Controllers
             return notificacionService.ObtenerPorId(id);
         }
 
-        // POST: api/Notificaciones
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-
         // PUT: api/Notificaciones/5
         [HttpPut("{id}")]
         public void Put(int id)
@@ -48,10 +42,5 @@ namespace HigoApi.Controllers
             notificacionService.Modificar(id);
         }
 
-        // DELETE: api/ApiWithActions/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
     }
 }

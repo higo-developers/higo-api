@@ -29,11 +29,7 @@ namespace HigoApi.Services.Impl
 
             Operacion opRes = ObtenerPorId(nuevaOperacion.IdOperacion);
 
-            notificacionService.Crear(opRes.IdVehiculoNavigation.IdPrestador.GetValueOrDefault(),
-                                        opRes.IdOperacion,
-                                        "Nueva solicitud",
-                                        opRes.IdAdquirenteNavigation.Nombre + " solicita tu " +
-                                        opRes.IdVehiculoNavigation.IdModeloMarcaNavigation.Descripcion);
+            notificacionService.Crear(opRes.IdVehiculoNavigation.IdPrestador.GetValueOrDefault(), opRes);
 
             return opRes;
         }
@@ -57,19 +53,18 @@ namespace HigoApi.Services.Impl
 
             switch (codEstado)
             {
-                case "APROBADO":
-                case "RECHAZADO":
-                    notificacionService.Crear(op.IdAdquirente,
-                                        op.IdOperacion,
-                                        "Pedido " + codEstado.ToLower(),
-                                        "El prestador ha " + codEstado.ToLower() + " tu solicitud");
+                case EstadoOperacion.APROBADO:
+                case EstadoOperacion.RECHAZADO:
+                    notificacionService.Crear(op.IdAdquirente, op);
                     break;
-                case "CANCELADO":
-                case "FINALIZADO":
-                    notificacionService.Crear(op.IdVehiculoNavigation.IdPrestador.GetValueOrDefault(),
-                                        op.IdOperacion,
-                                        "Pedido " + codEstado.ToLower(),
-                                        op.IdAdquirenteNavigation.Nombre + " ha " + codEstado.ToLower() + " el pedido");
+                case EstadoOperacion.CANCELADO:
+                case EstadoOperacion.PENDIENTE:
+                    notificacionService.Crear(op.IdVehiculoNavigation.IdPrestador.GetValueOrDefault(), op);
+                    break;
+                case EstadoOperacion.EJECUCION:
+                case EstadoOperacion.FINALIZADO:
+                    notificacionService.Crear(op.IdAdquirente,op);
+                    notificacionService.Crear(op.IdVehiculoNavigation.IdPrestador.GetValueOrDefault(), op);
                     break;
                 default:
                     break;
@@ -83,7 +78,7 @@ namespace HigoApi.Services.Impl
         {
             List<Operacion> operaciones = (from Operacion o in higoContext.Operacion
                                            where o.IdVehiculoNavigation.IdPrestador == idUsuario
-                                           where o.IdEstadoOperacionNavigation.Codigo == "PENDIENTE"
+                                           where o.IdEstadoOperacionNavigation.Codigo == EstadoOperacion.PENDIENTE
                                            select o).ToList();
 
             return operaciones;
