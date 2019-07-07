@@ -6,7 +6,6 @@ using HigoApi.Models;
 using HigoApi.Models.DTO;
 using HigoApi.Validators;
 using Microsoft.EntityFrameworkCore;
-using Perfil = HigoApi.Enums.Perfil;
 
 namespace HigoApi.Services.Impl
 {
@@ -44,13 +43,16 @@ namespace HigoApi.Services.Impl
 
         public Usuario RegistrarUsuario(RegistrarUsuarioDTO usuarioARegistrar)
         {
-            if (higoContext.Usuario.Any(x => x.Email == usuarioARegistrar.Email))
+            var origen = usuarioARegistrar.Origen.ToString() ?? OrigenUsuario.PORTAL.ToString();
+            
+            if (higoContext.Usuario.Any(x => x.Email.Equals(usuarioARegistrar.Email) && x.Origen.Equals(origen)))
                 throw new ValidationException("El E-mail ya se encuentra registrado anteriormente");
 
             if (higoContext.Usuario.Any(x => x.Dni.Equals(long.Parse(usuarioARegistrar.Dni))))
                 throw new ValidationException("El DNI ya se encuentra registrado anteriormente");
 
             validator.IsValidatedUser(usuarioARegistrar);
+            
             var usr = new Usuario
             {
                 Nombre = usuarioARegistrar.Nombre,
@@ -58,8 +60,10 @@ namespace HigoApi.Services.Impl
                 Dni = int.Parse(usuarioARegistrar.Dni),
                 Email = usuarioARegistrar.Email,
                 Password = usuarioARegistrar.Password,
-                IdPerfil = opcionesService.PerfilPorCodigo(Perfil.USER.ToString()).IdPerfil,
-                FechaAlta = DateTime.Now
+                FechaAlta = DateTime.Now,
+                IdPerfil = 2, // TODO Revisar por qué carga el objeto PerfilNavigation al obtener id consultando Perfil por código.
+                Origen = origen,
+                Telefono = usuarioARegistrar.Telefono
             };
             higoContext.Usuario.Add(usr);
             higoContext.SaveChanges();
