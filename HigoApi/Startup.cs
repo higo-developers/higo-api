@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using HigoApi.Builders;
 using HigoApi.Factories;
@@ -32,7 +33,9 @@ namespace HigoApi
          */
         private const string ConfigConnectionKey = "DefaultConnection";
         private const string AllowedHostsKey = "AllowedHosts";
-        private const string FrontEndKey = "FrontEnd";
+        private const string AllowHostsFrontEndKey = "FrontEnd";
+        private const string AllowHostsFrontEndHTTPSKey = "FrontEndHTTPS";
+        private const string ConfigurationSecretKey = "Secret_Key";
 
         private const string HigoCorsPolicy = "_higoCorsPolicy";
 
@@ -46,11 +49,17 @@ namespace HigoApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var allowedHosts = new List<string>
+            {
+                Configuration.GetSection(AllowedHostsKey).GetSection(AllowHostsFrontEndKey).Value,
+                Configuration.GetSection(AllowedHostsKey).GetSection(AllowHostsFrontEndHTTPSKey).Value
+            };
+            
             services.AddCors(options =>
             {
                 options.AddPolicy(HigoCorsPolicy, builder =>
                 {
-                    builder.WithOrigins(Configuration.GetSection(AllowedHostsKey).GetSection(FrontEndKey).Value)
+                    builder.WithOrigins(allowedHosts.ToArray())
                         .AllowAnyHeader()
                         .AllowAnyMethod();
                 });
@@ -69,7 +78,7 @@ namespace HigoApi
                     ValidateIssuerSigningKey = true,
                     ValidIssuer = "higo.com.ar",
                     ValidAudience = "higo.com.ar",
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Secret_Key"])),
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration[ConfigurationSecretKey])),
                     ClockSkew = TimeSpan.Zero
                 });
 
