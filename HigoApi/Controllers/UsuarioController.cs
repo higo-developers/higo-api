@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using HigoApi.Models;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using HigoApi.Models.DTO;
 using HigoApi.Services;
 using HigoApi.Validators;
-using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace HigoApi.Controllers
 {
@@ -131,6 +128,12 @@ namespace HigoApi.Controllers
             await ctx.SaveChangesAsync();
 
             return usuario;
+        }
+
+        [HttpGet("{email}/origen/{origen}")]
+        public IActionResult UsuarioPorEmailYOrigen(string email, string origen)
+        {
+            return Ok($"Consulta de usuario con email {email} y origen {origen}");
         }
     }
 }
