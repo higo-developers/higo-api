@@ -13,14 +13,11 @@ namespace HigoApi.Services.Impl
     {
         private readonly HigoContext higoContext;
         private readonly UsuarioRequestValidator validator;
-        private readonly IOpcionesService opcionesService;
 
-        public UsuarioService(HigoContext higoContext, UsuarioRequestValidator validator,
-            IOpcionesService opcionesService)
+        public UsuarioService(HigoContext higoContext, UsuarioRequestValidator validator)
         {
             this.higoContext = higoContext;
             this.validator = validator;
-            this.opcionesService = opcionesService;
         }
 
         public void ActualizarUsuario(Usuario usuario)
@@ -37,8 +34,7 @@ namespace HigoApi.Services.Impl
 
         public Usuario ObtenerUsuarioPorId(int id)
         {
-            var usuario = higoContext.Usuario.Where(u => u.IdUsuario == id).FirstOrDefault();
-            return usuario;
+            return higoContext.Usuario.FirstOrDefault(u => u.IdUsuario.Equals(id));
         }
 
         public Usuario RegistrarUsuario(RegistrarUsuarioDTO usuarioARegistrar)
@@ -63,8 +59,16 @@ namespace HigoApi.Services.Impl
                 FechaAlta = DateTime.Now,
                 IdPerfil = 2, // TODO Revisar por qué carga el objeto PerfilNavigation al obtener id consultando Perfil por código.
                 Origen = origen,
-                Telefono = usuarioARegistrar.Telefono
+                Telefono = usuarioARegistrar.Telefono,
+                
+                Latitud = usuarioARegistrar.Locacion.Latitud ?? string.Empty,
+                Longitud = usuarioARegistrar.Locacion.Longitud ?? string.Empty,
+                Pais = usuarioARegistrar.Locacion.Pais ?? string.Empty,
+                Provincia = usuarioARegistrar.Locacion.Provincia ?? string.Empty,
+                Partido = usuarioARegistrar.Locacion.Partido ?? string.Empty,
+                Localidad = usuarioARegistrar.Locacion.Localidad ?? string.Empty
             };
+            
             higoContext.Usuario.Add(usr);
             higoContext.SaveChanges();
 
