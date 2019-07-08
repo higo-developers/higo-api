@@ -14,16 +14,18 @@ namespace HigoApi.Services.Impl
         private readonly OperacionUtils operacionUtils;
         private readonly VehiculoUtils vehiculoUtils;
         private readonly IEstadoService estadoService;
+        private readonly IUsuarioService usuarioService;
 
         const string ModeloMarcaNavigationPropertyPath = "IdModeloMarcaNavigation.IdMarcaNavigation";
 
         public VehiculoService(HigoContext higoContext, OperacionUtils operacionUtils, VehiculoUtils vehiculoUtils,
-            IEstadoService estadoService)
+            IEstadoService estadoService, IUsuarioService usuarioService)
         {
             this.higoContext = higoContext;
             this.operacionUtils = operacionUtils;
             this.vehiculoUtils = vehiculoUtils;
             this.estadoService = estadoService;
+            this.usuarioService = usuarioService;
         }
 
         public List<Vehiculo> Listar(ParametrosBusquedaVehiculo parametros)
@@ -38,14 +40,13 @@ namespace HigoApi.Services.Impl
             List<Vehiculo> vehiculos = higoContext.Vehiculo
                 .Include(ModeloMarcaNavigationPropertyPath)
                 .Include(v => v.IdCilindradaNavigation)
-                .Include(v => v.IdLocacionNavigation)
                 .Include(v => v.IdEstadoVehiculoNavigation)
                 .Where(v => !idsVehiculosEnOperacion.Contains(v.IdVehiculo))
                 .Where(v => EstadoVehiculo.ACTIVO.ToString().Equals(v.IdEstadoVehiculoNavigation.Codigo))
-                .Where(v => vehiculoUtils.MatchLocationIfPresent(v.IdLocacionNavigation.Pais, parametros.Pais))
-                .Where(v => vehiculoUtils.MatchLocationIfPresent(v.IdLocacionNavigation.Provincia, parametros.Provincia))
-                .Where(v => vehiculoUtils.MatchLocationIfPresent(v.IdLocacionNavigation.Partido, parametros.Partido))
-                .Where(v => vehiculoUtils.MatchLocationIfPresent(v.IdLocacionNavigation.Localidad, parametros.Localidad))
+                .Where(v => vehiculoUtils.MatchLocationIfPresent(v.Pais, parametros.Pais))          
+                .Where(v => vehiculoUtils.MatchLocationIfPresent(v.Provincia, parametros.Provincia))
+                .Where(v => vehiculoUtils.MatchLocationIfPresent(v.Partido, parametros.Partido))    
+                .Where(v => vehiculoUtils.MatchLocationIfPresent(v.Localidad, parametros.Localidad))
                 .OrderBy(v => v.IdVehiculo)
                 .ToList();
 
@@ -58,7 +59,6 @@ namespace HigoApi.Services.Impl
                 .Where(v => v.IdVehiculo.Equals(id))
                 .Include(ModeloMarcaNavigationPropertyPath)
                 .Include(v => v.IdCilindradaNavigation)
-                .Include(v => v.IdLocacionNavigation)
                 .Include(v => v.IdPrestadorNavigation)
                 .Include(v => v.IdEstadoVehiculoNavigation)
                 .FirstOrDefault();
@@ -71,7 +71,6 @@ namespace HigoApi.Services.Impl
             return higoContext.Vehiculo
                 .Include(ModeloMarcaNavigationPropertyPath)
                 .Include(v => v.IdCilindradaNavigation)
-                .Include(v => v.IdLocacionNavigation)
                 .Include(v => v.IdEstadoVehiculoNavigation)
                 .Include(v => v.IdEstadoVehiculoNavigation)
                 .Where(v => v.IdPrestador.Equals(idUsuario))
@@ -92,8 +91,15 @@ namespace HigoApi.Services.Impl
 
         public Vehiculo Crear(Vehiculo vehiculo, int idUsuario)
         {
-            // TODO Cambiar datos de locacion de vehiculo
-            vehiculo.IdPrestador = idUsuario;
+            var usuario = usuarioService.ObtenerUsuarioPorId(idUsuario);
+
+            vehiculo.IdPrestador = usuario.IdUsuario;
+            vehiculo.Latitud = usuario.Latitud;
+            vehiculo.Longitud = usuario.Longitud;
+            vehiculo.Pais = usuario.Pais;
+            vehiculo.Provincia = usuario.Provincia;
+            vehiculo.Partido = usuario.Partido;
+            vehiculo.Localidad = usuario.Localidad;
 
             higoContext.Vehiculo.Add(vehiculo);
             higoContext.SaveChanges();
@@ -103,8 +109,15 @@ namespace HigoApi.Services.Impl
 
         public Vehiculo Actualizar(Vehiculo vehiculo, int idUsuario)
         {
-            // TODO Cambiar datos de locacion de vehiculo 
-            vehiculo.IdPrestador = idUsuario;
+            var usuario = usuarioService.ObtenerUsuarioPorId(idUsuario);
+
+            vehiculo.IdPrestador = usuario.IdUsuario;
+            vehiculo.Latitud = usuario.Latitud;
+            vehiculo.Longitud = usuario.Longitud;
+            vehiculo.Pais = usuario.Pais;
+            vehiculo.Provincia = usuario.Provincia;
+            vehiculo.Partido = usuario.Partido;
+            vehiculo.Localidad = usuario.Localidad;
 
             higoContext.Vehiculo.Update(vehiculo);
             higoContext.SaveChanges();

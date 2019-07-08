@@ -344,8 +344,6 @@ namespace HigoApi.Models
 
                 entity.HasIndex(e => e.IdEstadoVehiculo);
 
-                entity.HasIndex(e => e.IdLocacion);
-
                 entity.HasIndex(e => e.IdModeloMarca);
 
                 entity.HasIndex(e => e.IdPrestador);
@@ -371,8 +369,6 @@ namespace HigoApi.Models
                 entity.Property(e => e.IdCombustible).HasColumnName("Id_Combustible");
 
                 entity.Property(e => e.IdEstadoVehiculo).HasColumnName("Id_Estado_Vehiculo");
-
-                entity.Property(e => e.IdLocacion).HasColumnName("Id_Locacion");
 
                 entity.Property(e => e.IdModeloMarca).HasColumnName("Id_Modelo_Marca");
 
@@ -403,11 +399,6 @@ namespace HigoApi.Models
                     .HasForeignKey(d => d.IdEstadoVehiculo)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Vehiculo_Estado_Vehiculo");
-
-                entity.HasOne(d => d.IdLocacionNavigation)
-                    .WithMany(p => p.Vehiculo)
-                    .HasForeignKey(d => d.IdLocacion)
-                    .HasConstraintName("FK_Vehiculo_Locacion");
 
                 entity.HasOne(d => d.IdModeloMarcaNavigation)
                     .WithMany(p => p.Vehiculo)

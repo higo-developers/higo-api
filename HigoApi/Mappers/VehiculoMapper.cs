@@ -10,7 +10,6 @@ namespace HigoApi.Mappers
 {
     public class VehiculoMapper
     {
-        private readonly LocacionMapper locacionMapper;
         private readonly UsuarioMapper usuarioMapper;
         private readonly VehiculoUtils vehiculoUtils;
 
@@ -18,10 +17,9 @@ namespace HigoApi.Mappers
         private readonly ITipoService tipoService;
         private readonly IOpcionesService opcionesService;
 
-        public VehiculoMapper(LocacionMapper locacionMapper, UsuarioMapper usuarioMapper, VehiculoUtils vehiculoUtils,
+        public VehiculoMapper(UsuarioMapper usuarioMapper, VehiculoUtils vehiculoUtils,
             IEstadoService estadoService, ITipoService tipoService, IOpcionesService opcionesService)
         {
-            this.locacionMapper = locacionMapper;
             this.usuarioMapper = usuarioMapper;
             this.vehiculoUtils = vehiculoUtils;
             this.estadoService = estadoService;
@@ -54,8 +52,14 @@ namespace HigoApi.Mappers
                     response.Marca = vehiculo.IdModeloMarcaNavigation.IdMarcaNavigation.Descripcion;
             }
 
-            if (vehiculo.IdLocacionNavigation != null)
-                response.Locacion = locacionMapper.ToLocacionDTO(vehiculo.IdLocacionNavigation);
+            response.Locacion = new LocacionDTO
+            {
+                Latitud = vehiculo.Latitud,
+                Longitud = vehiculo.Longitud,
+                Pais = vehiculo.Pais,
+                Provincia = vehiculo.Provincia,
+                Localidad = vehiculo.Localidad
+            };
 
             if (vehiculo.IdPrestadorNavigation != null)
                 response.Usuario = usuarioMapper.ToUsuarioDTO(vehiculo.IdPrestadorNavigation);

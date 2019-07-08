@@ -34,8 +34,7 @@ namespace HigoApi.Services.Impl
 
         public Usuario ObtenerUsuarioPorId(int id)
         {
-            var usuario = higoContext.Usuario.Where(u => u.IdUsuario == id).FirstOrDefault();
-            return usuario;
+            return higoContext.Usuario.FirstOrDefault(u => u.IdUsuario.Equals(id));
         }
 
         public Usuario RegistrarUsuario(RegistrarUsuarioDTO usuarioARegistrar)

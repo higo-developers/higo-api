@@ -451,9 +451,6 @@ namespace HigoApi.Migrations
                     b.Property<int>("IdEstadoVehiculo")
                         .HasColumnName("Id_Estado_Vehiculo");
 
-                    b.Property<int?>("IdLocacion")
-                        .HasColumnName("Id_Locacion");
-
                     b.Property<int>("IdModeloMarca")
                         .HasColumnName("Id_Modelo_Marca");
 
@@ -463,8 +460,20 @@ namespace HigoApi.Migrations
                     b.Property<int?>("IdTipoVehiculo")
                         .HasColumnName("Id_Tipo_Vehiculo");
 
+                    b.Property<string>("Latitud");
+
+                    b.Property<string>("Localidad");
+
+                    b.Property<string>("Longitud");
+
+                    b.Property<string>("Pais");
+
+                    b.Property<string>("Partido");
+
                     b.Property<string>("Patente")
                         .HasMaxLength(15);
+
+                    b.Property<string>("Provincia");
 
                     b.Property<bool?>("RompenieblasDelantero")
                         .HasColumnName("Rompenieblas_Delantero");
@@ -483,8 +492,6 @@ namespace HigoApi.Migrations
                     b.HasIndex("IdCombustible");
 
                     b.HasIndex("IdEstadoVehiculo");
-
-                    b.HasIndex("IdLocacion");
 
                     b.HasIndex("IdModeloMarca");
 
@@ -578,11 +585,6 @@ namespace HigoApi.Migrations
                         .WithMany("Vehiculo")
                         .HasForeignKey("IdEstadoVehiculo")
                         .HasConstraintName("FK_Vehiculo_Estado_Vehiculo");
-
-                    b.HasOne("HigoApi.Models.Locacion", "IdLocacionNavigation")
-                        .WithMany("Vehiculo")
-                        .HasForeignKey("IdLocacion")
-                        .HasConstraintName("FK_Vehiculo_Locacion");
 
                     b.HasOne("HigoApi.Models.ModeloMarca", "IdModeloMarcaNavigation")
                         .WithMany("Vehiculo")
