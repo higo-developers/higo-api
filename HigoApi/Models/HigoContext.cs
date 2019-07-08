@@ -18,7 +18,6 @@ namespace HigoApi.Models
         public virtual DbSet<Control> Control { get; set; }
         public virtual DbSet<EstadoOperacion> EstadoOperacion { get; set; }
         public virtual DbSet<EstadoVehiculo> EstadoVehiculo { get; set; }
-        public virtual DbSet<Locacion> Locacion { get; set; }
         public virtual DbSet<Marca> Marca { get; set; }
         public virtual DbSet<MedioPago> MedioPago { get; set; }
         public virtual DbSet<ModeloMarca> ModeloMarca { get; set; }
@@ -133,17 +132,6 @@ namespace HigoApi.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.Descripcion).HasMaxLength(100);
-            });
-
-            modelBuilder.Entity<Locacion>(entity =>
-            {
-                entity.HasKey(e => e.IdLocacion);
-
-                entity.Property(e => e.IdLocacion).HasColumnName("Id_Locacion");
-
-                entity.Property(e => e.Latitud).IsRequired();
-
-                entity.Property(e => e.Longitud).IsRequired();
             });
 
             modelBuilder.Entity<Marca>(entity =>
