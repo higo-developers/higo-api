@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using HigoApi.Enums;
 using HigoApi.Mappers;
 using HigoApi.Models;
 using HigoApi.Models.DTO;
@@ -22,12 +23,6 @@ namespace HigoApi.Controllers
             this.operacionService = operacionService;
             this.workflowService = workflowService;
             this.operacionWorkflowMapper = operacionWorkflowMapper;
-        }
-
-        [HttpGet("proximosEstados")]
-        public IActionResult GetProximosEstados([FromQuery(Name = "estadoActual")] string codigoEstadoActual)
-        {
-            return Ok(workflowService.ProximosEstados(codigoEstadoActual));
         }
 
         [HttpGet]
@@ -60,7 +55,7 @@ namespace HigoApi.Controllers
                     FechaHoraHasta = DateTime.UtcNow,
                     ProximosEstados =
                         operacionWorkflowMapper.ToWorkflowDtoList(
-                            workflowService.ProximosEstados(EstadoOperacion.PENDIENTE))
+                            workflowService.ProximosEstados(EstadoOperacion.PENDIENTE, RolOperacion.ADQUIRENTE))
                 }
             };
             adquirientePorEstado.EnCurso = new List<OperacionDTO>
@@ -81,7 +76,7 @@ namespace HigoApi.Controllers
                     FechaHoraHasta = DateTime.UtcNow,
                     ProximosEstados =
                         operacionWorkflowMapper.ToWorkflowDtoList(
-                            workflowService.ProximosEstados(EstadoOperacion.VIGENTE))
+                            workflowService.ProximosEstados(EstadoOperacion.VIGENTE, RolOperacion.ADQUIRENTE))
                 }
             };
 
@@ -103,7 +98,7 @@ namespace HigoApi.Controllers
                     FechaHoraHasta = DateTime.UtcNow,
                     ProximosEstados =
                         operacionWorkflowMapper.ToWorkflowDtoList(
-                            workflowService.ProximosEstados(EstadoOperacion.FINALIZADO))
+                            workflowService.ProximosEstados(EstadoOperacion.FINALIZADO, RolOperacion.ADQUIRENTE))
                 },
                 new OperacionDTO
                 {
@@ -121,7 +116,7 @@ namespace HigoApi.Controllers
                     FechaHoraHasta = DateTime.UtcNow,
                     ProximosEstados =
                         operacionWorkflowMapper.ToWorkflowDtoList(
-                            workflowService.ProximosEstados(EstadoOperacion.CANCELADO))
+                            workflowService.ProximosEstados(EstadoOperacion.CANCELADO, RolOperacion.ADQUIRENTE))
                 }
             };
 
@@ -149,7 +144,7 @@ namespace HigoApi.Controllers
                         FechaHoraHasta = DateTime.UtcNow,
                         ProximosEstados =
                             operacionWorkflowMapper.ToWorkflowDtoList(
-                                workflowService.ProximosEstados(EstadoOperacion.PENDIENTE))
+                                workflowService.ProximosEstados(EstadoOperacion.PENDIENTE, RolOperacion.PRESTADOR))
                     },
                     new OperacionDTO
                     {
@@ -167,7 +162,7 @@ namespace HigoApi.Controllers
                         FechaHoraHasta = DateTime.UtcNow,
                         ProximosEstados =
                             operacionWorkflowMapper.ToWorkflowDtoList(
-                                workflowService.ProximosEstados(EstadoOperacion.PENDIENTE))
+                                workflowService.ProximosEstados(EstadoOperacion.PENDIENTE, RolOperacion.PRESTADOR))
                     }
                 };
                 prestadorPorEstado.EnCurso = new List<OperacionDTO>
@@ -188,7 +183,7 @@ namespace HigoApi.Controllers
                         FechaHoraHasta = DateTime.UtcNow,
                         ProximosEstados =
                             operacionWorkflowMapper.ToWorkflowDtoList(
-                                workflowService.ProximosEstados(EstadoOperacion.VIGENTE))
+                                workflowService.ProximosEstados(EstadoOperacion.VIGENTE, RolOperacion.PRESTADOR))
                     }
                 };
 
@@ -210,7 +205,7 @@ namespace HigoApi.Controllers
                         FechaHoraHasta = DateTime.UtcNow,
                         ProximosEstados =
                             operacionWorkflowMapper.ToWorkflowDtoList(
-                                workflowService.ProximosEstados(EstadoOperacion.FINALIZADO))
+                                workflowService.ProximosEstados(EstadoOperacion.FINALIZADO, RolOperacion.PRESTADOR))
                     },
                     new OperacionDTO
                     {
@@ -228,7 +223,7 @@ namespace HigoApi.Controllers
                         FechaHoraHasta = DateTime.UtcNow,
                         ProximosEstados =
                             operacionWorkflowMapper.ToWorkflowDtoList(
-                                workflowService.ProximosEstados(EstadoOperacion.CANCELADO))
+                                workflowService.ProximosEstados(EstadoOperacion.CANCELADO, RolOperacion.PRESTADOR))
                     },
                     new OperacionDTO
                     {
@@ -246,7 +241,7 @@ namespace HigoApi.Controllers
                         FechaHoraHasta = DateTime.UtcNow,
                         ProximosEstados =
                             operacionWorkflowMapper.ToWorkflowDtoList(
-                                workflowService.ProximosEstados(EstadoOperacion.RECHAZADO))
+                                workflowService.ProximosEstados(EstadoOperacion.RECHAZADO, RolOperacion.PRESTADOR))
                     }
                 };
 
