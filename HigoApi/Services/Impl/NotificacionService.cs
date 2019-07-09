@@ -27,7 +27,7 @@ namespace HigoApi.Services.Impl
                 IdUsuario = idUsuario,
                 Mensaje = ObtenerMensajePorEstado(operacion),
                 Descripcion = ObtenerDescripcionPorEstado(operacion),
-                URL = ObtenerURLPorEstado(operacion),
+                Url = ObtenerURLPorEstado(operacion),
                 Leida = false
             };
 

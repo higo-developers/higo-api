@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace HigoApi.Models
 {
@@ -29,16 +28,13 @@ namespace HigoApi.Models
         public bool? Abs { get; set; }
         public bool? ControlTraccion { get; set; }
         public bool? TapizadoCuero { get; set; }
-        [MaxLength(15)]
         public string Patente { get; set; }
-
         public string Latitud { get; set; }
+        public string Localidad { get; set; }
         public string Longitud { get; set; }
         public string Pais { get; set; }
-        public string Provincia { get; set; }
         public string Partido { get; set; }
-        public string Localidad { get; set; }
-
+        public string Provincia { get; set; }
         public double? PrecioPorHora { get; set; }
 
         public virtual Cilindrada IdCilindradaNavigation { get; set; }
