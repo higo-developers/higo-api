@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace HigoApi.Models.DTO
 {
@@ -16,5 +17,7 @@ namespace HigoApi.Models.DTO
         public string Vehiculo { get; set; }
         public decimal? MontoAcordado { get; set; }
         public decimal? MontoEfectivo { get; set; }
+
+        public List<WorkflowDTO> ProximosEstados { get; set; }
     }
 }

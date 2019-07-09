@@ -58,7 +58,7 @@ namespace HigoApi.Services.Impl
                 case EstadoOperacion.PENDIENTE:
                     notificacionService.Crear(op.IdVehiculoNavigation.IdPrestador.GetValueOrDefault(), op);
                     break;
-                case EstadoOperacion.EJECUCION:
+                case EstadoOperacion.VIGENTE:
                 case EstadoOperacion.FINALIZADO:
                     notificacionService.Crear(op.IdAdquirente, op);
                     notificacionService.Crear(op.IdVehiculoNavigation.IdPrestador.GetValueOrDefault(), op);

@@ -90,11 +90,13 @@ namespace HigoApi
             services.AddScoped<IOpcionesService, OpcionesService>();
             services.AddScoped<ITipoService, TipoService>();
             services.AddScoped<IEstadoService, EstadoService>();
+            services.AddScoped<IWorkflowService, WorkflowService>();
 
             services.AddScoped<VehiculoMapper>();
             services.AddScoped<UsuarioMapper>();
             services.AddScoped<MarcaMapper>();
             services.AddScoped<OpcionesMapper>();
+            services.AddScoped<OperacionWorkflowMapper>();
 
             services.AddScoped<TokenBuilder>();
             services.AddScoped<LoginResponseBuilder>();
