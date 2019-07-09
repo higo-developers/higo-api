@@ -40,13 +40,34 @@ namespace HigoApi.Controllers
                     IdVehiculo = 1,
                     CodEstado = EstadoOperacion.PENDIENTE,
                     Estado = "Pendiente de aprobacion",
-                    Prestador = "Prestador Prestador",
-                    Vehiculo = "Marca Modelo",
+                    Prestador = "Mario Santos",
+                    Adquirente = "Jose Fehler",
+                    Vehiculo = "Fiat Palio",
                     MontoAcordado = 500.00m,
-                    MontoEfectivo = 550.00m
+                    MontoEfectivo = 550.00m,
+                    FechaHoraDesde = DateTime.UtcNow,
+                    FechaHoraHasta = DateTime.UtcNow
                 }
             };
-            adquirientePorEstado.EnCurso = new List<OperacionDTO>();
+            adquirientePorEstado.EnCurso = new List<OperacionDTO>
+            {
+                new OperacionDTO
+                {
+                    IdOperacion = 2,
+                    IdAdquiriente = 4,
+                    IdVehiculo = 2,
+                    CodEstado = EstadoOperacion.EJECUCION,
+                    Estado = "En curso",
+                    Prestador = "Mario Santos",
+                    Adquirente = "Jose Fehler",
+                    Vehiculo = "Fiat Palio",
+                    MontoAcordado = 500.00m,
+                    MontoEfectivo = 550.00m,
+                    FechaHoraDesde = DateTime.UtcNow,
+                    FechaHoraHasta = DateTime.UtcNow
+                }
+            };
+            
             adquirientePorEstado.Finalizadas = new List<OperacionDTO>
             {
                 new OperacionDTO
@@ -56,10 +77,13 @@ namespace HigoApi.Controllers
                     IdVehiculo = 2,
                     CodEstado = EstadoOperacion.FINALIZADO,
                     Estado = "Finalizado",
-                    Prestador = "Prestador Prestador",
-                    Vehiculo = "Marca Modelo",
+                    Prestador = "Mario Santos",
+                    Adquirente = "Jose Fehler",
+                    Vehiculo = "Fiat Palio",
                     MontoAcordado = 500.00m,
-                    MontoEfectivo = 550.00m
+                    MontoEfectivo = 550.00m,
+                    FechaHoraDesde = DateTime.UtcNow,
+                    FechaHoraHasta = DateTime.UtcNow
                 },
                 new OperacionDTO
                 {
@@ -68,10 +92,13 @@ namespace HigoApi.Controllers
                     IdVehiculo = 3,
                     CodEstado = EstadoOperacion.CANCELADO,
                     Estado = "Cancelado por Adquiriente",
-                    Prestador = "Prestador Prestador",
-                    Vehiculo = "Marca Modelo",
+                    Prestador = "Mario Santos",
+                    Adquirente = "Jose Fehler",
+                    Vehiculo = "Fiat Palio",
                     MontoAcordado = 500.00m,
-                    MontoEfectivo = 550.00m
+                    MontoEfectivo = 550.00m,
+                    FechaHoraDesde = DateTime.UtcNow,
+                    FechaHoraHasta = DateTime.UtcNow
                 }
             };
 
@@ -90,10 +117,13 @@ namespace HigoApi.Controllers
                         IdVehiculo = 4,
                         CodEstado = EstadoOperacion.PENDIENTE,
                         Estado = "Pendiente de aprobacion",
-                        Prestador = "Prestador Prestador",
-                        Vehiculo = "Marca Modelo",
+                        Prestador = "Mario Santos",
+                        Adquirente = "Jose Fehler",
+                        Vehiculo = "Fiat Palio",
                         MontoAcordado = 500.00m,
-                        MontoEfectivo = 550.00m
+                        MontoEfectivo = 550.00m,
+                        FechaHoraDesde = DateTime.UtcNow,
+                        FechaHoraHasta = DateTime.UtcNow
                     },
                     new OperacionDTO
                     {
@@ -102,13 +132,34 @@ namespace HigoApi.Controllers
                         IdVehiculo = 4,
                         CodEstado = EstadoOperacion.PENDIENTE,
                         Estado = "Pendiente de aprobacion",
-                        Prestador = "Prestador Prestador",
-                        Vehiculo = "Marca Modelo",
+                        Prestador = "Mario Santos",
+                        Adquirente = "Jose Fehler",
+                        Vehiculo = "Fiat Palio",
                         MontoAcordado = 500.00m,
-                        MontoEfectivo = 550.00m
+                        MontoEfectivo = 550.00m,
+                        FechaHoraDesde = DateTime.UtcNow,
+                        FechaHoraHasta = DateTime.UtcNow
                     }
                 };
-                prestadorPorEstado.EnCurso = new List<OperacionDTO>();
+                prestadorPorEstado.EnCurso = new List<OperacionDTO>
+                {
+                    new OperacionDTO
+                    {
+                        IdOperacion = 2,
+                        IdAdquiriente = 4,
+                        IdVehiculo = 2,
+                        CodEstado = EstadoOperacion.EJECUCION,
+                        Estado = "En curso",
+                        Prestador = "Mario Santos",
+                        Adquirente = "Jose Fehler",
+                        Vehiculo = "Fiat Palio",
+                        MontoAcordado = 500.00m,
+                        MontoEfectivo = 550.00m,
+                        FechaHoraDesde = DateTime.UtcNow,
+                        FechaHoraHasta = DateTime.UtcNow
+                    }
+                };
+                
                 prestadorPorEstado.Finalizadas = new List<OperacionDTO>
                 {
                     new OperacionDTO
@@ -118,10 +169,13 @@ namespace HigoApi.Controllers
                         IdVehiculo = 4,
                         CodEstado = EstadoOperacion.FINALIZADO,
                         Estado = "Finalizado",
-                        Prestador = "Prestador Prestador",
-                        Vehiculo = "Marca Modelo",
+                        Prestador = "Mario Santos",
+                        Adquirente = "Jose Fehler",
+                        Vehiculo = "Fiat Palio",
                         MontoAcordado = 500.00m,
-                        MontoEfectivo = 550.00m
+                        MontoEfectivo = 550.00m,
+                        FechaHoraDesde = DateTime.UtcNow,
+                        FechaHoraHasta = DateTime.UtcNow
                     },
                     new OperacionDTO
                     {
@@ -130,10 +184,13 @@ namespace HigoApi.Controllers
                         IdVehiculo = 4,
                         CodEstado = EstadoOperacion.CANCELADO,
                         Estado = "Cancelado por Adquiriente",
-                        Prestador = "Prestador Prestador",
-                        Vehiculo = "Marca Modelo",
+                        Prestador = "Mario Santos",
+                        Adquirente = "Jose Fehler",
+                        Vehiculo = "Fiat Palio",
                         MontoAcordado = 500.00m,
-                        MontoEfectivo = 550.00m
+                        MontoEfectivo = 550.00m,
+                        FechaHoraDesde = DateTime.UtcNow,
+                        FechaHoraHasta = DateTime.UtcNow
                     },
                     new OperacionDTO
                     {
@@ -142,10 +199,13 @@ namespace HigoApi.Controllers
                         IdVehiculo = 4,
                         CodEstado = EstadoOperacion.RECHAZADO,
                         Estado = "Rechazado por Prestador",
-                        Prestador = "Prestador Prestador",
-                        Vehiculo = "Marca Modelo",
+                        Prestador = "Mario Santos",
+                        Adquirente = "Jose Fehler",
+                        Vehiculo = "Fiat Palio",
                         MontoAcordado = 500.00m,
-                        MontoEfectivo = 550.00m
+                        MontoEfectivo = 550.00m,
+                        FechaHoraDesde = DateTime.UtcNow,
+                        FechaHoraHasta = DateTime.UtcNow
                     }
                 };
 

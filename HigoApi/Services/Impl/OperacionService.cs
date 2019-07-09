@@ -88,6 +88,7 @@ namespace HigoApi.Services.Impl
                 .Include(o => o.IdVehiculoNavigation)
                     .ThenInclude(v => v.IdModeloMarcaNavigation)
                         .ThenInclude(m => m.IdMarcaNavigation)
+                .Include(o => o.IdAdquirenteNavigation)
                 .Where(o => o.IdAdquirente.Equals(idUsuario))
                 .ToList();
 
@@ -130,6 +131,7 @@ namespace HigoApi.Services.Impl
                 .Include(o => o.IdVehiculoNavigation)
                     .ThenInclude(v => v.IdModeloMarcaNavigation)
                         .ThenInclude(m => m.IdMarcaNavigation)
+                .Include(o => o.IdAdquirenteNavigation)
                 .Where(o => o.IdAdquirente.Equals(idUsuario))
                 .Where(o => o.IdEstadoOperacionNavigation.Codigo.Equals(codEstado))
                 .ToList();
@@ -146,6 +148,7 @@ namespace HigoApi.Services.Impl
                 .Include(o => o.IdVehiculoNavigation)
                 .ThenInclude(v => v.IdModeloMarcaNavigation)
                 .ThenInclude(m => m.IdMarcaNavigation)
+                .Include(o => o.IdAdquirenteNavigation)
                 .ToList();
         }
     }
