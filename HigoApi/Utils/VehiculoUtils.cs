@@ -63,5 +63,12 @@ namespace HigoApi.Utils
 
             return equipamientoList;
         }
+
+        public decimal CalcularPrecioPorHora(Vehiculo vehiculo, DateTime fechaDesde, DateTime fechaHasta)
+        {
+            var horasTranscurridas = (fechaHasta - fechaDesde).TotalHours;
+
+            return Convert.ToDecimal(vehiculo.PrecioPorHora * horasTranscurridas);
+        }
     }
 }

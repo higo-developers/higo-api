@@ -2,6 +2,7 @@
 using System.Linq;
 using HigoApi.Models;
 using HigoApi.Models.DTO;
+using HigoApi.Utils;
 using Microsoft.EntityFrameworkCore;
 
 namespace HigoApi.Services.Impl
@@ -10,16 +11,33 @@ namespace HigoApi.Services.Impl
     {
         private readonly HigoContext higoContext;
         private readonly INotificacionService notificacionService;
+        private readonly IVehiculoService vehiculoService;
 
-        public OperacionService(HigoContext higoContext, INotificacionService notificacionService)
+        private readonly VehiculoUtils vehiculoUtils;
+
+        public OperacionService(HigoContext higoContext, INotificacionService notificacionService,
+            IVehiculoService vehiculoService, VehiculoUtils vehiculoUtils)
         {
             this.higoContext = higoContext;
             this.notificacionService = notificacionService;
+            this.vehiculoService = vehiculoService;
+            this.vehiculoUtils = vehiculoUtils;
         }
 
         public Operacion Crear(OperacionDTO dataOp)
         {
             Operacion nuevaOperacion = new Operacion(dataOp);
+            
+            var estadoOperacionPendiente = ObtenerEstadoOperacionPorCodigo(EstadoOperacion.PENDIENTE);
+            var vehiculo = vehiculoService.ObtenerPorId(dataOp.IdVehiculo);
+
+            nuevaOperacion.IdEstadoOperacion = estadoOperacionPendiente.IdEstadoOperacion;
+            nuevaOperacion.IdVehiculo = vehiculo.IdVehiculo;
+            nuevaOperacion.MontoAcordado = vehiculoUtils.CalcularPrecioPorHora(
+                vehiculo,
+                dataOp.FechaHoraDesde.GetValueOrDefault(),
+                dataOp.FechaHoraHasta.GetValueOrDefault()
+            );
 
             higoContext.Operacion.Add(nuevaOperacion);
             higoContext.SaveChanges();
