@@ -156,7 +156,7 @@ namespace HigoApi.Controllers
         [HttpGet(RouteUsuarioOperaciones)]
         public IActionResult OperacionesDeUsuario(int id)
         {
-            return Ok(operacionService.ListadoOperacionesDeUsuario(id));
+            return Ok(operacionesClasificadasDtoBuilder.Build(operacionService.ListadoOperacionesDeUsuario(id), id));
         }
     }
 }
