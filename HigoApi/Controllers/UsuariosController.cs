@@ -16,7 +16,7 @@ namespace HigoApi.Controllers
     [Route("api/[controller]")]
     [ApiController]
     //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public class UsuarioController : ControllerBase
+    public class UsuariosController : ControllerBase
     {
         private readonly HigoContext ctx;
         private readonly IUsuarioService usuarioService;
@@ -26,7 +26,7 @@ namespace HigoApi.Controllers
         
         private const string ErrorMessageUsuarioNoEncontrado = "No se ha encontrado usuario con mail {0} y origen {1}";
         
-        public UsuarioController(IUsuarioService usuarioService, UsuarioRequestValidator parametrosValidator, HigoContext ctx)
+        public UsuariosController(IUsuarioService usuarioService, UsuarioRequestValidator parametrosValidator, HigoContext ctx)
         {
             this.ctx = ctx;
             this.usuarioService = usuarioService;
