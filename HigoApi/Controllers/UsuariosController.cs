@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using HigoApi.Builders;
 using HigoApi.Enums;
 using HigoApi.Models;
 using HigoApi.Models.DTO;
@@ -21,18 +22,24 @@ namespace HigoApi.Controllers
         private readonly HigoContext ctx;
         private readonly IUsuarioService usuarioService;
         private readonly UsuarioRequestValidator parametrosValidator;
+        private readonly IOperacionService operacionService;
+        private readonly OperacionesClasificadasDTOBuilder operacionesClasificadasDtoBuilder;
 
         private const string RouteUsuarioPorMailYOrigen = "{email}/origen/{codigoOrigen}";
+        private const string RouteUsuarioOperaciones = "{id}/operaciones";
         
         private const string ErrorMessageUsuarioNoEncontrado = "No se ha encontrado usuario con mail {0} y origen {1}";
-        
-        public UsuariosController(IUsuarioService usuarioService, UsuarioRequestValidator parametrosValidator, HigoContext ctx)
+
+        public UsuariosController(HigoContext ctx, IUsuarioService usuarioService,
+            UsuarioRequestValidator parametrosValidator, IOperacionService operacionService,
+            OperacionesClasificadasDTOBuilder operacionesClasificadasDtoBuilder)
         {
             this.ctx = ctx;
             this.usuarioService = usuarioService;
             this.parametrosValidator = parametrosValidator;
+            this.operacionService = operacionService;
+            this.operacionesClasificadasDtoBuilder = operacionesClasificadasDtoBuilder;
         }
-
 
         //GET: api/Usuario
        [HttpGet]
@@ -144,6 +151,12 @@ namespace HigoApi.Controllers
                 );
 
             return Ok(usuario);
+        }
+
+        [HttpGet(RouteUsuarioOperaciones)]
+        public IActionResult OperacionesDeUsuario(int id)
+        {
+            return Ok(operacionService.ListadoOperacionesDeUsuario(id));
         }
     }
 }
