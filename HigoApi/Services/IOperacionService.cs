@@ -14,6 +14,13 @@ namespace HigoApi.Services
 
         Operacion Crear(OperacionDTO operacion);
 
+        /// <summary>
+        /// Actualiza según el código de estado.
+        /// Estados: PENDIENTE, APROBADO, RECHAZADO, CANCELADO, COMENZADO, FINALIZADO
+        /// </summary>
+        /// <param name="idOperacion"></param>
+        /// <param name="codEstado"></param>
+        /// <returns></returns>
         Operacion Actualizar(int idOperacion, string codEstado);
 
         Operacion ObtenerPorId(int idOperacion);

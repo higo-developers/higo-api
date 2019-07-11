@@ -49,13 +49,6 @@ namespace HigoApi.Services.Impl
             return opRes;
         }
 
-        /// <summary>
-        /// Actualiza según el código de estado.
-        /// Estados: PENDIENTE, APROBADO, RECHAZADO, CANCELADO, COMENZADO, FINALIZADO
-        /// </summary>
-        /// <param name="idOperacion"></param>
-        /// <param name="codEstado"></param>
-        /// <returns></returns>
         public Operacion Actualizar(int idOperacion, string codEstado)
         {
             EstadoOperacion estadoOp = ObtenerEstadoOperacionPorCodigo(codEstado);
