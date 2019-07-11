@@ -6,6 +6,6 @@ namespace HigoApi.Strategies
 {
     public interface IEstrategiaAgregarOperacionPorEstado
     {
-        void AgregarOperacion(OperacionesPorEstadoDTO dto, Operacion operaciones, RolOperacion rol);
+        void AgregarOperacion(OperacionesPorEstadoDTO dto, Operacion operacion, RolOperacion rol);
     }
 }
