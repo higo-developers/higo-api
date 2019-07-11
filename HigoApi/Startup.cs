@@ -7,6 +7,7 @@ using HigoApi.Mappers;
 using HigoApi.Models;
 using HigoApi.Services;
 using HigoApi.Services.Impl;
+using HigoApi.Strategies;
 using HigoApi.Utils;
 using HigoApi.Validators;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -109,6 +110,10 @@ namespace HigoApi
             services.AddScoped<VehiculoUtils>();
 
             services.AddScoped<ErrorResponseFactory>();
+
+            services.AddScoped<AgregarOperacionPendiente>();
+            services.AddScoped<AgregarOperacionEnCurso>();
+            services.AddScoped<AgregarOperacionFinalizada>();
 
             services.AddSignalR();
         }
