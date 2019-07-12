@@ -39,7 +39,7 @@ namespace HigoApi.Services.Impl
 
         public Usuario RegistrarUsuario(RegistrarUsuarioDTO usuarioARegistrar)
         {
-            var origen = usuarioARegistrar.Origen.ToString() ?? OrigenUsuario.PORTAL.ToString();
+            var origen = usuarioARegistrar.Origen.HasValue ? usuarioARegistrar.Origen.ToString() : OrigenUsuario.PORTAL.ToString();
             
             if (higoContext.Usuario.Any(x => x.Email.Equals(usuarioARegistrar.Email) && x.Origen.Equals(origen)))
                 throw new ValidationException("El E-mail ya se encuentra registrado anteriormente");
@@ -61,12 +61,12 @@ namespace HigoApi.Services.Impl
                 Origen = origen,
                 Telefono = usuarioARegistrar.Telefono,
                 
-                Latitud = usuarioARegistrar.Locacion.Latitud ?? string.Empty,
-                Longitud = usuarioARegistrar.Locacion.Longitud ?? string.Empty,
-                Pais = usuarioARegistrar.Locacion.Pais ?? string.Empty,
-                Provincia = usuarioARegistrar.Locacion.Provincia ?? string.Empty,
-                Partido = usuarioARegistrar.Locacion.Partido ?? string.Empty,
-                Localidad = usuarioARegistrar.Locacion.Localidad ?? string.Empty
+                Latitud = usuarioARegistrar.Locacion?.Latitud,
+                Longitud = usuarioARegistrar.Locacion?.Longitud,
+                Pais = usuarioARegistrar.Locacion?.Pais,
+                Provincia = usuarioARegistrar.Locacion?.Provincia,
+                Partido = usuarioARegistrar.Locacion?.Partido,
+                Localidad = usuarioARegistrar.Locacion?.Localidad
             };
             
             higoContext.Usuario.Add(usr);

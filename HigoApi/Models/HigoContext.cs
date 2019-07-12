@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace HigoApi.Models
 {
@@ -21,13 +23,15 @@ namespace HigoApi.Models
         public virtual DbSet<Marca> Marca { get; set; }
         public virtual DbSet<MedioPago> MedioPago { get; set; }
         public virtual DbSet<ModeloMarca> ModeloMarca { get; set; }
+        public virtual DbSet<Notificacion> Notificacion { get; set; }
         public virtual DbSet<Operacion> Operacion { get; set; }
+        public virtual DbSet<OperacionWorkflow> OperacionWorkflow { get; set; }
         public virtual DbSet<Perfil> Perfil { get; set; }
         public virtual DbSet<TipoControl> TipoControl { get; set; }
         public virtual DbSet<TipoVehiculo> TipoVehiculo { get; set; }
         public virtual DbSet<Usuario> Usuario { get; set; }
         public virtual DbSet<Vehiculo> Vehiculo { get; set; }
-        public virtual DbSet<Notificacion> Notificacion { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -182,6 +186,45 @@ namespace HigoApi.Models
                     .HasConstraintName("FK_Modelo_Marca_Marca");
             });
 
+            modelBuilder.Entity<Notificacion>(entity =>
+            {
+                entity.HasKey(e => e.IdNotificacion);
+
+                entity.HasIndex(e => e.IdOperacion);
+
+                entity.HasIndex(e => e.IdUsuario);
+
+                entity.Property(e => e.IdNotificacion).HasColumnName("Id_Notificacion");
+
+                entity.Property(e => e.Descripcion)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.FechaCreacion)
+                    .HasColumnName("Fecha_Creacion")
+                    .HasColumnType("datetime");
+
+                entity.Property(e => e.IdOperacion).HasColumnName("Id_Operacion");
+
+                entity.Property(e => e.IdUsuario).HasColumnName("Id_Usuario");
+
+                entity.Property(e => e.Mensaje)
+                    .HasMaxLength(500)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Url).HasColumnName("URL");
+
+                entity.HasOne(d => d.IdOperacionNavigation)
+                    .WithMany(p => p.Notificacion)
+                    .HasForeignKey(d => d.IdOperacion)
+                    .HasConstraintName("FK_Notificacion_Operacion");
+
+                entity.HasOne(d => d.IdUsuarioNavigation)
+                    .WithMany(p => p.Notificacion)
+                    .HasForeignKey(d => d.IdUsuario)
+                    .HasConstraintName("FK_Notificacion_Usuario");
+            });
+
             modelBuilder.Entity<Operacion>(entity =>
             {
                 entity.HasKey(e => e.IdOperacion);
@@ -244,6 +287,36 @@ namespace HigoApi.Models
                     .HasForeignKey(d => d.IdVehiculo)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Operacion_Vehiculo");
+            });
+
+            modelBuilder.Entity<OperacionWorkflow>(entity =>
+            {
+                entity.HasKey(e => e.IdOperacionWorkflow);
+
+                entity.ToTable("Operacion_Workflow");
+
+                entity.Property(e => e.IdOperacionWorkflow).HasColumnName("Id_Operacion_Workflow");
+
+                entity.Property(e => e.DescripcionAccion)
+                    .HasColumnName("Descripcion_Accion")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.IdEstadoActual).HasColumnName("Id_Estado_Actual");
+
+                entity.Property(e => e.IdProximoEstado).HasColumnName("Id_Proximo_Estado");
+
+                entity.HasOne(d => d.IdEstadoActualNavigation)
+                    .WithMany(p => p.OperacionWorkflowIdEstadoActualNavigation)
+                    .HasForeignKey(d => d.IdEstadoActual)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Workflow_Operacion_Estado_Actual");
+
+                entity.HasOne(d => d.IdProximoEstadoNavigation)
+                    .WithMany(p => p.OperacionWorkflowIdProximoEstadoNavigation)
+                    .HasForeignKey(d => d.IdProximoEstado)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Workflow_Operacion_Proximo_Estado");
             });
 
             modelBuilder.Entity<Perfil>(entity =>
@@ -315,6 +388,8 @@ namespace HigoApi.Models
 
                 entity.Property(e => e.IdPerfil).HasColumnName("Id_Perfil");
 
+                entity.Property(e => e.Origen).HasMaxLength(30);
+
                 entity.HasOne(d => d.IdPerfilNavigation)
                     .WithMany(p => p.Usuario)
                     .HasForeignKey(d => d.IdPerfil)
@@ -364,6 +439,8 @@ namespace HigoApi.Models
 
                 entity.Property(e => e.IdTipoVehiculo).HasColumnName("Id_Tipo_Vehiculo");
 
+                entity.Property(e => e.Patente).HasMaxLength(15);
+
                 entity.Property(e => e.RompenieblasDelantero).HasColumnName("Rompenieblas_Delantero");
 
                 entity.Property(e => e.RompenieblasTrasero).HasColumnName("Rompenieblas_Trasero");
@@ -403,41 +480,6 @@ namespace HigoApi.Models
                     .WithMany(p => p.Vehiculo)
                     .HasForeignKey(d => d.IdTipoVehiculo)
                     .HasConstraintName("FK_Vehiculo_Tipo_Vehiculo");
-            });
-
-            modelBuilder.Entity<Notificacion>(entity => {
-                entity.HasKey(e => e.IdNotificacion);
-
-                entity.HasIndex(e => e.IdUsuario);
-                entity.HasIndex(e => e.IdOperacion);
-
-                entity.Property(e => e.IdNotificacion).HasColumnName("Id_Notificacion");
-
-                entity.Property(e => e.IdUsuario).HasColumnName("Id_Usuario");
-
-                entity.Property(e => e.IdOperacion).HasColumnName("Id_Operacion");
-
-                entity.Property(e => e.FechaCreacion)
-                    .HasColumnName("Fecha_Creacion")
-                    .HasColumnType("datetime");
-
-                entity.Property(e => e.Descripcion)
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Mensaje)
-                    .HasMaxLength(500)
-                    .IsUnicode(false);
-
-                entity.HasOne(d => d.IdUsuarioNavigation)
-                    .WithMany(p => p.Notificacion)
-                    .HasForeignKey(d => d.IdUsuario)
-                    .HasConstraintName("FK_Notificacion_Usuario");
-
-                entity.HasOne(d => d.IdOperacionNavigation)
-                    .WithMany(p => p.Notificacion)
-                    .HasForeignKey(d => d.IdOperacion)
-                    .HasConstraintName("FK_Notificacion_Operacion");
             });
         }
     }

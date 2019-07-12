@@ -7,6 +7,7 @@ using HigoApi.Mappers;
 using HigoApi.Models;
 using HigoApi.Services;
 using HigoApi.Services.Impl;
+using HigoApi.Strategies;
 using HigoApi.Utils;
 using HigoApi.Validators;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -90,22 +91,31 @@ namespace HigoApi
             services.AddScoped<IOpcionesService, OpcionesService>();
             services.AddScoped<ITipoService, TipoService>();
             services.AddScoped<IEstadoService, EstadoService>();
+            services.AddScoped<IWorkflowService, WorkflowService>();
 
             services.AddScoped<VehiculoMapper>();
             services.AddScoped<UsuarioMapper>();
             services.AddScoped<MarcaMapper>();
             services.AddScoped<OpcionesMapper>();
+            services.AddScoped<OperacionWorkflowMapper>();
 
             services.AddScoped<TokenBuilder>();
             services.AddScoped<LoginResponseBuilder>();
+            services.AddScoped<OperacionesClasificadasDTOBuilder>();
+            services.AddScoped<OperacionDTOBuilder>();
             
             services.AddScoped<ParametrosBusquedaVehiculoValidator>();
             services.AddScoped<UsuarioVehiculoValidator>();
             services.AddScoped<UsuarioRequestValidator>();
+            services.AddScoped<CambioEstadoOperacionValidator>();
             services.AddScoped<OperacionUtils>();
             services.AddScoped<VehiculoUtils>();
 
             services.AddScoped<ErrorResponseFactory>();
+
+            services.AddScoped<AgregarOperacionPendiente>();
+            services.AddScoped<AgregarOperacionEnCurso>();
+            services.AddScoped<AgregarOperacionFinalizada>();
 
             services.AddSignalR();
         }

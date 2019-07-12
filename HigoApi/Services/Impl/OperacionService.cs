@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using HigoApi.Mappers;
 using HigoApi.Models;
 using HigoApi.Models.DTO;
+using HigoApi.Utils;
+using HigoApi.Validators;
 using Microsoft.EntityFrameworkCore;
 
 namespace HigoApi.Services.Impl
@@ -13,16 +12,39 @@ namespace HigoApi.Services.Impl
     {
         private readonly HigoContext higoContext;
         private readonly INotificacionService notificacionService;
+        private readonly IVehiculoService vehiculoService;
+        private readonly IEstadoService estadoService;
 
-        public OperacionService(HigoContext higoContext, INotificacionService notificacionService)
+        private readonly VehiculoUtils vehiculoUtils;
+
+        private readonly CambioEstadoOperacionValidator cambioEstadoValidator;
+
+        public OperacionService(HigoContext higoContext, INotificacionService notificacionService,
+            IVehiculoService vehiculoService, IEstadoService estadoService, VehiculoUtils vehiculoUtils,
+            CambioEstadoOperacionValidator cambioEstadoValidator)
         {
             this.higoContext = higoContext;
             this.notificacionService = notificacionService;
+            this.vehiculoService = vehiculoService;
+            this.estadoService = estadoService;
+            this.vehiculoUtils = vehiculoUtils;
+            this.cambioEstadoValidator = cambioEstadoValidator;
         }
 
         public Operacion Crear(OperacionDTO dataOp)
         {
             Operacion nuevaOperacion = new Operacion(dataOp);
+
+            var estadoOperacionPendiente = estadoService.EstadoOperacionPorCodigo(EstadoOperacion.PENDIENTE);
+            var vehiculo = vehiculoService.ObtenerPorId(dataOp.IdVehiculo);
+
+            nuevaOperacion.IdEstadoOperacion = estadoOperacionPendiente.IdEstadoOperacion;
+            nuevaOperacion.IdVehiculo = vehiculo.IdVehiculo;
+            nuevaOperacion.MontoAcordado = vehiculoUtils.CalcularPrecioPorHora(
+                vehiculo,
+                dataOp.FechaHoraDesde.GetValueOrDefault(),
+                dataOp.FechaHoraHasta.GetValueOrDefault()
+            );
 
             higoContext.Operacion.Add(nuevaOperacion);
             higoContext.SaveChanges();
@@ -34,18 +56,13 @@ namespace HigoApi.Services.Impl
             return opRes;
         }
 
-        /// <summary>
-        /// Actualiza según el código de estado.
-        /// Estados: PENDIENTE, APROBADO, RECHAZADO, CANCELADO, COMENZADO, FINALIZADO
-        /// </summary>
-        /// <param name="idOperacion"></param>
-        /// <param name="codEstado"></param>
-        /// <returns></returns>
         public Operacion Actualizar(int idOperacion, string codEstado)
         {
-            EstadoOperacion estadoOp = ObtenerEstadoOperacionPorCodigo(codEstado);
-
             Operacion op = ObtenerPorId(idOperacion);
+            
+            cambioEstadoValidator.Validar(op, codEstado);
+            
+            EstadoOperacion estadoOp = estadoService.EstadoOperacionPorCodigo(codEstado);
             op.IdEstadoOperacion = estadoOp.IdEstadoOperacion;
 
             higoContext.Operacion.Update(op);
@@ -61,12 +78,10 @@ namespace HigoApi.Services.Impl
                 case EstadoOperacion.PENDIENTE:
                     notificacionService.Crear(op.IdVehiculoNavigation.IdPrestador.GetValueOrDefault(), op);
                     break;
-                case EstadoOperacion.EJECUCION:
+                case EstadoOperacion.VIGENTE:
                 case EstadoOperacion.FINALIZADO:
-                    notificacionService.Crear(op.IdAdquirente,op);
+                    notificacionService.Crear(op.IdAdquirente, op);
                     notificacionService.Crear(op.IdVehiculoNavigation.IdPrestador.GetValueOrDefault(), op);
-                    break;
-                default:
                     break;
             }
             
@@ -93,6 +108,7 @@ namespace HigoApi.Services.Impl
                 .Include(o => o.IdVehiculoNavigation)
                     .ThenInclude(v => v.IdModeloMarcaNavigation)
                         .ThenInclude(m => m.IdMarcaNavigation)
+                .Include(o => o.IdAdquirenteNavigation)
                 .Where(o => o.IdAdquirente.Equals(idUsuario))
                 .ToList();
 
@@ -108,24 +124,13 @@ namespace HigoApi.Services.Impl
                     .ThenInclude(v => v.IdPrestadorNavigation)
                 .Include(o => o.IdVehiculoNavigation)
                     .ThenInclude(v => v.IdModeloMarcaNavigation)
-                        .ThenInclude(m => m.IdMarcaNavigation)
+                    .ThenInclude(m => m.IdMarcaNavigation)
                 .Include(o => o.IdAdquirenteNavigation)
-                .Where(o => o.IdOperacion.Equals(idOperacion))
-                .FirstOrDefault();
+                .FirstOrDefault(o => o.IdOperacion.Equals(idOperacion));
 
             return op;
         }
-
-        private EstadoOperacion ObtenerEstadoOperacionPorCodigo(string cod)
-        {
-            EstadoOperacion estadoOp = (from EstadoOperacion eo in higoContext.EstadoOperacion
-                                        where eo.Codigo == cod
-                                        select eo)
-                                        .FirstOrDefault();
-
-            return estadoOp;
-        }
-
+   
         public List<Operacion> ListadoFiltradoPorEstadoPorAdquiriente(int idUsuario, string codEstado)
         {
             List<Operacion> operaciones = higoContext.Operacion
@@ -135,11 +140,25 @@ namespace HigoApi.Services.Impl
                 .Include(o => o.IdVehiculoNavigation)
                     .ThenInclude(v => v.IdModeloMarcaNavigation)
                         .ThenInclude(m => m.IdMarcaNavigation)
+                .Include(o => o.IdAdquirenteNavigation)
                 .Where(o => o.IdAdquirente.Equals(idUsuario))
                 .Where(o => o.IdEstadoOperacionNavigation.Codigo.Equals(codEstado))
                 .ToList();
 
             return operaciones;
+        }
+        
+        public List<Operacion> ListadoOperacionesDeUsuario(int idUsuario)
+        {
+            return higoContext.Operacion.Where(o => o.IdAdquirente.Equals(idUsuario) || o.IdVehiculoNavigation.IdPrestador.Equals(idUsuario))
+                .Include(o => o.IdEstadoOperacionNavigation)
+                .Include(o => o.IdVehiculoNavigation)
+                .ThenInclude(v => v.IdPrestadorNavigation)
+                .Include(o => o.IdVehiculoNavigation)
+                .ThenInclude(v => v.IdModeloMarcaNavigation)
+                .ThenInclude(m => m.IdMarcaNavigation)
+                .Include(o => o.IdAdquirenteNavigation)
+                .ToList();
         }
     }
 }

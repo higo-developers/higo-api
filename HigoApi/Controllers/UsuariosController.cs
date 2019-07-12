@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using HigoApi.Builders;
 using HigoApi.Enums;
+using HigoApi.Factories;
 using HigoApi.Models;
 using HigoApi.Models.DTO;
 using HigoApi.Services;
@@ -16,23 +18,32 @@ namespace HigoApi.Controllers
     [Route("api/[controller]")]
     [ApiController]
     //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public class UsuarioController : ControllerBase
+    public class UsuariosController : ControllerBase
     {
         private readonly HigoContext ctx;
         private readonly IUsuarioService usuarioService;
         private readonly UsuarioRequestValidator parametrosValidator;
+        private readonly IOperacionService operacionService;
+        private readonly OperacionesClasificadasDTOBuilder operacionesClasificadasDtoBuilder;
+        private readonly ErrorResponseFactory errorResponseFactory;
 
         private const string RouteUsuarioPorMailYOrigen = "{email}/origen/{codigoOrigen}";
+        private const string RouteUsuarioOperaciones = "{id}/operaciones";
         
         private const string ErrorMessageUsuarioNoEncontrado = "No se ha encontrado usuario con mail {0} y origen {1}";
-        
-        public UsuarioController(IUsuarioService usuarioService, UsuarioRequestValidator parametrosValidator, HigoContext ctx)
+
+        public UsuariosController(HigoContext ctx, IUsuarioService usuarioService,
+            UsuarioRequestValidator parametrosValidator, IOperacionService operacionService,
+            OperacionesClasificadasDTOBuilder operacionesClasificadasDtoBuilder,
+            ErrorResponseFactory errorResponseFactory)
         {
             this.ctx = ctx;
             this.usuarioService = usuarioService;
             this.parametrosValidator = parametrosValidator;
+            this.operacionService = operacionService;
+            this.operacionesClasificadasDtoBuilder = operacionesClasificadasDtoBuilder;
+            this.errorResponseFactory = errorResponseFactory;
         }
-
 
         //GET: api/Usuario
        [HttpGet]
@@ -144,6 +155,19 @@ namespace HigoApi.Controllers
                 );
 
             return Ok(usuario);
+        }
+
+        [HttpGet(RouteUsuarioOperaciones)]
+        public IActionResult OperacionesDeUsuario(int id)
+        {
+            try
+            {
+                return Ok(operacionesClasificadasDtoBuilder.Build(operacionService.ListadoOperacionesDeUsuario(id), id));
+            }
+            catch (Exception e)
+            {
+                return errorResponseFactory.InternalServerErrorResponse(e);
+            }
         }
     }
 }

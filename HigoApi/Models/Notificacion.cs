@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace HigoApi.Models
 {
@@ -14,9 +11,9 @@ namespace HigoApi.Models
         public bool? Leida { get; set; }
         public string Descripcion { get; set; }
         public string Mensaje { get; set; }
-        public string URL { get; set; }
+        public string Url { get; set; }
 
-        public virtual Usuario IdUsuarioNavigation { get; set; }
         public virtual Operacion IdOperacionNavigation { get; set; }
+        public virtual Usuario IdUsuarioNavigation { get; set; }
     }
 }

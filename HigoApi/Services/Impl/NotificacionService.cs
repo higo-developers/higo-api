@@ -1,9 +1,8 @@
-﻿using HigoApi.Models;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using HigoApi.Models;
 using HigoApi.Utils;
+using Microsoft.EntityFrameworkCore;
 
 namespace HigoApi.Services.Impl
 {
@@ -27,7 +26,7 @@ namespace HigoApi.Services.Impl
                 IdUsuario = idUsuario,
                 Mensaje = ObtenerMensajePorEstado(operacion),
                 Descripcion = ObtenerDescripcionPorEstado(operacion),
-                URL = ObtenerURLPorEstado(operacion),
+                Url = ObtenerURLPorEstado(operacion),
                 Leida = false
             };
 
@@ -51,7 +50,7 @@ namespace HigoApi.Services.Impl
                 case EstadoOperacion.RECHAZADO:
                     EmailUtil.EmailRechazarSolicitud(operacion);
                     break;
-                case EstadoOperacion.EJECUCION:
+                case EstadoOperacion.VIGENTE:
                     EmailUtil.EmailComenzarSolicitud(operacion, idUsuario);
                     break;
                 default:
@@ -124,7 +123,7 @@ namespace HigoApi.Services.Impl
                 case EstadoOperacion.RECHAZADO:
                     descripcion = "Alquiler " + codEstado.ToLower();
                     break;
-                case EstadoOperacion.EJECUCION:
+                case EstadoOperacion.VIGENTE:
                     descripcion = "El alquiler ha comenzado!";
                     break;
                 default:
@@ -156,7 +155,7 @@ namespace HigoApi.Services.Impl
                     mensaje += " ha cancelado el alquiler de tu vehículo ";
                     mensaje += operacion.IdVehiculoNavigation.IdModeloMarcaNavigation.IdMarcaNavigation.Descripcion + " " + operacion.IdVehiculoNavigation.IdModeloMarcaNavigation.Descripcion + ".";
                     break;
-                case EstadoOperacion.EJECUCION:
+                case EstadoOperacion.VIGENTE:
                     mensaje = "El alquiler del vehículo ";
                     mensaje += operacion.IdVehiculoNavigation.IdModeloMarcaNavigation.IdMarcaNavigation.Descripcion + " " + operacion.IdVehiculoNavigation.IdModeloMarcaNavigation.Descripcion;
                     mensaje += " ha comenzado!\n";
@@ -185,7 +184,7 @@ namespace HigoApi.Services.Impl
                 case EstadoOperacion.CANCELADO:
                 case EstadoOperacion.FINALIZADO:
                 case EstadoOperacion.RECHAZADO:
-                case EstadoOperacion.EJECUCION:
+                case EstadoOperacion.VIGENTE:
                     break;
                 default:
                     break;

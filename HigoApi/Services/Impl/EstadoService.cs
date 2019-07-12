@@ -16,5 +16,10 @@ namespace HigoApi.Services.Impl
         {
             return higoContext.EstadoVehiculo.FirstOrDefault(ev => ev.Codigo.Equals(codigo));
         }
+
+        public EstadoOperacion EstadoOperacionPorCodigo(string codigo)
+        {
+            return higoContext.EstadoOperacion.FirstOrDefault(ev => ev.Codigo.Equals(codigo));
+        }
     }
 }
