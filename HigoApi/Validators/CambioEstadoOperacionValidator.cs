@@ -7,7 +7,8 @@ namespace HigoApi.Validators
 {
     public class CambioEstadoOperacionValidator
     {
-        const string MessageCambioEstadoInvalido = "Cambio de estado no permitido";
+        const string MessageCambioEstadoInvalido =
+            "Cambio de estado no permitido. Estado actual de operación {0}: {1}.";
 
         private readonly IWorkflowService workflowService;
 
@@ -22,8 +23,12 @@ namespace HigoApi.Validators
                 .Select(eo => eo.Codigo)
                 .ToList();
 
-            if (proximosEstados.Any() && !proximosEstados.Contains(codigoEstadoOperacion))
-                throw new ValidationException(MessageCambioEstadoInvalido);
+            if (!proximosEstados.Contains(codigoEstadoOperacion))
+                throw new ValidationException(string.Format(
+                    MessageCambioEstadoInvalido,
+                    operacion.IdOperacion,
+                    operacion.IdEstadoOperacionNavigation.Descripcion)
+                );
         }
     }
 }
