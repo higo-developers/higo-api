@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using HigoApi.Mappers;
 using HigoApi.Models;
 using HigoApi.Models.DTO;
 using HigoApi.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HigoApi.Controllers
@@ -71,7 +67,6 @@ namespace HigoApi.Controllers
         public OperacionDTO Put(OperacionDTO opRes)
         {
             Operacion op = _operacionService.Actualizar(opRes.IdOperacion, opRes.CodEstado);
-
             return OperacionMapper.ConvertirAOperacionDTO(op);
         }
 
