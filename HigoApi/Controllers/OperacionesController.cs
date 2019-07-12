@@ -1,8 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using HigoApi.Factories;
 using HigoApi.Mappers;
 using HigoApi.Models;
 using HigoApi.Models.DTO;
 using HigoApi.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HigoApi.Controllers
@@ -12,10 +16,13 @@ namespace HigoApi.Controllers
     public class OperacionesController : ControllerBase
     {
         private readonly IOperacionService _operacionService;
+        
+        private readonly ErrorResponseFactory errorResponseFactory;
 
-        public OperacionesController(IOperacionService operacionService)
+        public OperacionesController(IOperacionService operacionService, ErrorResponseFactory errorResponseFactory)
         {
-            this._operacionService = operacionService;
+            _operacionService = operacionService;
+            this.errorResponseFactory = errorResponseFactory;
         }
 
         [HttpGet]
@@ -64,10 +71,21 @@ namespace HigoApi.Controllers
 
         // PUT: api/Operaciones/5
         [HttpPut]
-        public OperacionDTO Put(OperacionDTO opRes)
+        public IActionResult Put(OperacionDTO opRes)
         {
-            Operacion op = _operacionService.Actualizar(opRes.IdOperacion, opRes.CodEstado);
-            return OperacionMapper.ConvertirAOperacionDTO(op);
+            try
+            {
+                Operacion op = _operacionService.Actualizar(opRes.IdOperacion, opRes.CodEstado);
+                return Ok(OperacionMapper.ConvertirAOperacionDTO(op));
+            }
+            catch (ValidationException ve)
+            {
+                return UnprocessableEntity(new ErrorResponse(StatusCodes.Status422UnprocessableEntity, ve.Message));
+            }
+            catch (Exception e)
+            {
+                return errorResponseFactory.InternalServerErrorResponse(e);
+            }
         }
 
         // DELETE: api/ApiWithActions/5

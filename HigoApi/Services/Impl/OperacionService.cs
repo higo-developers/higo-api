@@ -3,6 +3,7 @@ using System.Linq;
 using HigoApi.Models;
 using HigoApi.Models.DTO;
 using HigoApi.Utils;
+using HigoApi.Validators;
 using Microsoft.EntityFrameworkCore;
 
 namespace HigoApi.Services.Impl
@@ -16,14 +17,18 @@ namespace HigoApi.Services.Impl
 
         private readonly VehiculoUtils vehiculoUtils;
 
+        private readonly CambioEstadoOperacionValidator cambioEstadoValidator;
+
         public OperacionService(HigoContext higoContext, INotificacionService notificacionService,
-            IVehiculoService vehiculoService, IEstadoService estadoService, VehiculoUtils vehiculoUtils)
+            IVehiculoService vehiculoService, IEstadoService estadoService, VehiculoUtils vehiculoUtils,
+            CambioEstadoOperacionValidator cambioEstadoValidator)
         {
             this.higoContext = higoContext;
             this.notificacionService = notificacionService;
             this.vehiculoService = vehiculoService;
             this.estadoService = estadoService;
             this.vehiculoUtils = vehiculoUtils;
+            this.cambioEstadoValidator = cambioEstadoValidator;
         }
 
         public Operacion Crear(OperacionDTO dataOp)
@@ -53,9 +58,11 @@ namespace HigoApi.Services.Impl
 
         public Operacion Actualizar(int idOperacion, string codEstado)
         {
-            EstadoOperacion estadoOp = estadoService.EstadoOperacionPorCodigo(codEstado);
-
             Operacion op = ObtenerPorId(idOperacion);
+            
+            cambioEstadoValidator.Validar(op, codEstado);
+            
+            EstadoOperacion estadoOp = estadoService.EstadoOperacionPorCodigo(codEstado);
             op.IdEstadoOperacion = estadoOp.IdEstadoOperacion;
 
             higoContext.Operacion.Update(op);

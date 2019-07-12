@@ -22,7 +22,7 @@ namespace HigoApi.Builders
             var operacionDto = OperacionMapper.ConvertirAOperacionDTO(operacion);
             
             operacionDto.ProximosEstados = operacionWorkflowMapper.ToWorkflowDtoList(
-                workflowService.ProximosEstados(operacion.IdEstadoOperacionNavigation.Codigo, rol)
+                workflowService.ProximosEstadosPorCodigoYRol(operacion.IdEstadoOperacionNavigation.Codigo, rol)
             );
 
             return operacionDto;

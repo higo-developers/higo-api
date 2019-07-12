@@ -107,6 +107,7 @@ namespace HigoApi
             services.AddScoped<ParametrosBusquedaVehiculoValidator>();
             services.AddScoped<UsuarioVehiculoValidator>();
             services.AddScoped<UsuarioRequestValidator>();
+            services.AddScoped<CambioEstadoOperacionValidator>();
             services.AddScoped<OperacionUtils>();
             services.AddScoped<VehiculoUtils>();
 
