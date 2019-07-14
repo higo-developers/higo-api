@@ -1,4 +1,5 @@
 using System;
+using HigoApi.Builders;
 using HigoApi.Mappers;
 using HigoApi.Models;
 using HigoApi.Models.DTO;
@@ -10,12 +11,15 @@ namespace HigoApi.Services.Impl
         private readonly HigoContext higoContext;
         private readonly ControlMapper controlMapper;
         private readonly IOperacionService operacionService;
+        private readonly ControlResponseBuilder controlResponseBuilder;
 
-        public ControlService(HigoContext higoContext, ControlMapper controlMapper, IOperacionService operacionService)
+        public ControlService(HigoContext higoContext, ControlMapper controlMapper, IOperacionService operacionService,
+            ControlResponseBuilder controlResponseBuilder)
         {
             this.higoContext = higoContext;
             this.controlMapper = controlMapper;
             this.operacionService = operacionService;
+            this.controlResponseBuilder = controlResponseBuilder;
         }
 
         public Control ObtenerControlPorIdDeOperacion(int idOperacion)
@@ -23,19 +27,20 @@ namespace HigoApi.Services.Impl
             throw new NotImplementedException();
         }
 
-        public Control Crear(ControlDTO controlDto)
+        public ControlResponse Crear(ControlDTO controlDto)
         {
             Control control = controlMapper.FromDtoParaCreacion(controlDto);
 
             higoContext.Control.Add(control);
-            
-            higoContext.SaveChanges();
-            operacionService.Actualizar(controlDto.IdOperacion, EstadoOperacion.VIGENTE);
 
-            return control;
+            higoContext.SaveChanges();
+            
+            var operacion = operacionService.Actualizar(controlDto.IdOperacion, EstadoOperacion.VIGENTE);
+
+            return controlResponseBuilder.Build(control, operacion);
         }
 
-        public Control Actualizar(ControlDTO controlDto)
+        public ControlResponse Actualizar(ControlDTO controlDto)
         {
             throw new NotImplementedException();
         }

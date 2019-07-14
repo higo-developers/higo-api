@@ -105,6 +105,7 @@ namespace HigoApi
             services.AddScoped<LoginResponseBuilder>();
             services.AddScoped<OperacionesClasificadasDTOBuilder>();
             services.AddScoped<OperacionDTOBuilder>();
+            services.AddScoped<ControlResponseBuilder>();
             
             services.AddScoped<ParametrosBusquedaVehiculoValidator>();
             services.AddScoped<UsuarioVehiculoValidator>();
