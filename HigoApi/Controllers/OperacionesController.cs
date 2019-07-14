@@ -15,6 +15,9 @@ namespace HigoApi.Controllers
     [ApiController]
     public class OperacionesController : ControllerBase
     {
+        private const string RouteIdOperacionControl = "{id}/control";
+        private const string RouteIdOperacionControlId = "{id}/control/{idControl}";
+        
         private readonly IOperacionService _operacionService;
         
         private readonly ErrorResponseFactory errorResponseFactory;
@@ -92,6 +95,40 @@ namespace HigoApi.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+        }
+
+        [HttpPost(RouteIdOperacionControl)]
+        public IActionResult PostControlOperacion(int id)
+        {
+            try
+            {
+                return Ok(new {Mensaje = $"Crear control para operacion {id}"});
+            }
+            catch (ValidationException ve)
+            {
+                return UnprocessableEntity(new ErrorResponse(StatusCodes.Status422UnprocessableEntity, ve.Message));
+            }
+            catch (Exception e)
+            {
+                return errorResponseFactory.InternalServerErrorResponse(e);
+            }
+        }
+
+        [HttpPut(RouteIdOperacionControlId)]
+        public IActionResult PostControlOperacion(int id, int idControl)
+        {
+            try
+            {
+                return Ok(new {Mensaje = $"Actualizar control {idControl} de operacion {id}"});
+            }
+            catch (ValidationException ve)
+            {
+                return UnprocessableEntity(new ErrorResponse(StatusCodes.Status422UnprocessableEntity, ve.Message));
+            }
+            catch (Exception e)
+            {
+                return errorResponseFactory.InternalServerErrorResponse(e);
+            }
         }
     }
 }
