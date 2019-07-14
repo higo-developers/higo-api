@@ -92,17 +92,20 @@ namespace HigoApi
             services.AddScoped<ITipoService, TipoService>();
             services.AddScoped<IEstadoService, EstadoService>();
             services.AddScoped<IWorkflowService, WorkflowService>();
+            services.AddScoped<IControlService, ControlService>();
 
             services.AddScoped<VehiculoMapper>();
             services.AddScoped<UsuarioMapper>();
             services.AddScoped<MarcaMapper>();
             services.AddScoped<OpcionesMapper>();
             services.AddScoped<OperacionWorkflowMapper>();
+            services.AddScoped<ControlMapper>();
 
             services.AddScoped<TokenBuilder>();
             services.AddScoped<LoginResponseBuilder>();
             services.AddScoped<OperacionesClasificadasDTOBuilder>();
             services.AddScoped<OperacionDTOBuilder>();
+            services.AddScoped<ControlResponseBuilder>();
             
             services.AddScoped<ParametrosBusquedaVehiculoValidator>();
             services.AddScoped<UsuarioVehiculoValidator>();
@@ -110,6 +113,7 @@ namespace HigoApi
             services.AddScoped<CambioEstadoOperacionValidator>();
             services.AddScoped<OperacionUtils>();
             services.AddScoped<VehiculoUtils>();
+            services.AddScoped<ControlUtils>();
 
             services.AddScoped<ErrorResponseFactory>();
 

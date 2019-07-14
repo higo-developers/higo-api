@@ -18,9 +18,13 @@ namespace HigoApi.Builders
             estrategiaAddOperacion.Add(EstadoOperacion.PENDIENTE, agregarOperacionPendiente);
             estrategiaAddOperacion.Add(EstadoOperacion.APROBADO, agregarOperacionEnCurso);
             estrategiaAddOperacion.Add(EstadoOperacion.VIGENTE, agregarOperacionEnCurso);
+            estrategiaAddOperacion.Add(EstadoOperacion.CONTROL_INICIAL, agregarOperacionEnCurso);
+            estrategiaAddOperacion.Add(EstadoOperacion.CONTROL_FINAL, agregarOperacionEnCurso);
+            estrategiaAddOperacion.Add(EstadoOperacion.PAGO_PENDIENTE, agregarOperacionEnCurso);
             estrategiaAddOperacion.Add(EstadoOperacion.FINALIZADO, agregarOperacionFinalizada);
             estrategiaAddOperacion.Add(EstadoOperacion.CANCELADO, agregarOperacionFinalizada);
             estrategiaAddOperacion.Add(EstadoOperacion.RECHAZADO, agregarOperacionFinalizada);
+            estrategiaAddOperacion.Add(EstadoOperacion.CALIFICADO, agregarOperacionFinalizada);
         }
 
         /// <summary>

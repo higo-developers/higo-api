@@ -15,13 +15,20 @@ namespace HigoApi.Controllers
     [ApiController]
     public class OperacionesController : ControllerBase
     {
-        private readonly IOperacionService _operacionService;
+        private const string RouteIdOperacionControl = "{idOperacion}/control";
+        
+        private const string MessageControlNoEncontrado = "No se ha encontrado control de operacion {0}";
+        
+        private readonly IOperacionService operacionService;
+        private readonly IControlService controlService;
         
         private readonly ErrorResponseFactory errorResponseFactory;
 
-        public OperacionesController(IOperacionService operacionService, ErrorResponseFactory errorResponseFactory)
+        public OperacionesController(IOperacionService operacionService, IControlService controlService,
+            ErrorResponseFactory errorResponseFactory)
         {
-            _operacionService = operacionService;
+            this.operacionService = operacionService;
+            this.controlService = controlService;
             this.errorResponseFactory = errorResponseFactory;
         }
 
@@ -34,11 +41,11 @@ namespace HigoApi.Controllers
             
             if (opDTO.CodEstado != null)
             {
-                operaciones = _operacionService.ListadoFiltradoPorEstadoPorAdquiriente(opDTO.IdAdquiriente, opDTO.CodEstado);
+                operaciones = operacionService.ListadoFiltradoPorEstadoPorAdquiriente(opDTO.IdAdquiriente, opDTO.CodEstado);
             }
             else
             {
-                operaciones = _operacionService.ListadoTodasPorAdquiriente(opDTO.IdAdquiriente);
+                operaciones = operacionService.ListadoTodasPorAdquiriente(opDTO.IdAdquiriente);
             }
             
 
@@ -52,7 +59,7 @@ namespace HigoApi.Controllers
         [HttpGet("{id}", Name = "GetOperacion")]
         public OperacionDTO Get(int id)
         {
-            Operacion op = _operacionService.ObtenerPorId(id);
+            Operacion op = operacionService.ObtenerPorId(id);
 
             OperacionDTO opDTO = OperacionMapper.ConvertirAOperacionDTO(op);
 
@@ -64,7 +71,7 @@ namespace HigoApi.Controllers
         [HttpPost]
         public OperacionDTO Post([FromBody] OperacionDTO opRes)
         {
-            Operacion op = _operacionService.Crear(opRes);
+            Operacion op = operacionService.Crear(opRes);
 
             return OperacionMapper.ConvertirAOperacionDTO(op);
         }
@@ -75,7 +82,7 @@ namespace HigoApi.Controllers
         {
             try
             {
-                Operacion op = _operacionService.Actualizar(opRes.IdOperacion, opRes.CodEstado);
+                Operacion op = operacionService.Actualizar(opRes.IdOperacion, opRes.CodEstado);
                 return Ok(OperacionMapper.ConvertirAOperacionDTO(op));
             }
             catch (ValidationException ve)
@@ -92,6 +99,58 @@ namespace HigoApi.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+        }
+
+        [HttpGet(RouteIdOperacionControl)]
+        public IActionResult GetControl(int idOperacion)
+        {
+            try
+            {
+                return Ok(controlService.ObtenerControlDtoPorIdOperacion(idOperacion));
+            }
+            catch (ArgumentNullException ane)
+            {
+                Console.WriteLine(ane);
+                return NotFound(new ErrorResponse(StatusCodes.Status404NotFound, string.Format(MessageControlNoEncontrado, idOperacion)));
+            }
+            catch (Exception e)
+            {
+                return errorResponseFactory.InternalServerErrorResponse(e);
+            }
+        }
+
+        [HttpPost(RouteIdOperacionControl)]
+        public IActionResult PostControlOperacion(int idOperacion, [FromBody] ControlDTO controlDto)
+        {
+            try
+            {
+                return Ok(controlService.Crear(controlDto));
+            }
+            catch (ValidationException ve)
+            {
+                return UnprocessableEntity(new ErrorResponse(StatusCodes.Status422UnprocessableEntity, ve.Message));
+            }
+            catch (Exception e)
+            {
+                return errorResponseFactory.InternalServerErrorResponse(e);
+            }
+        }
+
+        [HttpPut(RouteIdOperacionControl)]
+        public IActionResult PutControlOperacion(int idOperacion, [FromBody] ControlDTO controlDto)
+        {
+            try
+            {
+                return Ok(controlService.Actualizar(controlDto));
+            }
+            catch (ValidationException ve)
+            {
+                return UnprocessableEntity(new ErrorResponse(StatusCodes.Status422UnprocessableEntity, ve.Message));
+            }
+            catch (Exception e)
+            {
+                return errorResponseFactory.InternalServerErrorResponse(e);
+            }
         }
     }
 }
