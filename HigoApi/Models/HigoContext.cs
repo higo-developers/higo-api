@@ -1,6 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace HigoApi.Models
 {
@@ -81,15 +79,13 @@ namespace HigoApi.Models
 
                 entity.Property(e => e.IdControl).HasColumnName("Id_Control");
 
-                entity.Property(e => e.FechaHoraControl)
-                    .HasColumnName("Fecha_Hora_Control")
+                entity.Property(e => e.FechaHoraControlInicial)
+                    .HasColumnName("Fecha_Hora_Control_Inicial")
                     .HasColumnType("datetime");
 
                 entity.Property(e => e.IdOperacion).HasColumnName("Id_Operacion");
 
                 entity.Property(e => e.IdTipoControl).HasColumnName("Id_Tipo_Control");
-
-                entity.Property(e => e.Km).HasColumnName("KM");
 
                 entity.HasOne(d => d.IdOperacionNavigation)
                     .WithMany(p => p.Control)
