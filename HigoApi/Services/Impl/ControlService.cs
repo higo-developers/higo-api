@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using HigoApi.Builders;
 using HigoApi.Mappers;
 using HigoApi.Models;
@@ -24,7 +25,14 @@ namespace HigoApi.Services.Impl
 
         public Control ObtenerControlPorIdDeOperacion(int idOperacion)
         {
-            throw new NotImplementedException();
+            return higoContext.Control
+                .OrderByDescending(c => c.FechaHoraControlInicial)
+                .FirstOrDefault(c => c.IdOperacion.Equals(idOperacion));
+        }
+
+        public ControlDTO ObtenerControlDtoPorIdOperacion(int idOperacion)
+        {
+            return controlMapper.ToDto(ObtenerControlPorIdDeOperacion(idOperacion));
         }
 
         public ControlResponse Crear(ControlDTO controlDto)
@@ -34,7 +42,7 @@ namespace HigoApi.Services.Impl
             higoContext.Control.Add(control);
 
             higoContext.SaveChanges();
-            
+
             var operacion = operacionService.Actualizar(controlDto.IdOperacion, EstadoOperacion.VIGENTE);
 
             return controlResponseBuilder.Build(control, operacion);

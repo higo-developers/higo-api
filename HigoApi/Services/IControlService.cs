@@ -6,6 +6,7 @@ namespace HigoApi.Services
     public interface IControlService
     {
         Control ObtenerControlPorIdDeOperacion(int idOperacion);
+        ControlDTO ObtenerControlDtoPorIdOperacion(int idOperacion);
         ControlResponse Crear(ControlDTO controlDto);
         ControlResponse Actualizar(ControlDTO controlDto);
     }

@@ -17,6 +17,8 @@ namespace HigoApi.Controllers
     {
         private const string RouteIdOperacionControl = "{idOperacion}/control";
         
+        private const string MessageControlNoEncontrado = "No se ha encontrado control de operacion {0}";
+        
         private readonly IOperacionService operacionService;
         private readonly IControlService controlService;
         
@@ -104,7 +106,12 @@ namespace HigoApi.Controllers
         {
             try
             {
-                return Ok(new {Mensaje = $"Detalle de control de operacion {idOperacion}"});
+                return Ok(controlService.ObtenerControlDtoPorIdOperacion(idOperacion));
+            }
+            catch (ArgumentNullException ane)
+            {
+                Console.WriteLine(ane);
+                return NotFound(new ErrorResponse(StatusCodes.Status404NotFound, string.Format(MessageControlNoEncontrado, idOperacion)));
             }
             catch (Exception e)
             {
