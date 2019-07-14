@@ -10,11 +10,11 @@ namespace HigoApi.Models.DTO
         public NivelCombustible? NivelCombustibleInicial { get; set; }
         public NivelHigiene? HigieneExternaInicial { get; set; }
         public NivelHigiene? HigieneInternaInicial { get; set; }
-        public EstadoTecnico? EstadoTecnicoInicial { get; set; }
+        public FuncionamientoGeneral? FuncionamientoGeneralInicial { get; set; }
 
         public NivelCombustible? NivelCombustibleFinal { get; set; }
         public NivelHigiene? HigieneExternaFinal { get; set; }
         public NivelHigiene? HigieneInternaFinal { get; set; }
-        public EstadoTecnico? EstadoTecnicoFinal { get; set; }
+        public FuncionamientoGeneral? FuncionamientoGeneralFinal { get; set; }
     }
 }

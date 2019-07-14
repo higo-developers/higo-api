@@ -1,6 +1,6 @@
 namespace HigoApi.Enums
 {
-    public enum EstadoTecnico
+    public enum FuncionamientoGeneral
     {
         MALO,
         BUENO
