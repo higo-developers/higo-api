@@ -1,3 +1,5 @@
+using HigoApi.Enums;
+
 namespace HigoApi.Models.DTO
 {
     public class ControlDTO
@@ -5,14 +7,14 @@ namespace HigoApi.Models.DTO
         public int? Id { get; set; }
         public int IdOperacion { get; set; }
 
-        public int? NivelCombustibleInicial { get; set; }
-        public int? HigieneExternaInicial { get; set; }
-        public int? HigieneInternaInicial { get; set; }
-        public int? EstadoTecnicoInicial { get; set; }
+        public NivelCombustible? NivelCombustibleInicial { get; set; }
+        public NivelHigiene? HigieneExternaInicial { get; set; }
+        public NivelHigiene? HigieneInternaInicial { get; set; }
+        public EstadoTecnico? EstadoTecnicoInicial { get; set; }
 
-        public int? NivelCombustibleFinal { get; set; }
-        public int? HigieneExternaFinal { get; set; }
-        public int? HigieneInternaFinal { get; set; }
-        public int? EstadoTecnicoFinal { get; set; }
+        public NivelCombustible? NivelCombustibleFinal { get; set; }
+        public NivelHigiene? HigieneExternaFinal { get; set; }
+        public NivelHigiene? HigieneInternaFinal { get; set; }
+        public EstadoTecnico? EstadoTecnicoFinal { get; set; }
     }
 }
