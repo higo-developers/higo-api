@@ -99,6 +99,7 @@ namespace HigoApi
             services.AddScoped<MarcaMapper>();
             services.AddScoped<OpcionesMapper>();
             services.AddScoped<OperacionWorkflowMapper>();
+            services.AddScoped<ControlMapper>();
 
             services.AddScoped<TokenBuilder>();
             services.AddScoped<LoginResponseBuilder>();

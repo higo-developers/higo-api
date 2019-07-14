@@ -117,7 +117,7 @@ namespace HigoApi.Controllers
         {
             try
             {
-                return Ok(new {Mensaje = $"Crear control para operacion {idOperacion}"});
+                return Ok(controlService.Crear(controlDto));
             }
             catch (ValidationException ve)
             {

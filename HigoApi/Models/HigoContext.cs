@@ -25,7 +25,6 @@ namespace HigoApi.Models
         public virtual DbSet<Operacion> Operacion { get; set; }
         public virtual DbSet<OperacionWorkflow> OperacionWorkflow { get; set; }
         public virtual DbSet<Perfil> Perfil { get; set; }
-        public virtual DbSet<TipoControl> TipoControl { get; set; }
         public virtual DbSet<TipoVehiculo> TipoVehiculo { get; set; }
         public virtual DbSet<Usuario> Usuario { get; set; }
         public virtual DbSet<Vehiculo> Vehiculo { get; set; }
@@ -75,28 +74,31 @@ namespace HigoApi.Models
 
                 entity.HasIndex(e => e.IdOperacion);
 
-                entity.HasIndex(e => e.IdTipoControl);
-
                 entity.Property(e => e.IdControl).HasColumnName("Id_Control");
+
+                entity.Property(e => e.FechaHoraControlFinal).HasColumnName("Fecha_Hora_Control_Final");
 
                 entity.Property(e => e.FechaHoraControlInicial)
                     .HasColumnName("Fecha_Hora_Control_Inicial")
                     .HasColumnType("datetime");
 
+                entity.Property(e => e.FuncionamientoGeneralFinal).HasColumnName("Funcionamiento_General_Final");
+
+                entity.Property(e => e.FuncionamientoGeneralInicial).HasColumnName("Funcionamiento_General_Inicial");
+
+                entity.Property(e => e.HigieneExternaFinal).HasColumnName("Higiene_Externa_Final");
+
+                entity.Property(e => e.HigieneExternaInicial).HasColumnName("Higiene_Externa_Inicial");
+
+                entity.Property(e => e.HigieneInternaFinal).HasColumnName("Higiene_Interna_Final");
+
+                entity.Property(e => e.HigieneInternaInicial).HasColumnName("Higiene_Interna_Inicial");
+
                 entity.Property(e => e.IdOperacion).HasColumnName("Id_Operacion");
 
-                entity.Property(e => e.IdTipoControl).HasColumnName("Id_Tipo_Control");
+                entity.Property(e => e.NivelCombustibleFinal).HasColumnName("Nivel_Combustible_Final");
 
-                entity.HasOne(d => d.IdOperacionNavigation)
-                    .WithMany(p => p.Control)
-                    .HasForeignKey(d => d.IdOperacion)
-                    .HasConstraintName("FK_Control_Operacion");
-
-                entity.HasOne(d => d.IdTipoControlNavigation)
-                    .WithMany(p => p.Control)
-                    .HasForeignKey(d => d.IdTipoControl)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Control_Tipo_Control");
+                entity.Property(e => e.NivelCombustibleInicial).HasColumnName("Nivel_Combustible_Inicial");
             });
 
             modelBuilder.Entity<EstadoOperacion>(entity =>
@@ -302,6 +304,8 @@ namespace HigoApi.Models
 
                 entity.Property(e => e.IdProximoEstado).HasColumnName("Id_Proximo_Estado");
 
+                entity.Property(e => e.Rol).HasMaxLength(15);
+
                 entity.HasOne(d => d.IdEstadoActualNavigation)
                     .WithMany(p => p.OperacionWorkflowIdEstadoActualNavigation)
                     .HasForeignKey(d => d.IdEstadoActual)
@@ -320,24 +324,6 @@ namespace HigoApi.Models
                 entity.HasKey(e => e.IdPerfil);
 
                 entity.Property(e => e.IdPerfil).HasColumnName("Id_Perfil");
-
-                entity.Property(e => e.Codigo)
-                    .IsRequired()
-                    .HasMaxLength(30)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Descripcion)
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-            });
-
-            modelBuilder.Entity<TipoControl>(entity =>
-            {
-                entity.HasKey(e => e.IdTipoControl);
-
-                entity.ToTable("Tipo_Control");
-
-                entity.Property(e => e.IdTipoControl).HasColumnName("Id_Tipo_Control");
 
                 entity.Property(e => e.Codigo)
                     .IsRequired()
