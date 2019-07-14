@@ -15,16 +15,18 @@ namespace HigoApi.Controllers
     [ApiController]
     public class OperacionesController : ControllerBase
     {
-        private const string RouteIdOperacionControl = "{id}/control";
-        private const string RouteIdOperacionControlId = "{id}/control/{idControl}";
+        private const string RouteIdOperacionControl = "{idOperacion}/control";
         
-        private readonly IOperacionService _operacionService;
+        private readonly IOperacionService operacionService;
+        private readonly IControlService controlService;
         
         private readonly ErrorResponseFactory errorResponseFactory;
 
-        public OperacionesController(IOperacionService operacionService, ErrorResponseFactory errorResponseFactory)
+        public OperacionesController(IOperacionService operacionService, IControlService controlService,
+            ErrorResponseFactory errorResponseFactory)
         {
-            _operacionService = operacionService;
+            this.operacionService = operacionService;
+            this.controlService = controlService;
             this.errorResponseFactory = errorResponseFactory;
         }
 
@@ -37,11 +39,11 @@ namespace HigoApi.Controllers
             
             if (opDTO.CodEstado != null)
             {
-                operaciones = _operacionService.ListadoFiltradoPorEstadoPorAdquiriente(opDTO.IdAdquiriente, opDTO.CodEstado);
+                operaciones = operacionService.ListadoFiltradoPorEstadoPorAdquiriente(opDTO.IdAdquiriente, opDTO.CodEstado);
             }
             else
             {
-                operaciones = _operacionService.ListadoTodasPorAdquiriente(opDTO.IdAdquiriente);
+                operaciones = operacionService.ListadoTodasPorAdquiriente(opDTO.IdAdquiriente);
             }
             
 
@@ -55,7 +57,7 @@ namespace HigoApi.Controllers
         [HttpGet("{id}", Name = "GetOperacion")]
         public OperacionDTO Get(int id)
         {
-            Operacion op = _operacionService.ObtenerPorId(id);
+            Operacion op = operacionService.ObtenerPorId(id);
 
             OperacionDTO opDTO = OperacionMapper.ConvertirAOperacionDTO(op);
 
@@ -67,7 +69,7 @@ namespace HigoApi.Controllers
         [HttpPost]
         public OperacionDTO Post([FromBody] OperacionDTO opRes)
         {
-            Operacion op = _operacionService.Crear(opRes);
+            Operacion op = operacionService.Crear(opRes);
 
             return OperacionMapper.ConvertirAOperacionDTO(op);
         }
@@ -78,7 +80,7 @@ namespace HigoApi.Controllers
         {
             try
             {
-                Operacion op = _operacionService.Actualizar(opRes.IdOperacion, opRes.CodEstado);
+                Operacion op = operacionService.Actualizar(opRes.IdOperacion, opRes.CodEstado);
                 return Ok(OperacionMapper.ConvertirAOperacionDTO(op));
             }
             catch (ValidationException ve)
@@ -97,12 +99,25 @@ namespace HigoApi.Controllers
         {
         }
 
-        [HttpPost(RouteIdOperacionControl)]
-        public IActionResult PostControlOperacion(int id)
+        [HttpGet(RouteIdOperacionControl)]
+        public IActionResult GetControl(int idOperacion)
         {
             try
             {
-                return Ok(new {Mensaje = $"Crear control para operacion {id}"});
+                return Ok(new {Mensaje = $"Detalle de control de operacion {idOperacion}"});
+            }
+            catch (Exception e)
+            {
+                return errorResponseFactory.InternalServerErrorResponse(e);
+            }
+        }
+
+        [HttpPost(RouteIdOperacionControl)]
+        public IActionResult PostControlOperacion(int idOperacion, [FromBody] ControlDTO controlDto)
+        {
+            try
+            {
+                return Ok(new {Mensaje = $"Crear control para operacion {idOperacion}"});
             }
             catch (ValidationException ve)
             {
@@ -114,12 +129,12 @@ namespace HigoApi.Controllers
             }
         }
 
-        [HttpPut(RouteIdOperacionControlId)]
-        public IActionResult PostControlOperacion(int id, int idControl)
+        [HttpPut(RouteIdOperacionControl)]
+        public IActionResult PutControlOperacion(int idOperacion, [FromBody] ControlDTO controlDto)
         {
             try
             {
-                return Ok(new {Mensaje = $"Actualizar control {idControl} de operacion {id}"});
+                return Ok(new {Mensaje = $"Actualizar control de operacion {idOperacion}"});
             }
             catch (ValidationException ve)
             {

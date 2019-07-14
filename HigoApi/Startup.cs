@@ -92,6 +92,7 @@ namespace HigoApi
             services.AddScoped<ITipoService, TipoService>();
             services.AddScoped<IEstadoService, EstadoService>();
             services.AddScoped<IWorkflowService, WorkflowService>();
+            services.AddScoped<IControlService, ControlService>();
 
             services.AddScoped<VehiculoMapper>();
             services.AddScoped<UsuarioMapper>();
