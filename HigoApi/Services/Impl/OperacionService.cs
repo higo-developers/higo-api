@@ -160,5 +160,14 @@ namespace HigoApi.Services.Impl
                 .Include(o => o.IdAdquirenteNavigation)
                 .ToList();
         }
+
+        public void ActualizarMontoEfectivo(Operacion operacion, decimal montoEfectivo)
+        {
+            operacion.MontoEfectivo = montoEfectivo;
+            
+            higoContext.Operacion.Update(operacion);
+            
+            higoContext.SaveChanges();
+        }
     }
 }

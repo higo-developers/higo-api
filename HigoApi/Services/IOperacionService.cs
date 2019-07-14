@@ -31,5 +31,7 @@ namespace HigoApi.Services
         /// <param name="idUsuario">Id de usuario participante de la operación.</param>
         /// <returns>Listado de operaciones en las que el usuario participa.</returns>
         List<Operacion> ListadoOperacionesDeUsuario(int idUsuario);
+
+        void ActualizarMontoEfectivo(Operacion operacion, decimal montoEfectivo);
     }
 }

@@ -20,7 +20,7 @@ namespace HigoApi.Mappers
             
             return control;
         }
-
+        
         public ControlDTO ToDto(Control control)
         {
             if (control is null)

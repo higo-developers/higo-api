@@ -113,6 +113,7 @@ namespace HigoApi
             services.AddScoped<CambioEstadoOperacionValidator>();
             services.AddScoped<OperacionUtils>();
             services.AddScoped<VehiculoUtils>();
+            services.AddScoped<ControlUtils>();
 
             services.AddScoped<ErrorResponseFactory>();
 
