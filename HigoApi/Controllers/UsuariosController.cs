@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using HigoApi.Builders;
 using HigoApi.Enums;
 using HigoApi.Factories;
+using HigoApi.Mappers;
 using HigoApi.Models;
 using HigoApi.Models.DTO;
 using HigoApi.Services;
@@ -24,6 +25,7 @@ namespace HigoApi.Controllers
         private readonly UsuarioRequestValidator parametrosValidator;
         private readonly IOperacionService operacionService;
         private readonly OperacionesClasificadasDTOBuilder operacionesClasificadasDtoBuilder;
+        private readonly UsuarioMapper usuarioMapper;
         private readonly ErrorResponseFactory errorResponseFactory;
 
         private const string RouteUsuarioPorMailYOrigen = "{email}/origen/{codigoOrigen}";
@@ -34,7 +36,7 @@ namespace HigoApi.Controllers
 
         public UsuariosController(HigoContext ctx, IUsuarioService usuarioService,
             UsuarioRequestValidator parametrosValidator, IOperacionService operacionService,
-            OperacionesClasificadasDTOBuilder operacionesClasificadasDtoBuilder,
+            OperacionesClasificadasDTOBuilder operacionesClasificadasDtoBuilder, UsuarioMapper usuarioMapper,
             ErrorResponseFactory errorResponseFactory)
         {
             this.ctx = ctx;
@@ -42,6 +44,7 @@ namespace HigoApi.Controllers
             this.parametrosValidator = parametrosValidator;
             this.operacionService = operacionService;
             this.operacionesClasificadasDtoBuilder = operacionesClasificadasDtoBuilder;
+            this.usuarioMapper = usuarioMapper;
             this.errorResponseFactory = errorResponseFactory;
         }
 
@@ -63,7 +66,7 @@ namespace HigoApi.Controllers
                 if (usuario == null)
                     return NotFound(new ErrorResponse(StatusCodes.Status404NotFound, ErrorMessageUsuarioNoEncontrado));
 
-                return Ok(usuario);
+                return Ok(usuarioMapper.ToUsuarioDTO(usuario));
             }
             catch (Exception e)
             {
