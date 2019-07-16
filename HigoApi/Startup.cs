@@ -114,6 +114,7 @@ namespace HigoApi
             services.AddScoped<OperacionUtils>();
             services.AddScoped<VehiculoUtils>();
             services.AddScoped<ControlUtils>();
+            services.AddScoped<ImagenUtils>();
 
             services.AddScoped<ErrorResponseFactory>();
 
