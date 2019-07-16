@@ -38,7 +38,9 @@ namespace HigoApi.Mappers
             {
                 Id = vehiculo.IdVehiculo,
                 Equipamiento = vehiculoUtils.EquipamientoAsList(vehiculo),
-                Estado = vehiculo.IdEstadoVehiculoNavigation.Codigo
+                Estado = vehiculo.IdEstadoVehiculoNavigation.Codigo,
+                PrecioHora = vehiculo.PrecioPorHora,
+                PathImagen = vehiculo.PathImagen
             };
 
 
