@@ -17,7 +17,6 @@ namespace HigoApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class UsuariosController : ControllerBase
     {
         private readonly HigoContext ctx;
@@ -30,7 +29,8 @@ namespace HigoApi.Controllers
         private const string RouteUsuarioPorMailYOrigen = "{email}/origen/{codigoOrigen}";
         private const string RouteUsuarioOperaciones = "{id}/operaciones";
         
-        private const string ErrorMessageUsuarioNoEncontrado = "No se ha encontrado usuario con mail {0} y origen {1}";
+        private const string ErrorMessageUsuarioNoEncontrado = "Usuario no encontrado";
+        private const string ErrorMessageUsuarioNoEncontradoConMailYOrigen = "No se ha encontrado usuario con mail {0} y origen {1}";
 
         public UsuariosController(HigoContext ctx, IUsuarioService usuarioService,
             UsuarioRequestValidator parametrosValidator, IOperacionService operacionService,
@@ -54,28 +54,21 @@ namespace HigoApi.Controllers
 
         //GET: api/Usuario/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Usuario>> GetUsuario(int id)
+        public IActionResult GetUsuario(int id)
         {
-            var usuario = await ctx.Usuario.FindAsync(id);
-
             try
             {
+                var usuario = usuarioService.ObtenerUsuarioPorId(id);
+                
                 if (usuario == null)
-                {
-                    const int code = StatusCodes.Status404NotFound;
-                    return StatusCode(code, new ErrorResponse(code, "Usuario no encontrado"));
-                }
+                    return NotFound(new ErrorResponse(StatusCodes.Status404NotFound, ErrorMessageUsuarioNoEncontrado));
 
-                return usuario;
-
+                return Ok(usuario);
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
-                const int code = StatusCodes.Status500InternalServerError;
-                return StatusCode(code, new ErrorResponse(code, e.Message));
+                return errorResponseFactory.InternalServerErrorResponse(e);
             }
-
         }
 
         // PUT: api/Usuario/5
@@ -151,7 +144,7 @@ namespace HigoApi.Controllers
 
             if (usuario == null)
                 return NotFound(
-                    new ErrorResponse(StatusCodes.Status404NotFound, string.Format(ErrorMessageUsuarioNoEncontrado, email, origen))
+                    new ErrorResponse(StatusCodes.Status404NotFound, string.Format(ErrorMessageUsuarioNoEncontradoConMailYOrigen, email, origen))
                 );
 
             return Ok(usuario);
