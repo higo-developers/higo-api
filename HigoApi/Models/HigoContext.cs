@@ -423,6 +423,8 @@ namespace HigoApi.Models
 
                 entity.Property(e => e.Patente).HasMaxLength(15);
 
+                entity.Property(e => e.PathImagen).HasColumnName("Path_Imagen");
+
                 entity.Property(e => e.RompenieblasDelantero).HasColumnName("Rompenieblas_Delantero");
 
                 entity.Property(e => e.RompenieblasTrasero).HasColumnName("Rompenieblas_Trasero");

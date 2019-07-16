@@ -36,6 +36,7 @@ namespace HigoApi.Models
         public string Partido { get; set; }
         public string Provincia { get; set; }
         public double? PrecioPorHora { get; set; }
+        public string PathImagen { get; set; }
 
         public virtual Cilindrada IdCilindradaNavigation { get; set; }
         public virtual Combustible IdCombustibleNavigation { get; set; }
