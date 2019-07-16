@@ -372,6 +372,8 @@ namespace HigoApi.Models
 
                 entity.Property(e => e.Origen).HasMaxLength(30);
 
+                entity.Property(e => e.PathImagenRegistro).HasColumnName("Path_Imagen_Registro");
+
                 entity.HasOne(d => d.IdPerfilNavigation)
                     .WithMany(p => p.Usuario)
                     .HasForeignKey(d => d.IdPerfil)
