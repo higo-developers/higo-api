@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace HigoApi.Models
 {
@@ -7,11 +6,15 @@ namespace HigoApi.Models
     {
         public int IdControl { get; set; }
         public int? IdOperacion { get; set; }
-        public int IdTipoControl { get; set; }
-        public DateTime? FechaHoraControl { get; set; }
-        public long? Km { get; set; }
-
-        public virtual Operacion IdOperacionNavigation { get; set; }
-        public virtual TipoControl IdTipoControlNavigation { get; set; }
+        public DateTime? FechaHoraControlInicial { get; set; }
+        public int? FuncionamientoGeneralFinal { get; set; }
+        public int? FuncionamientoGeneralInicial { get; set; }
+        public DateTime? FechaHoraControlFinal { get; set; }
+        public int? HigieneExternaFinal { get; set; }
+        public int? HigieneExternaInicial { get; set; }
+        public int? HigieneInternaFinal { get; set; }
+        public int? HigieneInternaInicial { get; set; }
+        public int? NivelCombustibleFinal { get; set; }
+        public int? NivelCombustibleInicial { get; set; }
     }
 }
