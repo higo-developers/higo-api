@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using HigoApi.Builders;
 using HigoApi.Enums;
 using HigoApi.Factories;
+using HigoApi.Mappers;
 using HigoApi.Models;
 using HigoApi.Models.DTO;
 using HigoApi.Services;
@@ -17,7 +18,6 @@ namespace HigoApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class UsuariosController : ControllerBase
     {
         private readonly HigoContext ctx;
@@ -25,16 +25,18 @@ namespace HigoApi.Controllers
         private readonly UsuarioRequestValidator parametrosValidator;
         private readonly IOperacionService operacionService;
         private readonly OperacionesClasificadasDTOBuilder operacionesClasificadasDtoBuilder;
+        private readonly UsuarioMapper usuarioMapper;
         private readonly ErrorResponseFactory errorResponseFactory;
 
         private const string RouteUsuarioPorMailYOrigen = "{email}/origen/{codigoOrigen}";
         private const string RouteUsuarioOperaciones = "{id}/operaciones";
         
-        private const string ErrorMessageUsuarioNoEncontrado = "No se ha encontrado usuario con mail {0} y origen {1}";
+        private const string ErrorMessageUsuarioNoEncontrado = "Usuario no encontrado";
+        private const string ErrorMessageUsuarioNoEncontradoConMailYOrigen = "No se ha encontrado usuario con mail {0} y origen {1}";
 
         public UsuariosController(HigoContext ctx, IUsuarioService usuarioService,
             UsuarioRequestValidator parametrosValidator, IOperacionService operacionService,
-            OperacionesClasificadasDTOBuilder operacionesClasificadasDtoBuilder,
+            OperacionesClasificadasDTOBuilder operacionesClasificadasDtoBuilder, UsuarioMapper usuarioMapper,
             ErrorResponseFactory errorResponseFactory)
         {
             this.ctx = ctx;
@@ -42,6 +44,7 @@ namespace HigoApi.Controllers
             this.parametrosValidator = parametrosValidator;
             this.operacionService = operacionService;
             this.operacionesClasificadasDtoBuilder = operacionesClasificadasDtoBuilder;
+            this.usuarioMapper = usuarioMapper;
             this.errorResponseFactory = errorResponseFactory;
         }
 
@@ -54,28 +57,21 @@ namespace HigoApi.Controllers
 
         //GET: api/Usuario/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Usuario>> GetUsuario(int id)
+        public IActionResult GetUsuario(int id)
         {
-            var usuario = await ctx.Usuario.FindAsync(id);
-
             try
             {
+                var usuario = usuarioService.ObtenerUsuarioPorId(id);
+                
                 if (usuario == null)
-                {
-                    const int code = StatusCodes.Status404NotFound;
-                    return StatusCode(code, new ErrorResponse(code, "Usuario no encontrado"));
-                }
+                    return NotFound(new ErrorResponse(StatusCodes.Status404NotFound, ErrorMessageUsuarioNoEncontrado));
 
-                return usuario;
-
+                return Ok(usuarioMapper.ToUsuarioDTO(usuario));
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
-                const int code = StatusCodes.Status500InternalServerError;
-                return StatusCode(code, new ErrorResponse(code, e.Message));
+                return errorResponseFactory.InternalServerErrorResponse(e);
             }
-
         }
 
         // PUT: api/Usuario/5
@@ -151,7 +147,7 @@ namespace HigoApi.Controllers
 
             if (usuario == null)
                 return NotFound(
-                    new ErrorResponse(StatusCodes.Status404NotFound, string.Format(ErrorMessageUsuarioNoEncontrado, email, origen))
+                    new ErrorResponse(StatusCodes.Status404NotFound, string.Format(ErrorMessageUsuarioNoEncontradoConMailYOrigen, email, origen))
                 );
 
             return Ok(usuario);

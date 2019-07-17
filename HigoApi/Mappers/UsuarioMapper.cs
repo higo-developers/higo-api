@@ -10,7 +10,15 @@ namespace HigoApi.Mappers
             return new UsuarioDTO
             {
                 Id = usuario.IdUsuario,
-                Nombre = $"{usuario.Nombre} {usuario.Apellido}"
+                Nombre = $"{usuario.Nombre} {usuario.Apellido}",
+                Email = usuario.Email,
+                Dni = usuario.Dni.ToString(),
+                Telefono = usuario.Telefono,
+                Pais = usuario.Pais,
+                Provincia = usuario.Provincia,
+                Partido = usuario.Partido,
+                Localidad = usuario.Localidad,
+                PathImagenRegistro = usuario.PathImagenRegistro
             };
         }
 

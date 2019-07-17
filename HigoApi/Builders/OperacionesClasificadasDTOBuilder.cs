@@ -21,6 +21,7 @@ namespace HigoApi.Builders
             estrategiaAddOperacion.Add(EstadoOperacion.CONTROL_INICIAL, agregarOperacionEnCurso);
             estrategiaAddOperacion.Add(EstadoOperacion.CONTROL_FINAL, agregarOperacionEnCurso);
             estrategiaAddOperacion.Add(EstadoOperacion.PAGO_PENDIENTE, agregarOperacionEnCurso);
+            estrategiaAddOperacion.Add(EstadoOperacion.CONFIRMACION_PAGO, agregarOperacionEnCurso);
             estrategiaAddOperacion.Add(EstadoOperacion.FINALIZADO, agregarOperacionFinalizada);
             estrategiaAddOperacion.Add(EstadoOperacion.CANCELADO, agregarOperacionFinalizada);
             estrategiaAddOperacion.Add(EstadoOperacion.RECHAZADO, agregarOperacionFinalizada);
