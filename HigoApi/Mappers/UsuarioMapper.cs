@@ -17,7 +17,8 @@ namespace HigoApi.Mappers
                 Pais = usuario.Pais,
                 Provincia = usuario.Provincia,
                 Partido = usuario.Partido,
-                Localidad = usuario.Localidad
+                Localidad = usuario.Localidad,
+                PathImagenRegistro = usuario.PathImagenRegistro
             };
         }
 

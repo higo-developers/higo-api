@@ -11,5 +11,6 @@ namespace HigoApi.Models.DTO
         public string Provincia { get; set; }
         public string Partido { get; set; }
         public string Localidad { get; set; }
+        public string PathImagenRegistro { get; set; }
     }
 }
