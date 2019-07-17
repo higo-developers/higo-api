@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace HigoApi.Models
 {
@@ -23,6 +25,7 @@ namespace HigoApi.Models
         public virtual DbSet<ModeloMarca> ModeloMarca { get; set; }
         public virtual DbSet<Notificacion> Notificacion { get; set; }
         public virtual DbSet<Operacion> Operacion { get; set; }
+        public virtual DbSet<OperacionMp> OperacionMp { get; set; }
         public virtual DbSet<OperacionWorkflow> OperacionWorkflow { get; set; }
         public virtual DbSet<Perfil> Perfil { get; set; }
         public virtual DbSet<TipoVehiculo> TipoVehiculo { get; set; }
@@ -33,7 +36,8 @@ namespace HigoApi.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-                // Se agrega configuracion de contexto a Startup.ConfigureServices().
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+                optionsBuilder.UseSqlServer("Data Source = localhost; Initial Catalog = Higo;Integrated Security = True");
             }
         }
 
@@ -287,6 +291,42 @@ namespace HigoApi.Models
                     .HasConstraintName("FK_Operacion_Vehiculo");
             });
 
+            modelBuilder.Entity<OperacionMp>(entity =>
+            {
+                entity.HasKey(e => e.IdOperacionMp);
+
+                entity.ToTable("Operacion_MP");
+
+                entity.Property(e => e.IdOperacionMp)
+                    .HasColumnName("Id_Operacion_MP")
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.Amount)
+                    .HasColumnName("amount")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CollectorId).HasColumnName("collector_id");
+
+                entity.Property(e => e.Description).HasColumnName("description");
+
+                entity.Property(e => e.IdOperacionHigo).HasColumnName("Id_Operacion_HIGO");
+
+                entity.Property(e => e.InitPoint).HasColumnName("init_point");
+
+                entity.Property(e => e.PayerId).HasColumnName("payer_id");
+
+                entity.Property(e => e.Status)
+                    .HasColumnName("status")
+                    .HasMaxLength(50);
+
+                entity.HasOne(d => d.IdOperacionHigoNavigation)
+                    .WithMany(p => p.OperacionMp)
+                    .HasForeignKey(d => d.IdOperacionHigo)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Operacion_MP_Operacion");
+            });
+
             modelBuilder.Entity<OperacionWorkflow>(entity =>
             {
                 entity.HasKey(e => e.IdOperacionWorkflow);
@@ -364,6 +404,8 @@ namespace HigoApi.Models
 
                 entity.Property(e => e.Dni).HasColumnName("DNI");
 
+                entity.Property(e => e.EmailMp).HasColumnName("EmailMP");
+
                 entity.Property(e => e.FechaAlta)
                     .HasColumnName("Fecha_Alta")
                     .HasColumnType("date");
@@ -373,6 +415,8 @@ namespace HigoApi.Models
                 entity.Property(e => e.Origen).HasMaxLength(30);
 
                 entity.Property(e => e.PathImagenRegistro).HasColumnName("Path_Imagen_Registro");
+
+                entity.Property(e => e.TokenMp).HasColumnName("TokenMP");
 
                 entity.HasOne(d => d.IdPerfilNavigation)
                     .WithMany(p => p.Usuario)

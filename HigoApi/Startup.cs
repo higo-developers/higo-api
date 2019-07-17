@@ -93,6 +93,7 @@ namespace HigoApi
             services.AddScoped<IEstadoService, EstadoService>();
             services.AddScoped<IWorkflowService, WorkflowService>();
             services.AddScoped<IControlService, ControlService>();
+            services.AddScoped<IOperacionMPService, OperacionMPService>();
 
             services.AddScoped<VehiculoMapper>();
             services.AddScoped<UsuarioMapper>();
@@ -100,6 +101,7 @@ namespace HigoApi
             services.AddScoped<OpcionesMapper>();
             services.AddScoped<OperacionWorkflowMapper>();
             services.AddScoped<ControlMapper>();
+            services.AddScoped<OperacionMPMapper>();
 
             services.AddScoped<TokenBuilder>();
             services.AddScoped<LoginResponseBuilder>();

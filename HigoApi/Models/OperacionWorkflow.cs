@@ -1,4 +1,7 @@
-﻿namespace HigoApi.Models
+﻿using System;
+using System.Collections.Generic;
+
+namespace HigoApi.Models
 {
     public partial class OperacionWorkflow
     {
