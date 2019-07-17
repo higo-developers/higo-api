@@ -372,6 +372,8 @@ namespace HigoApi.Models
 
                 entity.Property(e => e.Origen).HasMaxLength(30);
 
+                entity.Property(e => e.PathImagenRegistro).HasColumnName("Path_Imagen_Registro");
+
                 entity.HasOne(d => d.IdPerfilNavigation)
                     .WithMany(p => p.Usuario)
                     .HasForeignKey(d => d.IdPerfil)
@@ -422,6 +424,8 @@ namespace HigoApi.Models
                 entity.Property(e => e.IdTipoVehiculo).HasColumnName("Id_Tipo_Vehiculo");
 
                 entity.Property(e => e.Patente).HasMaxLength(15);
+
+                entity.Property(e => e.PathImagen).HasColumnName("Path_Imagen");
 
                 entity.Property(e => e.RompenieblasDelantero).HasColumnName("Rompenieblas_Delantero");
 

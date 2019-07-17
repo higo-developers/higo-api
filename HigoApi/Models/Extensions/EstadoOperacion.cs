@@ -13,6 +13,7 @@
         public const string VIGENTE = "VIGENTE";
         public const string CONTROL_FINAL = "CONTROL_FINAL";
         public const string PAGO_PENDIENTE = "PAGO_PENDIENTE";
+        public const string CONFIRMACION_PAGO = "CONFIRMACION_PAGO";
         public const string FINALIZADO = "FINALIZADO";
         public const string CALIFICADO = "CALIFICADO";
     }

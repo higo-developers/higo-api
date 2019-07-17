@@ -28,6 +28,7 @@ namespace HigoApi.Models
         public string Pais { get; set; }
         public string Partido { get; set; }
         public string Provincia { get; set; }
+        public string PathImagenRegistro { get; set; }
 
         public virtual Perfil IdPerfilNavigation { get; set; }
         public virtual ICollection<Notificacion> Notificacion { get; set; }
